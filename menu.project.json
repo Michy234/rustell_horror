@@ -1,0 +1,134 @@
+{
+  "name": "NEW RUSTELL HORROR ROJO (menu)",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "Shared": {
+        "$path": "src/shared"
+      }
+    },
+    "ServerScriptService": {
+      "Server": {
+        "$path": "src/server"
+      }
+    },
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+        "Client": {
+          "$path": "src/client"
+        }
+      }
+    },
+    "StarterGui": {
+      "$className": "StarterGui",
+      "MainMenu": {
+        "$className": "ScreenGui",
+        "$properties": {
+          "IgnoreGuiInset": true,
+          "ResetOnSpawn": false,
+          "ZIndexBehavior": "Sibling"
+        },
+        "MenuFrame": {
+          "$className": "Frame",
+          "$properties": {
+            "BackgroundColor3": [0, 0, 0],
+            "BackgroundTransparency": 0,
+            "BorderSizePixel": 0,
+            "Size": {
+              "X": [1, 0],
+              "Y": [1, 0]
+            },
+            "Position": {
+              "X": [0, 0],
+              "Y": [0, 0]
+            }
+          },
+          "TitleImage": {
+            "$className": "ImageLabel",
+            "$properties": {
+              "BackgroundTransparency": 1,
+              "AnchorPoint": [0.5, 0.5],
+              "Position": {
+                "X": [0.5, 0],
+                "Y": [0.35, 0]
+              },
+              "Size": {
+                "X": [0, 600],
+                "Y": [0, 200]
+              },
+              "Image": "rbxassetid://124417421313227",
+              "ScaleType": "Fit"
+            }
+          },
+          "PlayButton": {
+            "$className": "TextButton",
+            "$properties": {
+              "AnchorPoint": [0.5, 0.5],
+              "BackgroundColor3": [0.16, 0.16, 0.16],
+              "BorderSizePixel": 0,
+              "Font": "GothamBold",
+              "Position": {
+                "X": [0.5, 0],
+                "Y": [0.65, 0]
+              },
+              "Size": {
+                "X": [0, 260],
+                "Y": [0, 70]
+              },
+              "Text": "Play",
+              "TextColor3": [1, 1, 1],
+              "TextScaled": true
+            }
+          }
+        },
+        "FadeFrame": {
+          "$className": "Frame",
+          "$properties": {
+            "BackgroundColor3": [0, 0, 0],
+            "BackgroundTransparency": 1,
+            "BorderSizePixel": 0,
+            "Size": {
+              "X": [1, 0],
+              "Y": [1, 0]
+            },
+            "Position": {
+              "X": [0, 0],
+              "Y": [0, 0]
+            },
+            "ZIndex": 10
+          }
+        }
+      }
+    },
+    "Workspace": {
+      "$properties": {
+        "FilteringEnabled": true
+      },
+      "Baseplate": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [0.286, 0.219, 0.121],
+          "Material": "Grass",
+          "Locked": true,
+          "Position": [0, -10, 0],
+          "Size": [512, 20, 512]
+        }
+      }
+    },
+    "Lighting": {
+      "$properties": {
+        "Ambient": [0, 0, 0],
+        "Brightness": 2,
+        "GlobalShadows": true,
+        "Outlines": false,
+        "Technology": "Voxel"
+      }
+    },
+    "SoundService": {
+      "$properties": {
+        "RespectFilteringEnabled": true
+      }
+    }
+  }
+}
