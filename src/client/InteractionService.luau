@@ -180,7 +180,42 @@ function InteractionService.init()
 	ProximityPromptService.PromptHidden:Connect(function(prompt)
 		local item = activePromptItems[prompt]
 		if item then
+			-- Stop any ongoing tween on BackgroundFill to let GroupTransparency hide it perfectly
+			local backgroundFill = item:FindFirstChild("BackgroundFill")
+			if backgroundFill and backgroundFill:IsA("GuiObject") then
+				TweenService:Create(
+					backgroundFill,
+					TweenInfo.new(0),
+					{ BackgroundTransparency = backgroundFill.BackgroundTransparency }
+				):Play()
+			end
 			local billboard = item.Parent :: BillboardGui
+
+			-- Fade each element individually for perfect synchronization
+			for _, element in item:GetDescendants() do
+				if element:IsA("GuiObject") then
+					local props = {}
+					if pcall(function()
+						return element.BackgroundTransparency
+					end) then
+						props.BackgroundTransparency = 1
+					end
+					if element:IsA("TextLabel") or element:IsA("TextButton") then
+						props.TextTransparency = 1
+						if pcall(function()
+							return element.TextStrokeTransparency
+						end) then
+							props.TextStrokeTransparency = 1
+						end
+					elseif element:IsA("ImageLabel") or element:IsA("ImageButton") then
+						props.ImageTransparency = 1
+					end
+
+					if next(props) ~= nil then
+						TweenService:Create(element, TweenInfo.new(0.2, Enum.EasingStyle.Sine), props):Play()
+					end
+				end
+			end
 
 			local fade = TweenService:Create(item, TweenInfo.new(0.2, Enum.EasingStyle.Sine), { GroupTransparency = 1 })
 			fade:Play()
