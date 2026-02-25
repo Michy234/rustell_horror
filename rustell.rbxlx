@@ -57,7 +57,7 @@
 			<token name="LevelOfDetail">0</token>
 			<CoordinateFrame name="ModelMeshCFrame">
 				<X>0</X>
-				<Y>0</Y>
+				<Y>1.63631368</Y>
 				<Z>0</Z>
 				<R00>1</R00>
 				<R01>0</R01>
@@ -80,7 +80,22 @@
 			<Ref name="PrimaryPart">null</Ref>
 			<float name="ScaleFactor">1</float>
 			<SharedString name="SlimHash">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-			<OptionalCoordinateFrame name="WorldPivotData"></OptionalCoordinateFrame>
+			<OptionalCoordinateFrame name="WorldPivotData">
+				<CFrame>
+					<X>0</X>
+					<Y>1.63631368</Y>
+					<Z>0</Z>
+					<R00>1</R00>
+					<R01>0</R01>
+					<R02>0</R02>
+					<R10>0</R10>
+					<R11>1</R11>
+					<R12>0</R12>
+					<R20>0</R20>
+					<R21>0</R21>
+					<R22>1</R22>
+				</CFrame>
+			</OptionalCoordinateFrame>
 			<BinaryString name="AttributesSerialize"></BinaryString>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 			<bool name="DefinesCapabilities">false</bool>
@@ -90,116 +105,69 @@
 			<BinaryString name="Tags"></BinaryString>
 			<UniqueId name="UniqueId">076bca2916d5b3ca09b03b0f00000002</UniqueId>
 		</Properties>
-		<Item class="Part" referent="11">
-			<Properties>
-				<token name="shape">1</token>
-				<token name="formFactorRaw">1</token>
-				<bool name="Anchored">true</bool>
-				<bool name="AudioCanCollide">true</bool>
-				<float name="BackParamA">-0.5</float>
-				<float name="BackParamB">0.5</float>
-				<token name="BackSurface">0</token>
-				<token name="BackSurfaceInput">0</token>
-				<float name="BottomParamA">-0.5</float>
-				<float name="BottomParamB">0.5</float>
-				<token name="BottomSurface">4</token>
-				<token name="BottomSurfaceInput">0</token>
-				<CoordinateFrame name="CFrame">
-					<X>0</X>
-					<Y>-10</Y>
-					<Z>0</Z>
-					<R00>1</R00>
-					<R01>0</R01>
-					<R02>0</R02>
-					<R10>0</R10>
-					<R11>1</R11>
-					<R12>0</R12>
-					<R20>0</R20>
-					<R21>0</R21>
-					<R22>1</R22>
-				</CoordinateFrame>
-				<bool name="CanCollide">true</bool>
-				<bool name="CanQuery">true</bool>
-				<bool name="CanTouch">true</bool>
-				<bool name="CastShadow">true</bool>
-				<string name="CollisionGroup">Default</string>
-				<int name="CollisionGroupId">0</int>
-				<Color3uint8 name="Color3uint8">4284636770</Color3uint8>
-				<PhysicalProperties name="CustomPhysicalProperties">
-					<CustomPhysics>false</CustomPhysics>
-				</PhysicalProperties>
-				<bool name="EnableFluidForces">true</bool>
-				<float name="FrontParamA">-0.5</float>
-				<float name="FrontParamB">0.5</float>
-				<token name="FrontSurface">0</token>
-				<token name="FrontSurfaceInput">0</token>
-				<float name="LeftParamA">-0.5</float>
-				<float name="LeftParamB">0.5</float>
-				<token name="LeftSurface">0</token>
-				<token name="LeftSurfaceInput">0</token>
-				<bool name="Locked">true</bool>
-				<bool name="Massless">false</bool>
-				<token name="Material">256</token>
-				<string name="MaterialVariantSerialized"></string>
-				<CoordinateFrame name="PivotOffset">
-					<X>0</X>
-					<Y>0</Y>
-					<Z>0</Z>
-					<R00>1</R00>
-					<R01>0</R01>
-					<R02>0</R02>
-					<R10>0</R10>
-					<R11>1</R11>
-					<R12>0</R12>
-					<R20>0</R20>
-					<R21>0</R21>
-					<R22>1</R22>
-				</CoordinateFrame>
-				<float name="Reflectance">0</float>
-				<float name="RightParamA">-0.5</float>
-				<float name="RightParamB">0.5</float>
-				<token name="RightSurface">0</token>
-				<token name="RightSurfaceInput">0</token>
-				<int name="RootPriority">0</int>
-				<Vector3 name="RotVelocity">
-					<X>0</X>
-					<Y>0</Y>
-					<Z>0</Z>
-				</Vector3>
-				<float name="TopParamA">-0.5</float>
-				<float name="TopParamB">0.5</float>
-				<token name="TopSurface">3</token>
-				<token name="TopSurfaceInput">0</token>
-				<float name="Transparency">0</float>
-				<Vector3 name="Velocity">
-					<X>0</X>
-					<Y>0</Y>
-					<Z>0</Z>
-				</Vector3>
-				<Vector3 name="size">
-					<X>512</X>
-					<Y>20</Y>
-					<Z>512</Z>
-				</Vector3>
-				<BinaryString name="AttributesSerialize"></BinaryString>
-				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-				<bool name="DefinesCapabilities">false</bool>
-				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-				<string name="Name">Baseplate</string>
-				<int64 name="SourceAssetId">-1</int64>
-				<BinaryString name="Tags"></BinaryString>
-				<UniqueId name="UniqueId">076bca2916d5b3ca09b03b0f0000039e</UniqueId>
-			</Properties>
-		</Item>
 		<Item class="Terrain" referent="RBXCAC71DD7A70F42AD8BBF9C6BDC019DA7">
 			<Properties>
-				<token name="AcquisitionMethod">0</token>
+				<token name="AcquisitionMethod">11</token>
 				<bool name="Decoration">false</bool>
 				<float name="GrassLength">0.699999988</float>
 				<BinaryString name="MaterialColors"><![CDATA[AAAAAAAAan8/P39rf2Y/ilY+j35fi21PZmxvZbDqw8faiVpHOi4kHh4lZlw76JxKc3trhHta
 gcLgc4RKxr21zq2UlJSM]]></BinaryString>
-				<BinaryString name="PhysicsGrid">AgMAAAAAAAAAAAAAAAA=</BinaryString>
-				<BinaryString name="SmoothGrid">AQU=</BinaryString>
+				<BinaryString name="PhysicsGrid"><![CDATA[AgMAAACA/////////////P/8AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAB
+AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAD/AAD/
+AAD/AAH5AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAB
+AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAP//AP//AP//Af/5AAAAAAAA
+AAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAB
+AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAD/AAD/AAD/AAH5AAAAAAAAAAAAAAABAAAAAAAA
+AAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAB
+AAAAAAAAAAAAAAABAP//AP//AP//Af/5AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAA
+AAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAB
+AAD/AAD/AAD/AAH5AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAA
+AAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAP//AP//AP//Af/5
+AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAA
+AAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAD/AAD/AAD/AAH5AAAAAAAAAAAAAAAB
+AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAA
+AAAAAAABAAAAAAAAAAAAAAABAP//AP//AP//Af/5AAAAAAAAAAAAAAABAAAAAAAAAAAAAAAB
+AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAA
+AAAAAAABAAD/AAD/AAD/AAH5AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAB
+AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAP//AP//
+AP//Af/5AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAB
+AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAD/AAD/AAD/AAH5AAAAAAAA
+AAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAB
+AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAP//AP//AP//Af/5AAAAAAAAAAAAAAABAAAAAAAA
+AAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAB
+AAAAAAAAAAAAAAABAAD/AAD/AAD/AAH5AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAA
+AAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAB
+AP//AP//AP//Af/5AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAA
+AAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAD/AAD/AAD/AAH5
+AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAA
+AAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAA=]]></BinaryString>
+				<BinaryString name="SmoothGrid"><![CDATA[AQX///////////////+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/
+gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/
+gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/
+gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/
+gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4DmjhiABo4Y
+gAaOGIAGjhiABo4YgAaOGIAGjhiABo4YgAaOGIAGjhiABo4YgAaOGIAGjhiABo4YgAaOGIAG
+jhiABo4YgAaOGIAGjhiABo4YgAaOGIAGjhiABo4YgAaOGIAGjhgAAAAAAAAAAAAAAAGA/4D/
+gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/
+gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/
+gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/
+gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/
+gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4AGjhiABo4YgAaOGIAGjhiABo4YgAaOGIAG
+jhiABo4YgAaOGIAGjhiABo4YgAaOGIAGjhiABo4YgAaOGIAGjhiABo4YgAaOGIAGjhiABo4Y
+gAaOGIAGjhiABo4YgAaOGIAGjhiA3wAA/wAA/wAA/wEA/4D/gP+A/4D/gP+A/4D/gP+A/4D/
+gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/
+gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/
+gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/
+gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/
+gP+A/4D/gP+A/4D/gN+OGIAGjhiABo4YgAaOGIAGjhiABo4YgAaOGIAGjhiABo4YgAaOGIAG
+jhiABo4YgAaOGIAGjhiABo4YgAaOGIAGjhiABo4YgAaOGIAGjhiABo4YgAaOGIAGjhiABo4Y
+gAaOGIAGAAAAAAAAAAAAAAABgP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/
+gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/
+gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/
+gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/
+gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+A/4D/gP+OGIAG
+jhiABo4YgAaOGIAGjhiABo4YgAaOGIAGjhiABo4YgAaOGIAGjhiABo4YgAaOGIAGjhiABo4Y
+gAaOGIAGjhiABo4YgAaOGIAGjhiABo4YgAaOGIAGjhiABo4YgAaOGIDm]]></BinaryString>
 				<bool name="SmoothVoxelsUpgraded">false</bool>
 				<Color3 name="WaterColor">
 					<R>0.0500000007</R>
@@ -310,27 +278,27 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 		<Item class="Camera" referent="RBXB3C141A78F5F4601A36C7E00F3ECBCA4">
 			<Properties>
 				<CoordinateFrame name="CFrame">
-					<X>-4.93112803</X>
-					<Y>31.3048363</Y>
-					<Z>15.7091446</Z>
-					<R00>0.966821492</R00>
-					<R01>0.223857641</R01>
-					<R02>-0.123061165</R02>
-					<R10>-0</R10>
-					<R11>0.481736839</R11>
-					<R12>0.876315951</R12>
-					<R20>0.25545311</R20>
-					<R21>-0.847241104</R21>
-					<R22>0.465753496</R22>
+					<X>13.141161</X>
+					<Y>9.50652885</Y>
+					<Z>7.46632195</Z>
+					<R00>0.821140826</R00>
+					<R01>0.198920369</R01>
+					<R02>0.534937859</R02>
+					<R10>1.49011612e-08</R10>
+					<R11>0.937294185</R11>
+					<R12>-0.348539352</R12>
+					<R20>-0.570725739</R20>
+					<R21>0.286199898</R21>
+					<R22>0.769650459</R22>
 				</CoordinateFrame>
 				<Ref name="CameraSubject">null</Ref>
 				<token name="CameraType">0</token>
 				<float name="FieldOfView">70</float>
 				<token name="FieldOfViewMode">0</token>
 				<CoordinateFrame name="Focus">
-					<X>-4.68500566</X>
-					<Y>29.5522041</Y>
-					<Z>14.7776375</Z>
+					<X>12.0712852</X>
+					<Y>10.2036076</Y>
+					<Z>5.92702103</Z>
 					<R00>1</R00>
 					<R01>0</R01>
 					<R02>0</R02>
@@ -385,15 +353,15 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 				<OptionalCoordinateFrame name="WorldPivotData">
 					<CFrame>
 						<X>1</X>
-						<Y>4</Y>
+						<Y>5.63631344</Y>
 						<Z>0</Z>
 						<R00>1</R00>
-						<R01>-0</R01>
+						<R01>0</R01>
 						<R02>0</R02>
 						<R10>0</R10>
 						<R11>1</R11>
 						<R12>0</R12>
-						<R20>-0</R20>
+						<R20>0</R20>
 						<R21>0</R21>
 						<R22>1</R22>
 					</CFrame>
@@ -438,7 +406,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<OptionalCoordinateFrame name="WorldPivotData">
 						<CFrame>
 							<X>1</X>
-							<Y>4</Y>
+							<Y>5.63631344</Y>
 							<Z>0</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -476,7 +444,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>2.27594376</X>
-							<Y>4.48742008</Y>
+							<Y>6.12373352</Y>
 							<Z>1.29844356</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -577,7 +545,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>0.980490863</X>
-							<Y>3.37019062</Y>
+							<Y>5.00650406</Y>
 							<Z>-1.06990969</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -678,7 +646,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>3.36049199</X>
-							<Y>2.67019081</Y>
+							<Y>4.30650425</Y>
 							<Z>1.13852537</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -779,7 +747,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>0.980490863</X>
-							<Y>3.37019062</Y>
+							<Y>5.00650406</Y>
 							<Z>1.03009033</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -880,7 +848,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-1.37433457</X>
-							<Y>2.95019054</Y>
+							<Y>4.58650398</Y>
 							<Z>-1.29912722</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -981,7 +949,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>3.36049199</X>
-							<Y>2.74019051</Y>
+							<Y>4.37650394</Y>
 							<Z>-1.29912722</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -1118,7 +1086,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>1.0244118</X>
-							<Y>1.11921072</Y>
+							<Y>2.7555244</Y>
 							<Z>-0.131079093</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -1219,7 +1187,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>2.38761377</X>
-							<Y>7.20402431</Y>
+							<Y>8.84033775</Y>
 							<Z>0.271087646</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -1320,7 +1288,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-0.935747862</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514831543</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -1421,7 +1389,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>2.9842658</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -1522,7 +1490,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>0.954256654</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-1.03145754</Z>
 							<R00>0</R00>
 							<R01>0</R01>
@@ -1623,7 +1591,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>2.81195736</X>
-							<Y>4.81912756</Y>
+							<Y>6.45544147</Y>
 							<Z>1.32074583</Z>
 							<R00>0</R00>
 							<R01>0</R01>
@@ -1724,7 +1692,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>1.16425872</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -1825,7 +1793,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>1.02425826</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -1926,7 +1894,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>1.72426081</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -2027,7 +1995,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>1.58426034</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -2128,7 +2096,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>2.28426313</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -2229,7 +2197,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-0.795747399</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -2330,7 +2298,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>2.14426231</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -2467,7 +2435,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>0.980633736</X>
-							<Y>6.286901</Y>
+							<Y>7.92321491</Y>
 							<Z>-0.695983887</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -2568,7 +2536,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>0.847589314</X>
-							<Y>7.30491972</Y>
+							<Y>8.94123363</Y>
 							<Z>0.368029773</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -2669,7 +2637,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-1.26071787</X>
-							<Y>0.895818949</Y>
+							<Y>2.53213263</Y>
 							<Z>-1.4199096</Z>
 							<R00>0</R00>
 							<R01>0</R01>
@@ -2770,7 +2738,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-2.49433756</X>
-							<Y>5.05018997</Y>
+							<Y>6.68650341</Y>
 							<Z>-0.109161377</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -2886,7 +2854,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<OptionalCoordinateFrame name="WorldPivotData">
 							<CFrame>
 								<X>-0.545239568</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>-0.173675537</Z>
 								<R00>0</R00>
 								<R01>0</R01>
@@ -2924,7 +2892,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>-0.539334297</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>-0.388793945</Z>
 								<R00>0</R00>
 								<R01>0</R01>
@@ -3055,7 +3023,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>-0.517758369</X>
-								<Y>5.45753384</Y>
+								<Y>7.09384727</Y>
 								<Z>0.0854492188</Z>
 								<R00>0</R00>
 								<R01>0</R01>
@@ -3156,7 +3124,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>-0.595987082</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>-0.998602271</Z>
 								<R00>0</R00>
 								<R01>0</R01>
@@ -3287,7 +3255,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>-0.522842526</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>-0.627496302</Z>
 								<R00>0</R00>
 								<R01>0</R01>
@@ -3418,7 +3386,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>-0.545274377</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>-0.870642066</Z>
 								<R00>0</R00>
 								<R01>0</R01>
@@ -3549,7 +3517,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>-0.539334297</X>
-								<Y>5.47462034</Y>
+								<Y>7.11093426</Y>
 								<Z>-0.089636229</Z>
 								<R00>0</R00>
 								<R01>0</R01>
@@ -3680,7 +3648,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>-0.572487235</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>-1.19624627</Z>
 								<R00>0</R00>
 								<R01>0</R01>
@@ -3811,7 +3779,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>-0.539334297</X>
-								<Y>5.47462034</Y>
+								<Y>7.11093426</Y>
 								<Z>0.129711911</Z>
 								<R00>0</R00>
 								<R01>0</R01>
@@ -3943,7 +3911,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>0.954256654</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>0.788525403</Z>
 							<R00>0</R00>
 							<R01>0</R01>
@@ -4044,7 +4012,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>0.744257212</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -4145,7 +4113,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>0.884257674</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -4246,7 +4214,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-0.655748129</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -4347,7 +4315,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-0.515747666</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -4448,7 +4416,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>0.184255064</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -4549,7 +4517,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>0.324255586</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -4650,7 +4618,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>0.0442544818</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -4751,7 +4719,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-0.0957460403</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -4852,7 +4820,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>1.3042593</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -4953,7 +4921,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>1.44425988</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -5054,7 +5022,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-0.552394629</X>
-							<Y>7.15365219</Y>
+							<Y>8.78996563</Y>
 							<Z>0.222424313</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -5155,7 +5123,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>0.954256654</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.331457525</Z>
 							<R00>0</R00>
 							<R01>0</R01>
@@ -5271,7 +5239,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<OptionalCoordinateFrame name="WorldPivotData">
 							<CFrame>
 								<X>1.71150088</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>-0.206573486</Z>
 								<R00>-1</R00>
 								<R01>0</R01>
@@ -5309,7 +5277,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>1.49637723</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>-0.200677484</Z>
 								<R00>-1</R00>
 								<R01>0</R01>
@@ -5440,7 +5408,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>1.97062159</X>
-								<Y>5.46904898</Y>
+								<Y>7.10536289</Y>
 								<Z>-0.179101557</Z>
 								<R00>-1</R00>
 								<R01>0</R01>
@@ -5541,7 +5509,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>0.886570156</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>-0.257330328</Z>
 								<R00>-1</R00>
 								<R01>0</R01>
@@ -5672,7 +5640,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>1.25767612</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>-0.184185788</Z>
 								<R00>-1</R00>
 								<R01>0</R01>
@@ -5803,7 +5771,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>1.01452768</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>-0.206616208</Z>
 								<R00>-1</R00>
 								<R01>0</R01>
@@ -5934,7 +5902,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>1.79553485</X>
-								<Y>5.45195913</Y>
+								<Y>7.08827305</Y>
 								<Z>-0.200677484</Z>
 								<R00>-1</R00>
 								<R01>0</R01>
@@ -6065,7 +6033,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>0.688926101</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>-0.233831778</Z>
 								<R00>-1</R00>
 								<R01>0</R01>
@@ -6196,7 +6164,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>2.01488566</X>
-								<Y>5.45195913</Y>
+								<Y>7.08827305</Y>
 								<Z>-0.200677484</Z>
 								<R00>-1</R00>
 								<R01>0</R01>
@@ -6328,7 +6296,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>2.00426197</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -6429,7 +6397,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>1.86426139</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -6530,7 +6498,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>2.84426498</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -6631,7 +6599,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>2.70426464</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -6732,7 +6700,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-1.26071787</X>
-							<Y>0.895818949</Y>
+							<Y>2.53213263</Y>
 							<Z>1.24008179</Z>
 							<R00>0</R00>
 							<R01>0</R01>
@@ -6833,7 +6801,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>0.954256654</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>0.228533939</Z>
 							<R00>0</R00>
 							<R01>0</R01>
@@ -6933,14 +6901,14 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>4.48055458</X>
-							<Y>4.6959691</Y>
+							<Y>6.33228302</Y>
 							<Z>-0.108093262</Z>
 							<R00>0</R00>
 							<R01>0</R01>
 							<R02>-1</R02>
 							<R10>0</R10>
 							<R11>-0.999999881</R11>
-							<R12>-0</R12>
+							<R12>0</R12>
 							<R20>-0.999999881</R20>
 							<R21>0</R21>
 							<R22>0</R22>
@@ -7034,7 +7002,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>4.49433756</X>
-							<Y>5.05018997</Y>
+							<Y>6.68650341</Y>
 							<Z>-0.109161377</Z>
 							<R00>-1</R00>
 							<R01>0</R01>
@@ -7135,7 +7103,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-0.375747085</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -7236,7 +7204,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-0.235746503</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -7373,7 +7341,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>0.980490863</X>
-							<Y>4.35019016</Y>
+							<Y>5.9865036</Y>
 							<Z>-0.0514831543</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -7489,7 +7457,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<OptionalCoordinateFrame name="WorldPivotData">
 							<CFrame>
 								<X>1.71150231</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>0.652832031</Z>
 								<R00>-1</R00>
 								<R01>0</R01>
@@ -7527,7 +7495,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>1.49637854</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>0.646935999</Z>
 								<R00>-1</R00>
 								<R01>0</R01>
@@ -7658,7 +7626,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>1.97062302</X>
-								<Y>5.45753384</Y>
+								<Y>7.09384727</Y>
 								<Z>0.625360072</Z>
 								<R00>-1</R00>
 								<R01>0</R01>
@@ -7759,7 +7727,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>0.886570156</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>0.703588843</Z>
 								<R00>-1</R00>
 								<R01>0</R01>
@@ -7890,7 +7858,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>1.25767612</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>0.630444348</Z>
 								<R00>-1</R00>
 								<R01>0</R01>
@@ -8021,7 +7989,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>1.01452899</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>0.652874768</Z>
 								<R00>-1</R00>
 								<R01>0</R01>
@@ -8152,7 +8120,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>1.79553628</X>
-								<Y>5.47462034</Y>
+								<Y>7.11093426</Y>
 								<Z>0.646935999</Z>
 								<R00>-1</R00>
 								<R01>0</R01>
@@ -8283,7 +8251,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>0.688926101</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>0.680090308</Z>
 								<R00>-1</R00>
 								<R01>0</R01>
@@ -8414,7 +8382,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>2.01488566</X>
-								<Y>5.47462034</Y>
+								<Y>7.11093426</Y>
 								<Z>0.646935999</Z>
 								<R00>-1</R00>
 								<R01>0</R01>
@@ -8546,7 +8514,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>0.993819594</X>
-							<Y>4.56536293</Y>
+							<Y>6.20167637</Y>
 							<Z>0.0489196777</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -8688,7 +8656,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<OptionalCoordinateFrame name="WorldPivotData">
 							<CFrame>
 								<X>0.101153016</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>-0.173675537</Z>
 								<R00>0</R00>
 								<R01>0</R01>
@@ -8726,7 +8694,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>0.107058346</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>-0.388793945</Z>
 								<R00>0</R00>
 								<R01>0</R01>
@@ -8857,7 +8825,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>0.128634274</X>
-								<Y>5.45753384</Y>
+								<Y>7.09384727</Y>
 								<Z>0.0854492188</Z>
 								<R00>0</R00>
 								<R01>0</R01>
@@ -8958,7 +8926,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>0.0504055023</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>-0.998602271</Z>
 								<R00>0</R00>
 								<R01>0</R01>
@@ -9089,7 +9057,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>0.123550057</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>-0.627496302</Z>
 								<R00>0</R00>
 								<R01>0</R01>
@@ -9220,7 +9188,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>0.101118267</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>-0.870642066</Z>
 								<R00>0</R00>
 								<R01>0</R01>
@@ -9351,7 +9319,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>0.107058346</X>
-								<Y>5.47462034</Y>
+								<Y>7.11093426</Y>
 								<Z>-0.089636229</Z>
 								<R00>0</R00>
 								<R01>0</R01>
@@ -9482,7 +9450,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>0.0739054084</X>
-								<Y>5.46328115</Y>
+								<Y>7.09959507</Y>
 								<Z>-1.19624627</Z>
 								<R00>0</R00>
 								<R01>0</R01>
@@ -9613,7 +9581,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 							<token name="BottomSurfaceInput">0</token>
 							<CoordinateFrame name="CFrame">
 								<X>0.107058346</X>
-								<Y>5.47462034</Y>
+								<Y>7.11093426</Y>
 								<Z>0.129711911</Z>
 								<R00>0</R00>
 								<R01>0</R01>
@@ -9745,7 +9713,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>1.32362294</X>
-							<Y>4.48742008</Y>
+							<Y>6.12373352</Y>
 							<Z>1.2497375</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -9845,7 +9813,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-2.48055625</X>
-							<Y>4.6959691</Y>
+							<Y>6.33228302</Y>
 							<Z>-0.110229492</Z>
 							<R00>0</R00>
 							<R01>0</R01>
@@ -9946,7 +9914,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-1.37433457</X>
-							<Y>2.95019054</Y>
+							<Y>4.58650398</Y>
 							<Z>1.13852537</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -10083,7 +10051,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>2.80479693</X>
-							<Y>4.47105265</Y>
+							<Y>6.10736656</Y>
 							<Z>1.27772212</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -10184,7 +10152,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>2.42426348</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -10285,7 +10253,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>2.56426406</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -10386,7 +10354,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>0.60425663</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -10487,7 +10455,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>0.464256108</X>
-							<Y>5.22793579</Y>
+							<Y>6.86424923</Y>
 							<Z>-0.0514404289</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -10588,7 +10556,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-0.286379218</X>
-							<Y>4.48742008</Y>
+							<Y>6.12373352</Y>
 							<Z>1.2497375</Z>
 							<R00>1</R00>
 							<R01>0</R01>
@@ -10706,17 +10674,17 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 				<OptionalCoordinateFrame name="WorldPivotData">
 					<CFrame>
 						<X>28.0894318</X>
-						<Y>4</Y>
+						<Y>5.63631344</Y>
 						<Z>-13.2072296</Z>
-						<R00>1.00000024</R00>
+						<R00>1.00000036</R00>
 						<R01>0</R01>
 						<R02>0</R02>
 						<R10>0</R10>
-						<R11>1.00000048</R11>
+						<R11>1.00000072</R11>
 						<R12>0</R12>
 						<R20>0</R20>
 						<R21>0</R21>
-						<R22>1.00000024</R22>
+						<R22>1.00000036</R22>
 					</CFrame>
 				</OptionalCoordinateFrame>
 				<BinaryString name="AttributesSerialize">AQAAAAoAAABfaHRoa0hxbzVlAhAAAAB3aGg4dldOaWJEMnlaNHBq</BinaryString>
@@ -10744,7 +10712,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>28.0894318</X>
-						<Y>4</Y>
+						<Y>5.63631344</Y>
 						<Z>-13.2072296</Z>
 						<R00>1.00000036</R00>
 						<R01>0</R01>
@@ -10986,7 +10954,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>28.2312813</X>
-						<Y>5.4593029</Y>
+						<Y>7.09561634</Y>
 						<Z>-13.5562325</Z>
 						<R00>0.998549581</R00>
 						<R01>0.0430652015</R01>
@@ -11485,7 +11453,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>26.547245</X>
-						<Y>3.32167625</Y>
+						<Y>4.95798969</Y>
 						<Z>-13.4735003</Z>
 						<R00>0.973761797</R00>
 						<R01>0.218665168</R01>
@@ -11818,7 +11786,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>29.6387558</X>
-						<Y>3.19128942</Y>
+						<Y>4.82760334</Y>
 						<Z>-13.2829361</Z>
 						<R00>0.99237144</R00>
 						<R01>-0.0819916353</R01>
@@ -12151,7 +12119,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>26.693182</X>
-						<Y>3.95115495</Y>
+						<Y>5.58746862</Y>
 						<Z>-13.3064842</Z>
 						<R00>0.973761797</R00>
 						<R01>0.218665168</R01>
@@ -12484,7 +12452,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>29.584034</X>
-						<Y>3.83145428</Y>
+						<Y>5.46776772</Y>
 						<Z>-13.1022978</Z>
 						<R00>0.99237144</R00>
 						<R01>-0.0819916353</R01>
@@ -12817,7 +12785,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>26.834774</X>
-						<Y>4.55882311</Y>
+						<Y>6.19513702</Y>
 						<Z>-13.2516909</Z>
 						<R00>0.973761797</R00>
 						<R01>0.227553234</R01>
@@ -13194,7 +13162,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>29.5205269</X>
-						<Y>4.42956018</Y>
+						<Y>6.0658741</Y>
 						<Z>-13.1485844</Z>
 						<R00>0.993238688</R00>
 						<R01>-0.11450766</R01>
@@ -13571,7 +13539,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>28.0307541</X>
-						<Y>1.92132759</Y>
+						<Y>3.55764127</Y>
 						<Z>-12.4176226</Z>
 						<R00>0.874496758</R00>
 						<R01>-0.477599919</R01>
@@ -13904,7 +13872,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>27.7183456</X>
-						<Y>2.03809547</Y>
+						<Y>3.67440915</Y>
 						<Z>-13.0270605</Z>
 						<R00>0.874496758</R00>
 						<R01>-0.442416549</R01>
@@ -14237,7 +14205,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>28.1650105</X>
-						<Y>4.22647047</Y>
+						<Y>5.86278439</Y>
 						<Z>-13.2419558</Z>
 						<R00>0.998549581</R00>
 						<R01>0.0537718199</R01>
@@ -14878,7 +14846,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>27.5997753</X>
-						<Y>2.5404954</Y>
+						<Y>4.17680931</Y>
 						<Z>-13.2973595</Z>
 						<R00>0.895009577</R00>
 						<R01>0.14346765</R01>
@@ -15211,7 +15179,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>28.7674694</X>
-						<Y>0.953017712</Y>
+						<Y>2.58933139</Y>
 						<Z>-13.2855301</Z>
 						<R00>0.999675333</R00>
 						<R01>-0.025127396</R01>
@@ -15544,7 +15512,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>28.692934</X>
-						<Y>1.6459558</Y>
+						<Y>3.28226948</Y>
 						<Z>-13.2999611</Z>
 						<R00>0.992532313</R00>
 						<R01>-0.121909291</R01>
@@ -15877,7 +15845,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>28.1042862</X>
-						<Y>3.16269612</Y>
+						<Y>4.7990098</Y>
 						<Z>-13.2072306</Z>
 						<R00>0.997570872</R00>
 						<R01>0.0696647689</R01>
@@ -16430,7 +16398,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>28.5801926</X>
-						<Y>2.47518921</Y>
+						<Y>4.11150265</Y>
 						<Z>-13.2590055</Z>
 						<R00>0.989177942</R00>
 						<R01>-0.145899564</R01>
@@ -17356,7 +17324,7 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>28.2578754</X>
-							<Y>5.95724821</Y>
+							<Y>7.59356213</Y>
 							<Z>-13.9514236</Z>
 							<R00>0.998549581</R00>
 							<R01>0.0430652015</R01>
@@ -18123,7 +18091,7 @@ return TextureConfigurationSystem
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>28.2609577</X>
-							<Y>5.98587465</Y>
+							<Y>7.62218857</Y>
 							<Z>-13.6095581</Z>
 							<R00>0.998549581</R00>
 							<R01>0.0430652015</R01>
@@ -18405,7 +18373,7 @@ EAAAAHJ0SURRY3Q3ZlhidFo2S2U=]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>28.1990299</X>
-							<Y>4.86281061</Y>
+							<Y>6.49912453</Y>
 							<Z>-13.3009176</Z>
 							<R00>-0.998549581</R00>
 							<R01>0.0537718199</R01>
@@ -18687,7 +18655,7 @@ EAAAAGFlS2dlczZqRHo3MVd3YzA=]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>28.10285</X>
-							<Y>3.15901923</Y>
+							<Y>4.79533291</Y>
 							<Z>-13.2317924</Z>
 							<R00>0.997570872</R00>
 							<R01>0.0696647689</R01>
@@ -18933,7 +18901,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>28.2436848</X>
-							<Y>5.63263941</Y>
+							<Y>7.26895332</Y>
 							<Z>-13.6803703</Z>
 							<R00>0.9985497</R00>
 							<R01>0.0430652052</R01>
@@ -19181,17 +19149,17 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 				<OptionalCoordinateFrame name="WorldPivotData">
 					<CFrame>
 						<X>-10.961834</X>
-						<Y>4</Y>
+						<Y>5.63631344</Y>
 						<Z>14.792819</Z>
-						<R00>1</R00>
+						<R00>1.00000238</R00>
 						<R01>0</R01>
 						<R02>0</R02>
 						<R10>0</R10>
-						<R11>1</R11>
+						<R11>1.00000477</R11>
 						<R12>0</R12>
 						<R20>0</R20>
 						<R21>0</R21>
-						<R22>1</R22>
+						<R22>1.00000238</R22>
 					</CFrame>
 				</OptionalCoordinateFrame>
 				<BinaryString name="AttributesSerialize"></BinaryString>
@@ -19219,7 +19187,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-10.961834</X>
-						<Y>5.50000763</Y>
+						<Y>7.13632107</Y>
 						<Z>14.792819</Z>
 						<R00>1.00000238</R00>
 						<R01>0</R01>
@@ -19492,7 +19460,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-10.961834</X>
-						<Y>4</Y>
+						<Y>5.63631344</Y>
 						<Z>14.792819</Z>
 						<R00>1.00000238</R00>
 						<R01>0</R01>
@@ -20249,7 +20217,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-12.4618378</X>
-						<Y>4</Y>
+						<Y>5.63631344</Y>
 						<Z>14.792819</Z>
 						<R00>1.00000238</R00>
 						<R01>0</R01>
@@ -20447,7 +20415,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-9.46183014</X>
-						<Y>4</Y>
+						<Y>5.63631344</Y>
 						<Z>14.792819</Z>
 						<R00>1.00000238</R00>
 						<R01>0</R01>
@@ -20645,7 +20613,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-11.461834</X>
-						<Y>1.99999046</Y>
+						<Y>3.63630414</Y>
 						<Z>14.792819</Z>
 						<R00>1.00000238</R00>
 						<R01>0</R01>
@@ -20859,7 +20827,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-10.461834</X>
-						<Y>1.99999046</Y>
+						<Y>3.63630414</Y>
 						<Z>14.792819</Z>
 						<R00>1.00000238</R00>
 						<R01>0</R01>
@@ -21113,7 +21081,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-10.961834</X>
-						<Y>4</Y>
+						<Y>5.63631344</Y>
 						<Z>14.792819</Z>
 						<R00>1.00000238</R00>
 						<R01>0</R01>
@@ -21372,7 +21340,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-10.9112492</X>
-							<Y>5.75858831</Y>
+							<Y>7.39490223</Y>
 							<Z>14.8993721</Z>
 							<R00>-4.37114949e-08</R00>
 							<R01>-7.8713942e-09</R01>
@@ -21681,7 +21649,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-10.961834</X>
-							<Y>2.48133063</Y>
+							<Y>4.11764431</Y>
 							<Z>14.7928181</Z>
 							<R00>1.00000238</R00>
 							<R01>0</R01>
@@ -22008,7 +21976,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-10.6793976</X>
-							<Y>4.06487322</Y>
+							<Y>5.70118713</Y>
 							<Z>14.6953564</Z>
 							<R00>1.00000238</R00>
 							<R01>4.89403602e-13</R01>
@@ -22317,7 +22285,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-10.9574699</X>
-							<Y>5.77074623</Y>
+							<Y>7.40705967</Y>
 							<Z>14.8165255</Z>
 							<R00>1.00000238</R00>
 							<R01>-7.8713942e-09</R01>
@@ -22626,7 +22594,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-10.9601555</X>
-							<Y>5.70816851</Y>
+							<Y>7.34448242</Y>
 							<Z>14.798707</Z>
 							<R00>1.00000238</R00>
 							<R01>-7.8713942e-09</R01>
@@ -22935,7 +22903,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-10.9585094</X>
-							<Y>3.62223768</Y>
+							<Y>5.2585516</Y>
 							<Z>14.3212204</Z>
 							<R00>-4.37114913e-08</R00>
 							<R01>-1.22464976e-16</R01>
@@ -23244,7 +23212,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-9.46001244</X>
-							<Y>3.72279835</Y>
+							<Y>5.35911179</Y>
 							<Z>14.7959862</Z>
 							<R00>1.00000238</R00>
 							<R01>0</R01>
@@ -23553,7 +23521,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-12.4638767</X>
-							<Y>3.2266891</Y>
+							<Y>4.86300278</Y>
 							<Z>14.792819</Z>
 							<R00>1.00000238</R00>
 							<R01>0</R01>
@@ -23862,7 +23830,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-11.2062511</X>
-							<Y>3.89737844</Y>
+							<Y>5.53369236</Y>
 							<Z>15.1956453</Z>
 							<R00>1.00000238</R00>
 							<R01>0</R01>
@@ -24171,7 +24139,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-11.944252</X>
-							<Y>3.22517014</Y>
+							<Y>4.86148357</Y>
 							<Z>14.8058186</Z>
 							<R00>-4.37114913e-08</R00>
 							<R01>0</R01>
@@ -24480,7 +24448,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-10.9608402</X>
-							<Y>5.23746967</Y>
+							<Y>6.87378311</Y>
 							<Z>14.7913237</Z>
 							<R00>1.00000238</R00>
 							<R01>-7.8713942e-09</R01>
@@ -24789,7 +24757,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>-10.9620934</X>
-							<Y>6.52893734</Y>
+							<Y>8.16525078</Y>
 							<Z>14.7931242</Z>
 							<R00>1.00000238</R00>
 							<R01>-7.8713942e-09</R01>
@@ -25088,7 +25056,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 				<OptionalCoordinateFrame name="WorldPivotData">
 					<CFrame>
 						<X>7.76318455</X>
-						<Y>2.91240358</Y>
+						<Y>4.5487175</Y>
 						<Z>-7.09130001</Z>
 						<R00>-0.699650347</R00>
 						<R01>0</R01>
@@ -25142,17 +25110,17 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 				<OptionalCoordinateFrame name="WorldPivotData">
 					<CFrame>
 						<X>29.1875935</X>
-						<Y>4</Y>
+						<Y>5.63631344</Y>
 						<Z>19.2790184</Z>
 						<R00>1</R00>
-						<R01>0</R01>
+						<R01>5.46752252e-30</R01>
 						<R02>0</R02>
-						<R10>0</R10>
+						<R10>5.46752252e-30</R10>
 						<R11>1</R11>
 						<R12>0</R12>
 						<R20>0</R20>
 						<R21>0</R21>
-						<R22>1</R22>
+						<R22>0.99999994</R22>
 					</CFrame>
 				</OptionalCoordinateFrame>
 				<BinaryString name="AttributesSerialize"></BinaryString>
@@ -25180,7 +25148,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>29.1875935</X>
-						<Y>4</Y>
+						<Y>5.63631344</Y>
 						<Z>19.2790184</Z>
 						<R00>1</R00>
 						<R01>5.46752252e-30</R01>
@@ -25361,7 +25329,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>27.6608868</X>
-						<Y>2.83359385</Y>
+						<Y>4.46990776</Y>
 						<Z>18.9561272</Z>
 						<R00>1</R00>
 						<R01>1.0935045e-29</R01>
@@ -25707,7 +25675,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>27.9542313</X>
-						<Y>3.45935941</Y>
+						<Y>5.09567308</Y>
 						<Z>19.2725735</Z>
 						<R00>1</R00>
 						<R01>1.0935045e-29</R01>
@@ -26053,7 +26021,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>28.3174667</X>
-						<Y>4.11375523</Y>
+						<Y>5.75006866</Y>
 						<Z>19.2777157</Z>
 						<R00>1</R00>
 						<R01>1.0935045e-29</R01>
@@ -26443,7 +26411,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>30.7147064</X>
-						<Y>2.83359385</Y>
+						<Y>4.46990776</Y>
 						<Z>18.9561272</Z>
 						<R00>1</R00>
 						<R01>1.0935045e-29</R01>
@@ -26789,7 +26757,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>30.4209576</X>
-						<Y>3.45935941</Y>
+						<Y>5.09567308</Y>
 						<Z>19.2725716</Z>
 						<R00>1</R00>
 						<R01>1.0935045e-29</R01>
@@ -27135,7 +27103,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>30.0577202</X>
-						<Y>4.11375523</Y>
+						<Y>5.75006866</Y>
 						<Z>19.2777138</Z>
 						<R00>1</R00>
 						<R01>1.0935045e-29</R01>
@@ -27525,7 +27493,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>29.1875935</X>
-						<Y>4.11093712</Y>
+						<Y>5.74725056</Y>
 						<Z>19.200016</Z>
 						<R00>1</R00>
 						<R01>1.0935045e-29</R01>
@@ -28179,7 +28147,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>28.8339787</X>
-						<Y>0.925400019</Y>
+						<Y>2.5617137</Y>
 						<Z>19.1264095</Z>
 						<R00>1</R00>
 						<R01>1.0935045e-29</R01>
@@ -28525,7 +28493,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>28.8480625</X>
-						<Y>1.53514194</Y>
+						<Y>3.17145562</Y>
 						<Z>19.2900925</Z>
 						<R00>1</R00>
 						<R01>1.0935045e-29</R01>
@@ -28871,7 +28839,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>28.8148346</X>
-						<Y>2.45945454</Y>
+						<Y>4.09576797</Y>
 						<Z>19.2900925</Z>
 						<R00>1</R00>
 						<R01>1.0935045e-29</R01>
@@ -29217,7 +29185,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>29.5412083</X>
-						<Y>0.925400257</Y>
+						<Y>2.56171393</Y>
 						<Z>19.1263885</Z>
 						<R00>1</R00>
 						<R01>1.0935045e-29</R01>
@@ -29563,7 +29531,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>29.5271244</X>
-						<Y>1.53514194</Y>
+						<Y>3.17145562</Y>
 						<Z>19.2900734</Z>
 						<R00>1</R00>
 						<R01>1.0935045e-29</R01>
@@ -29909,7 +29877,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>29.5603523</X>
-						<Y>2.45945454</Y>
+						<Y>4.09576797</Y>
 						<Z>19.2900734</Z>
 						<R00>1</R00>
 						<R01>1.0935045e-29</R01>
@@ -30255,7 +30223,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>29.1875954</X>
-						<Y>3.23053503</Y>
+						<Y>4.86684895</Y>
 						<Z>19.2536201</Z>
 						<R00>1</R00>
 						<R01>1.0935045e-29</R01>
@@ -30916,7 +30884,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>29.1875935</X>
-						<Y>5.42707586</Y>
+						<Y>7.06338978</Y>
 						<Z>19.2792854</Z>
 						<R00>1</R00>
 						<R01>1.0935045e-29</R01>
@@ -31406,7 +31374,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>29.1875935</X>
-							<Y>4.70451403</Y>
+							<Y>6.34082794</Y>
 							<Z>19.2129307</Z>
 							<R00>1</R00>
 							<R01>1.22464685e-16</R01>
@@ -31651,7 +31619,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>29.1581211</X>
-							<Y>4.84660339</Y>
+							<Y>6.48291683</Y>
 							<Z>19.4552517</Z>
 							<R00>1</R00>
 							<R01>9.67929207e-30</R01>
@@ -31960,7 +31928,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>29.1876373</X>
-							<Y>5.41225195</Y>
+							<Y>7.04856586</Y>
 							<Z>19.2786083</Z>
 							<R00>1</R00>
 							<R01>9.67929207e-30</R01>
@@ -32269,7 +32237,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>29.188509</X>
-							<Y>5.90689659</Y>
+							<Y>7.54321003</Y>
 							<Z>18.7801094</Z>
 							<R00>1</R00>
 							<R01>9.67929207e-30</R01>
@@ -32578,7 +32546,7 @@ EAAAADFUZHpab05oZkRLWkxKbXQ=]]></BinaryString>
 						<token name="BottomSurfaceInput">0</token>
 						<CoordinateFrame name="CFrame">
 							<X>29.187439</X>
-							<Y>5.71343899</Y>
+							<Y>7.34975243</Y>
 							<Z>19.2788353</Z>
 							<R00>-1</R00>
 							<R01>3.62027705e-16</R01>
@@ -33037,10 +33005,10 @@ controller:LoadAnimation(script.Animation):play()
 				<OptionalCoordinateFrame name="WorldPivotData">
 					<CFrame>
 						<X>7.58252144</X>
-						<Y>2.5</Y>
+						<Y>4.13631344</Y>
 						<Z>-2.82015324</Z>
 						<R00>-0.18052192</R00>
-						<R01>-0</R01>
+						<R01>0</R01>
 						<R02>-0.983570993</R02>
 						<R10>0</R10>
 						<R11>1</R11>
@@ -33091,17 +33059,17 @@ controller:LoadAnimation(script.Animation):play()
 				<OptionalCoordinateFrame name="WorldPivotData">
 					<CFrame>
 						<X>-13.999999</X>
-						<Y>3</Y>
+						<Y>4.63631344</Y>
 						<Z>-13.000001</Z>
-						<R00>1.00000048</R00>
+						<R00>1.0000006</R00>
 						<R01>0</R01>
 						<R02>0</R02>
 						<R10>0</R10>
-						<R11>1.00000095</R11>
+						<R11>1.00000119</R11>
 						<R12>0</R12>
 						<R20>0</R20>
 						<R21>0</R21>
-						<R22>1.00000048</R22>
+						<R22>1.0000006</R22>
 					</CFrame>
 				</OptionalCoordinateFrame>
 				<BinaryString name="AttributesSerialize"></BinaryString>
@@ -33165,7 +33133,7 @@ controller:LoadAnimation(script.Animation):play()
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-14.8452349</X>
-						<Y>3.69660711</Y>
+						<Y>5.33292055</Y>
 						<Z>-12.7482424</Z>
 						<R00>1.0000006</R00>
 						<R01>0</R01>
@@ -34343,7 +34311,7 @@ return TextureConfiguration]]></ProtectedString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-15.6860256</X>
-						<Y>2.37378621</Y>
+						<Y>4.01009941</Y>
 						<Z>-13.6235857</Z>
 						<R00>1.0000006</R00>
 						<R01>0</R01>
@@ -34643,7 +34611,7 @@ return TextureConfiguration]]></ProtectedString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-15.4200726</X>
-						<Y>3.01049948</Y>
+						<Y>4.64681292</Y>
 						<Z>-13.0200357</Z>
 						<R00>1.0000006</R00>
 						<R01>0</R01>
@@ -34943,7 +34911,7 @@ return TextureConfiguration]]></ProtectedString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-13.9999981</X>
-						<Y>2.25824976</Y>
+						<Y>3.8945632</Y>
 						<Z>-12.8276033</Z>
 						<R00>1.0000006</R00>
 						<R01>0</R01>
@@ -35463,7 +35431,7 @@ return TextureConfiguration]]></ProtectedString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-14.5267925</X>
-						<Y>1.59843338</Y>
+						<Y>3.23474693</Y>
 						<Z>-12.9902334</Z>
 						<R00>1.0000006</R00>
 						<R01>0</R01>
@@ -35763,7 +35731,7 @@ return TextureConfiguration]]></ProtectedString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-14.4707804</X>
-						<Y>-0.745959818</Y>
+						<Y>0.890353739</Y>
 						<Z>-13.0120764</Z>
 						<R00>1.0000006</R00>
 						<R01>0</R01>
@@ -36063,7 +36031,7 @@ return TextureConfiguration]]></ProtectedString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-14.4731388</X>
-						<Y>0.180607557</Y>
+						<Y>1.81692111</Y>
 						<Z>-12.9423418</Z>
 						<R00>1.0000006</R00>
 						<R01>0</R01>
@@ -36363,7 +36331,7 @@ return TextureConfiguration]]></ProtectedString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-13.4732037</X>
-						<Y>1.59843326</Y>
+						<Y>3.23474669</Y>
 						<Z>-12.9902334</Z>
 						<R00>1.0000006</R00>
 						<R01>0</R01>
@@ -36663,7 +36631,7 @@ return TextureConfiguration]]></ProtectedString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-13.5292158</X>
-						<Y>-0.745960295</Y>
+						<Y>0.890353143</Y>
 						<Z>-13.0120773</Z>
 						<R00>1.0000006</R00>
 						<R01>0</R01>
@@ -36963,7 +36931,7 @@ return TextureConfiguration]]></ProtectedString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-13.5268574</X>
-						<Y>0.180607319</Y>
+						<Y>1.81692076</Y>
 						<Z>-12.9423418</Z>
 						<R00>1.0000006</R00>
 						<R01>0</R01>
@@ -37263,7 +37231,7 @@ return TextureConfiguration]]></ProtectedString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-13.1547604</X>
-						<Y>3.69660687</Y>
+						<Y>5.33292007</Y>
 						<Z>-12.7482424</Z>
 						<R00>1.0000006</R00>
 						<R01>0</R01>
@@ -37607,7 +37575,7 @@ return TextureConfiguration]]></ProtectedString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-12.3139687</X>
-						<Y>2.37378621</Y>
+						<Y>4.01009941</Y>
 						<Z>-13.6235857</Z>
 						<R00>1.0000006</R00>
 						<R01>0</R01>
@@ -37907,7 +37875,7 @@ return TextureConfiguration]]></ProtectedString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-12.5799246</X>
-						<Y>3.01049948</Y>
+						<Y>4.64681292</Y>
 						<Z>-13.0200357</Z>
 						<R00>1.0000006</R00>
 						<R01>0</R01>
@@ -38207,7 +38175,7 @@ return TextureConfiguration]]></ProtectedString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-13.9999981</X>
-						<Y>3.51675081</Y>
+						<Y>5.15306425</Y>
 						<Z>-12.76299</Z>
 						<R00>1.0000006</R00>
 						<R01>0</R01>
@@ -38815,7 +38783,7 @@ return TextureConfiguration]]></ProtectedString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-13.9999981</X>
-						<Y>4.7647295</Y>
+						<Y>6.40104294</Y>
 						<Z>-12.773118</Z>
 						<R00>1.0000006</R00>
 						<R01>0</R01>
@@ -40505,7 +40473,7 @@ return TextureConfiguration]]></ProtectedString>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
 						<X>-13.999999</X>
-						<Y>3</Y>
+						<Y>4.63631344</Y>
 						<Z>-13.000001</Z>
 						<R00>1.0000006</R00>
 						<R01>0</R01>
@@ -41429,14 +41397,16 @@ local InteractionService = {}
 function InteractionService.init()
 	local player = Players.LocalPlayer
 	local playerGui = player:WaitForChild("PlayerGui")
-	
+
 	local activeBillboards = {} -- Adornee -> BillboardGui
 	local activePromptItems = {} -- Prompt -> CanvasGroup
 	local promptConnections = {} -- Prompt -> List of connections
 
 	local function getOrCreateBillboard(adornee: Instance): BillboardGui
-		if activeBillboards[adornee] then return activeBillboards[adornee] end
-		
+		if activeBillboards[adornee] then
+			return activeBillboards[adornee]
+		end
+
 		local bgui = Instance.new("BillboardGui")
 		bgui.Name = "PromptUI_" .. adornee.Name
 		bgui.Size = UDim2.fromOffset(250, 150)
@@ -41446,7 +41416,7 @@ function InteractionService.init()
 		bgui.MaxDistance = 35
 		bgui.ZIndexBehavior = Enum.ZIndexBehavior.Global
 		bgui.Adornee = adornee:IsA("BasePart") and adornee or (adornee:IsA("Model") and adornee.PrimaryPart) or nil
-		
+
 		local layout = Instance.new("UIListLayout")
 		layout.Padding = UDim.new(0, 5)
 		layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
@@ -41464,12 +41434,12 @@ function InteractionService.init()
 		item.Size = UDim2.new(1, 0, 0, 40)
 		item.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 		item.BackgroundTransparency = 0.2
-		item.GroupTransparency = 1 
+		item.GroupTransparency = 1
 		item.BorderSizePixel = 0
 		item.Parent = billboard
-		
+
 		Instance.new("UICorner", item).CornerRadius = UDim.new(0, 6)
-		
+
 		-- Key Frame (Circular Background for the Key)
 		local keyFrame = Instance.new("Frame")
 		keyFrame.Size = UDim2.fromOffset(32, 32)
@@ -41478,7 +41448,7 @@ function InteractionService.init()
 		keyFrame.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 		keyFrame.ZIndex = 2
 		keyFrame.Parent = item
-		
+
 		Instance.new("UICorner", keyFrame).CornerRadius = UDim.new(1, 0)
 
 		local keyText = Instance.new("TextLabel")
@@ -41505,86 +41475,92 @@ function InteractionService.init()
 		actionText.ZIndex = 2
 		actionText.Parent = item
 
-		-- Circular Progress (Hold)
+		-- Background Fill Progress (Hold)
 		if prompt.HoldDuration > 0 then
-			-- Back circle (gray)
-			local circleBg = Instance.new("ImageLabel")
-			circleBg.Name = "CircleBackground"
-			circleBg.Size = UDim2.fromOffset(38, 38)
-			circleBg.Position = UDim2.new(0, 1, 0.5, 0)
-			circleBg.AnchorPoint = Vector2.new(0, 0.5)
-			circleBg.BackgroundTransparency = 1
-			circleBg.Image = "rbxassetid://4032821949" 
-			circleBg.ImageColor3 = Color3.new(0,0,0)
-			circleBg.ImageTransparency = 0.4
-			circleBg.ZIndex = 1
-			circleBg.Parent = item
-			
-			local barFill = Instance.new("ImageLabel")
-			barFill.Name = "Fill"
-			barFill.Size = UDim2.fromScale(1, 1)
-			barFill.BackgroundTransparency = 1
-			barFill.Image = "rbxassetid://4032821949"
-			barFill.ImageColor3 = Color3.fromRGB(0, 255, 150)
-			barFill.ZIndex = 1
-			barFill.Parent = circleBg
-			
-			local gradient = Instance.new("UIGradient")
-			gradient.Transparency = NumberSequence.new({
-				NumberSequenceKeypoint.new(0, 0),
-				NumberSequenceKeypoint.new(0.5, 0),
-				NumberSequenceKeypoint.new(0.501, 1),
-				NumberSequenceKeypoint.new(1, 1)
-			})
-			gradient.Rotation = -180
-			gradient.Parent = barFill
-			
+			local backgroundFill = Instance.new("Frame")
+			backgroundFill.Name = "BackgroundFill"
+			backgroundFill.Size = UDim2.fromScale(0, 1)
+			backgroundFill.BackgroundColor3 = Color3.fromRGB(0, 255, 150)
+			backgroundFill.BackgroundTransparency = 0.5
+			backgroundFill.BorderSizePixel = 0
+			backgroundFill.ZIndex = 1
+			backgroundFill.Parent = item
+
+			local uiCorner = Instance.new("UICorner")
+			uiCorner.CornerRadius = UDim.new(0, 6)
+			uiCorner.Parent = backgroundFill
+
 			local progressConn: RBXScriptConnection?
-			
+			local sizeTween: any = nil
+
 			local begin = prompt.PromptButtonHoldBegan:Connect(function()
+				if sizeTween then
+					sizeTween:Cancel()
+					sizeTween = nil
+				end
+				backgroundFill.Size = UDim2.fromScale(0, 1)
+				backgroundFill.BackgroundTransparency = 0.5
+
 				local startTime = tick()
-				if progressConn then progressConn:Disconnect() end
+				if progressConn then
+					progressConn:Disconnect()
+				end
 				progressConn = RunService.RenderStepped:Connect(function()
 					local alpha = math.clamp((tick() - startTime) / prompt.HoldDuration, 0, 1)
-					-- Rotate gradient from -180 to 180 to fill the circle
-					gradient.Rotation = (alpha * 360) - 180
-					if alpha >= 1 then 
-						if progressConn then progressConn:Disconnect() end
+					backgroundFill.Size = UDim2.fromScale(alpha, 1)
+					if alpha >= 1 then
+						if progressConn then
+							progressConn:Disconnect()
+						end
 						progressConn = nil
 					end
 				end)
 			end)
-			
+
 			local ended = prompt.PromptButtonHoldEnded:Connect(function()
-				if progressConn then progressConn:Disconnect() end
+				if progressConn then
+					progressConn:Disconnect()
+				end
 				progressConn = nil
-				gradient.Rotation = -180
+				sizeTween = TweenService:Create(
+					backgroundFill,
+					TweenInfo.new(0.2, Enum.EasingStyle.Sine),
+					{ BackgroundTransparency = 1 }
+				)
+				sizeTween:Play()
 			end)
-			
-			promptConnections[prompt] = {begin, ended}
+
+			promptConnections[prompt] = { begin, ended }
 		end
 
 		activePromptItems[prompt] = item
-		
+
 		local propConn = prompt:GetPropertyChangedSignal("ActionText"):Connect(function()
 			actionText.Text = prompt.ActionText
 		end)
-		table.insert(promptConnections[prompt] or {}, propConn)
+		if not promptConnections[prompt] then
+			promptConnections[prompt] = {}
+		end
+		table.insert(promptConnections[prompt], propConn)
 	end
 
 	ProximityPromptService.PromptShown:Connect(function(prompt, _)
 		if prompt.Style == Enum.ProximityPromptStyle.Custom then
 			local adornee = prompt.Parent
-			if not adornee then return end
-			
+			if not adornee then
+				return
+			end
+
 			local billboard = getOrCreateBillboard(adornee)
-			if activePromptItems[prompt] then activePromptItems[prompt]:Destroy() end
-			
+			if activePromptItems[prompt] then
+				activePromptItems[prompt]:Destroy()
+			end
+
 			createPromptItem(prompt, billboard)
 			local item = activePromptItems[prompt]
-			
+
 			if item then
-				TweenService:Create(item, TweenInfo.new(0.2, Enum.EasingStyle.Sine), {GroupTransparency = 0}):Play()
+				TweenService:Create(item, TweenInfo.new(0.2, Enum.EasingStyle.Sine), { GroupTransparency = 0 }):Play()
 			end
 		end
 	end)
@@ -41593,19 +41569,21 @@ function InteractionService.init()
 		local item = activePromptItems[prompt]
 		if item then
 			local billboard = item.Parent :: BillboardGui
-			
-			local fade = TweenService:Create(item, TweenInfo.new(0.2, Enum.EasingStyle.Sine), {GroupTransparency = 1})
+
+			local fade = TweenService:Create(item, TweenInfo.new(0.2, Enum.EasingStyle.Sine), { GroupTransparency = 1 })
 			fade:Play()
 			fade.Completed:Connect(function(state)
 				if state == Enum.PlaybackState.Completed and activePromptItems[prompt] == item then
 					item:Destroy()
 					activePromptItems[prompt] = nil
-					
+
 					if promptConnections[prompt] then
-						for _, c in promptConnections[prompt] do c:Disconnect() end
+						for _, c in promptConnections[prompt] do
+							c:Disconnect()
+						end
 						promptConnections[prompt] = nil
 					end
-					
+
 					local hasOther = false
 					for _, otherItem in activePromptItems do
 						if otherItem.Parent == billboard then
@@ -41613,10 +41591,12 @@ function InteractionService.init()
 							break
 						end
 					end
-					
+
 					if not hasOther then
 						local adornee = billboard.Adornee
-						if adornee then activeBillboards[adornee] = nil end
+						if adornee then
+							activeBillboards[adornee] = nil
+						end
 						billboard:Destroy()
 					end
 				end
@@ -42481,7 +42461,7 @@ local NPCService = {}
 
 function NPCService.init()
 	print("NPCService: [ULTRA BOOT] Avvio monitoraggio totale...")
-	
+
 	task.spawn(function()
 		while true do
 			-- Scansione di ogni oggetto nel Workspace per trovare NPC
@@ -42503,7 +42483,7 @@ function NPCService.setupNPC(npc: Model)
 	npc:SetAttribute("Initialized", true)
 	npc:SetAttribute("IsEating", false)
 	print("NPCService: [SYSTEM] Inizializzazione forzata per -> " .. npc.Name)
-	
+
 	local humanoid = npc:FindFirstChildOfClass("Humanoid")
 	if not humanoid then
 		task.wait(1) -- Aspetta un secondo per caricamento modello
@@ -42513,88 +42493,116 @@ function NPCService.setupNPC(npc: Model)
 			return
 		end
 	end
-	
+
 	-- Configurazione Humanoid
 	humanoid.WalkSpeed = 12
 	humanoid.AutoRotate = true
-	
+
 	-- Animation Setup (Detect RigType for compatibility)
 	local animator = humanoid:FindFirstChildOfClass("Animator") or Instance.new("Animator", humanoid)
 	local walkAnim = Instance.new("Animation")
-	
+
 	print("NPCService: RigType detected for " .. npc.Name .. " -> " .. tostring(humanoid.RigType))
-	
+
 	if humanoid.RigType == Enum.HumanoidRigType.R6 then
 		walkAnim.AnimationId = "rbxassetid://180426354" -- Standard R6 Walk
 	else
 		walkAnim.AnimationId = "rbxassetid://507767714" -- Standard R15 Walk
 	end
-	
+
 	local walkTrack: AnimationTrack?
 	local success, err = pcall(function()
 		walkTrack = animator:LoadAnimation(walkAnim)
 	end)
-	
+
 	if not success or not walkTrack then
 		warn("NPCService: [FAIL] Impossibile caricare animazione per " .. npc.Name .. ": " .. tostring(err))
 	else
 		walkTrack.Looped = true
 		print("NPCService: [OK] Animazione caricata per " .. npc.Name)
 	end
-	
+
 	-- T-Pose Animation for death (Common Roblox ID)
 	local tPoseAnim = Instance.new("Animation")
-	tPoseAnim.AnimationId = "rbxassetid://507768375" 
+	tPoseAnim.AnimationId = "rbxassetid://507768375"
 	-- Track will be loaded on death to ensure smoothness
-	
-	local rootPart = npc.PrimaryPart or npc:FindFirstChild("HumanoidRootPart") or npc:FindFirstChildWhichIsA("BasePart", true)
+
+	local rootPart = npc.PrimaryPart
+		or npc:FindFirstChild("HumanoidRootPart")
+		or npc:FindFirstChildWhichIsA("BasePart", true)
 	if not rootPart then
 		warn("NPCService: [FAIL] NPC " .. npc.Name .. " non ha parti fisiche!")
 		return
 	end
-	
+
 	-- Hunger System Initialization
 	npc:SetAttribute("Hunger", 100)
 	NPCService.createHungerUI(npc)
-	
+
 	task.spawn(function()
 		while npc.Parent do
 			local hunger = npc:GetAttribute("Hunger") or 100
-			
+
 			if hunger <= 0 then
 				NPCService.die(npc)
 				break
 			end
-			
+
 			hunger = math.max(0, hunger - (Settings.HUNGER_DECAY_RATE or 0.5))
 			npc:SetAttribute("Hunger", hunger)
 			NPCService.updateHungerUI(npc, hunger)
 			task.wait(1)
 		end
 	end)
-	
+
 	-- AI Watchdog
 	task.spawn(function()
 		while npc.Parent do
-			print(string.format("NPCService: [WATCHDOG] %s | Hunger: %.1f | Eating: %s | Rig: %s", 
-				npc.Name, npc:GetAttribute("Hunger") or 0, tostring(npc:GetAttribute("IsEating")), tostring(humanoid.RigType)))
+			print(
+				string.format(
+					"NPCService: [WATCHDOG] %s | Hunger: %.1f | Eating: %s | Rig: %s",
+					npc.Name,
+					npc:GetAttribute("Hunger") or 0,
+					tostring(npc:GetAttribute("IsEating")),
+					tostring(humanoid.RigType)
+				)
+			)
 			task.wait(10)
 		end
 	end)
-	
-	-- SBLOCCO TOTALE RICORSIVO
+
+	-- SBLOCCO E SETUP FISICA (Eseguito una sola volta)
 	task.spawn(function()
-		while npc.Parent do
-			for _, part in npc:GetDescendants() do
-				if part:IsA("BasePart") then
-					part.Anchored = false
-					part.CanCollide = true
+		local RunService = game:GetService("RunService")
+		-- Disabilita stati fisici problematici
+		humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
+		humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
+		humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying, false)
+
+		for _, part in npc:GetDescendants() do
+			if part:IsA("BasePart") then
+				part.Anchored = false
+
+				-- Se c'è un CollisionGroup per gli NPC è meglio ma di base disabilitiamo collisioni
+				-- tra braccia/gambe per evitare incastri
+				if
+					part.Name ~= "HumanoidRootPart"
+					and part.Name ~= "Head"
+					and part.Name ~= "Torso"
+					and part.Name ~= "UpperTorso"
+					and part.Name ~= "LowerTorso"
+				then
+					part.CanCollide = false
 				end
+
+				-- Forza il gruppo collisione se esiste, altrimenti previeni che si spingano
+				pcall(function()
+					part.CollisionGroup = "NPCs"
+				end)
 			end
-			task.wait(5)
 		end
 	end)
-	
+
 	-- Setup Interazione
 	local prompt = Instance.new("ProximityPrompt")
 	prompt.ActionText = "Dai Rustella"
@@ -42604,68 +42612,121 @@ function NPCService.setupNPC(npc: Model)
 	prompt.MaxActivationDistance = 25
 	prompt.RequiresLineOfSight = false
 	prompt.Parent = rootPart
-	
+
 	prompt.Triggered:Connect(function(player)
 		NPCService.handleInteraction(npc, player, prompt)
 	end)
-	
-	-- AI Movement Loop (FORZATO CON STUCK CHECK)
+
+	-- AI Movement Loop (CON PATHFINDING E STUCK CHECK)
+	local PathfindingService = game:GetService("PathfindingService")
+
 	task.spawn(function()
 		print("NPCService: [AI START] " .. npc.Name .. " è operativo.")
 		while npc.Parent do
 			if not npc:GetAttribute("IsEating") then
 				local targetBrace = NPCService.findNearestBrace(rootPart.Position)
 				local centerPos = rootPart.Position
-				
+
 				if targetBrace then
 					local p = targetBrace.PrimaryPart or targetBrace:FindFirstChildWhichIsA("BasePart", true)
-					if p then centerPos = p.Position end
+					if p then
+						centerPos = p.Position
+					end
 				end
-				
-				-- Repulsion: Se è troppo vicino alla brace, forza la fuga
+
+				-- Calcola destinazione intelligente
 				local distToCenter = (rootPart.Position - centerPos).Magnitude
 				local goalPos
-				
+
 				if distToCenter < Settings.NPC_MIN_DISTANCE then
 					-- Direzione di fuga dalla brace
 					local fleeDir = (rootPart.Position - centerPos).Unit
-					if fleeDir.Magnitude == 0 or distToCenter < 1 then 
-						fleeDir = Vector3.new(math.random()-0.5, 0, math.random()-0.5).Unit
+					if fleeDir.Magnitude == 0 or distToCenter < 1 then
+						fleeDir = Vector3.new(math.random() - 0.5, 0, math.random() - 0.5).Unit
 					end
 					goalPos = centerPos + fleeDir * (Settings.NPC_MIN_DISTANCE + math.random(5, 10))
-					-- print("NPCService: " .. npc.Name .. " troppo vicino! Fuga verso: " .. tostring(goalPos))
 				else
-					-- Destinazione random tra min e max
+					-- Destinazione random in modo naturale
 					local angle = math.random() * math.pi * 2
 					local dist = math.random(Settings.NPC_MIN_DISTANCE, Settings.NPC_WALK_RADIUS)
 					goalPos = centerPos + Vector3.new(math.cos(angle) * dist, 0, math.sin(angle) * dist)
 				end
-				
-				-- MOVE-TO CON TIMEOUT (Antistuck)
-				humanoid:MoveTo(goalPos)
-				
-				-- Start walking animation
-				if walkTrack then
-					walkTrack:Play(0.2)
-					walkTrack:AdjustSpeed(humanoid.WalkSpeed / 16)
-				end
-				
-				-- Aspetta il completamento o timeout di 8 secondi
-				local finished = false
-				local conn
-				conn = humanoid.MoveToFinished:Connect(function()
-					finished = true
-					if conn then conn:Disconnect() end
+
+				-- Usa Pathfinding per aggirare ostacoli
+				local path = PathfindingService:CreatePath({
+					AgentRadius = 2,
+					AgentHeight = 5,
+					AgentCanJump = false,
+					AgentCanClimb = false,
+					WaypointSpacing = 4,
+				})
+
+				local success, err = pcall(function()
+					path:ComputeAsync(rootPart.Position, goalPos)
 				end)
-				
-				local startWait = tick()
-				while not finished and (tick() - startWait) < 8 do
-					task.wait(0.5)
+
+				if success and path.Status == Enum.PathStatus.Success then
+					local waypoints = path:GetWaypoints()
+
+					if walkTrack then
+						walkTrack:Play(0.2)
+						walkTrack:AdjustSpeed(humanoid.WalkSpeed / 16)
+					end
+
+					local stuck = false
+					for i, waypoint in ipairs(waypoints) do
+						if npc:GetAttribute("IsEating") or not npc.Parent or stuck then
+							break
+						end
+
+						-- Salta i primissimi waypoint se troppo vicini
+						if i == 1 then
+							continue
+						end
+
+						humanoid:MoveTo(waypoint.Position)
+
+						local wpFinished = false
+						local conn
+						conn = humanoid.MoveToFinished:Connect(function(reached)
+							wpFinished = true
+							if not reached then
+								stuck = true
+							end
+							if conn then
+								conn:Disconnect()
+							end
+						end)
+
+						local startWait = tick()
+						-- max 3 secondi per waypoint
+						while not wpFinished and (tick() - startWait) < 3 do
+							if (rootPart.Position - waypoint.Position).Magnitude < 2 then
+								break -- Abbastanza vicino
+							end
+							task.wait(0.1)
+						end
+						if conn then
+							conn:Disconnect()
+						end
+
+						if not wpFinished then
+							stuck = true -- Timeout, incastrato
+						end
+					end
+
+					if walkTrack then
+						walkTrack:Stop(0.3)
+					end
+				else
+					-- Path fallito (destinazione irraggiungibile)
+					task.wait(1)
 				end
-				if conn then conn:Disconnect() end
-				
-				if walkTrack then walkTrack:Stop(0.3) end
-				task.wait(Settings.NPC_IDLE_TIME or 5)
+
+				-- Pausa prima di camminare di nuovo
+				if not npc:GetAttribute("IsEating") then
+					task.wait(Settings.NPC_IDLE_TIME or math.random(3, 7))
+				end
 			else
 				task.wait(1)
 			end
@@ -42676,7 +42737,7 @@ end
 function NPCService.findNearestBrace(pos: Vector3): Model?
 	local nearest = nil
 	local minDist = math.huge
-	
+
 	for _, obj in Workspace:GetDescendants() do
 		local name = obj.Name:lower()
 		if name:match("brace") and obj:IsA("Model") then
@@ -42694,11 +42755,15 @@ function NPCService.findNearestBrace(pos: Vector3): Model?
 end
 
 function NPCService.handleInteraction(npc: Model, player: Player, prompt: ProximityPrompt)
-	if npc:GetAttribute("IsEating") then return end
-	
+	if npc:GetAttribute("IsEating") then
+		return
+	end
+
 	local character = player.Character
-	if not character then return end
-	
+	if not character then
+		return
+	end
+
 	local tool = character:FindFirstChild("Rustella") or character:FindFirstChild("Rustella Bruciata")
 	if not tool then
 		local backpack = player:FindFirstChild("Backpack")
@@ -42706,14 +42771,14 @@ function NPCService.handleInteraction(npc: Model, player: Player, prompt: Proxim
 			tool = backpack:FindFirstChild("Rustella") or backpack:FindFirstChild("Rustella Bruciata")
 		end
 	end
-	
+
 	if tool then
 		local isBurntItem = (tool.Name == "Rustella Bruciata")
 		-- Consume Tool
 		tool:Destroy()
 		npc:SetAttribute("IsEating", true)
 		prompt.Enabled = false
-		
+
 		-- Stop walk animation
 		local humanoid = npc:FindFirstChildOfClass("Humanoid")
 		if humanoid then
@@ -42721,14 +42786,14 @@ function NPCService.handleInteraction(npc: Model, player: Player, prompt: Proxim
 				track:Stop(0.5)
 			end
 		end
-		
+
 		-- Play Sound
 		local rootPart = npc:FindFirstChild("HumanoidRootPart")
 		if isBurntItem then
 			NPCService.playSound(rootPart or npc, Settings.BURNT_FEED_SOUND)
 			print("NPCService: " .. npc.Name .. " ha ricevuto una rustella BRUCIATA!")
 			NPCService.notify(player, npc.Name .. ": 'Bleah! Che schifo!'")
-			
+
 			-- Hunger Penalty
 			local currentHunger = npc:GetAttribute("Hunger") or 0
 			npc:SetAttribute("Hunger", math.max(0, currentHunger - (Settings.BURNT_PENALTY or 20)))
@@ -42736,92 +42801,92 @@ function NPCService.handleInteraction(npc: Model, player: Player, prompt: Proxim
 			NPCService.playSound(rootPart or npc, Settings.SOUNDS.WOAH)
 			print("NPCService: " .. npc.Name .. " ha ricevuto una rustella da " .. player.Name)
 			NPCService.notify(player, npc.Name .. ": 'Woah! Grazie!'")
-			
+
 			-- Hunger Restore
 			local currentHunger = npc:GetAttribute("Hunger") or 0
 			npc:SetAttribute("Hunger", math.min(100, currentHunger + (Settings.FEED_RESTORE_AMOUNT or 35)))
 		end
-		
-			-- Visual: Put rustella in hand (Horizontal & Real Model)
-			local hand = npc:FindFirstChild("RightHand") or npc:FindFirstChild("Right Arm")
-			if hand and hand:IsA("BasePart") then
-				local visualRustella = Instance.new("Part")
-				visualRustella.Name = "EatingRustellaHandle"
-				visualRustella.Size = Vector3.new(0.5, 0.5, 0.5)
-				visualRustella.Transparency = 1
-				visualRustella.CanCollide = false
-				
-				-- Orientamento Orizzontale al limite della mano
-				visualRustella.CFrame = hand.CFrame * CFrame.new(0.6, 0, 0)
-				visualRustella.Parent = npc
-				
-				-- Provo a recuperare il modello originale dal primo braciere trovato
-				local nearestBrace = NPCService.findNearestBrace(npc.PrimaryPart.Position)
-				local modelSource = nearestBrace and nearestBrace:FindFirstChild("Model")
-				local rSource = modelSource and modelSource:FindFirstChild("rustell1")
-				
-				if rSource then
-					local clone = rSource:Clone()
-					clone.Name = "Visual"
-					
-					-- Position model to target BEFORE welding
-					if clone:IsA("Model") then
-						clone:PivotTo(visualRustella.CFrame * CFrame.Angles(0, math.rad(90), 0))
-					elseif clone:IsA("BasePart") then
-						clone.CFrame = visualRustella.CFrame * CFrame.Angles(0, math.rad(90), 0)
-					end
-					
-					clone.Parent = visualRustella
-					
-					-- Weld ALL parts of the model
-					for _, p in clone:GetDescendants() do
-						if p:IsA("BasePart") then
-							p.Transparency = 0
-							p.Anchored = false
-							p.CanCollide = false
-							p.Color = isBurntItem and Settings.BURNT_COLOR or Color3.fromRGB(150, 100, 80)
-							
-							local w = Instance.new("WeldConstraint")
-							w.Part0 = visualRustella
-							w.Part1 = p
-							w.Parent = p
-						end
-					end
 
-					-- Individual part case
-					if clone:IsA("BasePart") then
+		-- Visual: Put rustella in hand (Horizontal & Real Model)
+		local hand = npc:FindFirstChild("RightHand") or npc:FindFirstChild("Right Arm")
+		if hand and hand:IsA("BasePart") then
+			local visualRustella = Instance.new("Part")
+			visualRustella.Name = "EatingRustellaHandle"
+			visualRustella.Size = Vector3.new(0.5, 0.5, 0.5)
+			visualRustella.Transparency = 1
+			visualRustella.CanCollide = false
+
+			-- Orientamento Orizzontale al limite della mano
+			visualRustella.CFrame = hand.CFrame * CFrame.new(0.6, 0, 0)
+			visualRustella.Parent = npc
+
+			-- Provo a recuperare il modello originale dal primo braciere trovato
+			local nearestBrace = NPCService.findNearestBrace(npc.PrimaryPart.Position)
+			local modelSource = nearestBrace and nearestBrace:FindFirstChild("Model")
+			local rSource = modelSource and modelSource:FindFirstChild("rustell1")
+
+			if rSource then
+				local clone = rSource:Clone()
+				clone.Name = "Visual"
+
+				-- Position model to target BEFORE welding
+				if clone:IsA("Model") then
+					clone:PivotTo(visualRustella.CFrame * CFrame.Angles(0, math.rad(90), 0))
+				elseif clone:IsA("BasePart") then
+					clone.CFrame = visualRustella.CFrame * CFrame.Angles(0, math.rad(90), 0)
+				end
+
+				clone.Parent = visualRustella
+
+				-- Weld ALL parts of the model
+				for _, p in clone:GetDescendants() do
+					if p:IsA("BasePart") then
+						p.Transparency = 0
+						p.Anchored = false
+						p.CanCollide = false
+						p.Color = isBurntItem and Settings.BURNT_COLOR or Color3.fromRGB(150, 100, 80)
+
 						local w = Instance.new("WeldConstraint")
 						w.Part0 = visualRustella
-						w.Part1 = clone
-						w.Parent = clone
+						w.Part1 = p
+						w.Parent = p
 					end
-				else
-					-- Fallback se non trova il modello
-					visualRustella.Transparency = 0
-					visualRustella.Color = isBurntItem and Settings.BURNT_COLOR or Color3.fromRGB(80, 40, 20)
-					visualRustella.Size = Vector3.new(0.1, 0.1, 1.2)
-					visualRustella.CFrame = visualRustella.CFrame * CFrame.Angles(0, math.rad(90), 0)
 				end
-				
-				local weld = Instance.new("WeldConstraint")
-				weld.Part0 = hand
-				weld.Part1 = visualRustella
-				weld.Parent = visualRustella
-			
+
+				-- Individual part case
+				if clone:IsA("BasePart") then
+					local w = Instance.new("WeldConstraint")
+					w.Part0 = visualRustella
+					w.Part1 = clone
+					w.Parent = clone
+				end
+			else
+				-- Fallback se non trova il modello
+				visualRustella.Transparency = 0
+				visualRustella.Color = isBurntItem and Settings.BURNT_COLOR or Color3.fromRGB(80, 40, 20)
+				visualRustella.Size = Vector3.new(0.1, 0.1, 1.2)
+				visualRustella.CFrame = visualRustella.CFrame * CFrame.Angles(0, math.rad(90), 0)
+			end
+
+			local weld = Instance.new("WeldConstraint")
+			weld.Part0 = hand
+			weld.Part1 = visualRustella
+			weld.Parent = visualRustella
+
 			-- Wait hold time
 			task.wait(Settings.NPC_HOLD_TIME)
-			
+
 			-- Eat: Play CHOMP sound
 			NPCService.playSound(rootPart or npc, Settings.SOUNDS.CHOMP)
 			visualRustella:Destroy()
-			
+
 			if isBurntItem then
 				NPCService.notify(player, npc.Name .. " ha mangiato la rustella bruciata. Ne soffre!")
 			else
 				NPCService.notify(player, npc.Name .. " ha mangiato la rustella. Fame ripristinata!")
 			end
 		end
-		
+
 		task.wait(1) -- Small delay before resuming
 		npc:SetAttribute("IsEating", false)
 		prompt.Enabled = true
@@ -42845,21 +42910,25 @@ function NPCService.playSound(parent: Instance, soundId: string)
 	sound.RollOffMinDistance = 10
 	sound.Parent = parent
 	sound:Play()
-	sound.Ended:Connect(function() sound:Destroy() end)
+	sound.Ended:Connect(function()
+		sound:Destroy()
+	end)
 end
 
 function NPCService.die(npc: Model)
-	if npc:GetAttribute("IsDead") then return end
+	if npc:GetAttribute("IsDead") then
+		return
+	end
 	npc:SetAttribute("IsDead", true)
 	print("NPCService: " .. npc.Name .. " è morto di fame!")
-	
+
 	local humanoid = npc:FindFirstChildOfClass("Humanoid")
 	if humanoid then
 		-- Stop current animations
 		for _, track in humanoid:GetPlayingAnimationTracks() do
 			track:Stop(0.1)
 		end
-		
+
 		-- Play T-Pose animation for 1 second before dying
 		local animator = humanoid:FindFirstChildOfClass("Animator")
 		if animator then
@@ -42871,48 +42940,54 @@ function NPCService.die(npc: Model)
 			end
 		end
 	end
-	
-	-- Play Death Sound 
+
+	-- Play Death Sound
 	local sound = Instance.new("Sound")
 	sound.SoundId = Settings.DEATH_SOUND_ID
 	sound.Volume = Settings.DEATH_VOLUME or 0.8
 	sound.Parent = Workspace
 	sound:Play()
-	
+
 	sound.Ended:Connect(function()
 		sound:Destroy()
 	end)
-	
+
 	-- Wait 1 second in T-Pose
 	task.wait(1)
-	
+
 	-- Fade NPC Avatar
 	local fadeInfo = TweenInfo.new(0.2, Enum.EasingStyle.Linear)
 	for _, part in npc:GetDescendants() do
 		if part:IsA("BasePart") or part:IsA("Decal") or part:IsA("Texture") then
-			TweenService:Create(part, fadeInfo, {Transparency = 1}):Play()
+			TweenService:Create(part, fadeInfo, { Transparency = 1 }):Play()
 		end
 	end
-	
+
 	-- Remove UI and NPC
 	local head = npc:FindFirstChild("Head")
 	if head then
 		local ui = head:FindFirstChild("HungerUI")
-		if ui then ui:Destroy() end
+		if ui then
+			ui:Destroy()
+		end
 	end
-	
+
 	task.wait(0.2)
 	npc:Destroy()
 end
 
 function NPCService.createHungerUI(npc: Model)
 	local head = npc:FindFirstChild("Head") or npc:FindFirstChildWhichIsA("BasePart", true)
-	if not head then return end
-	
+	if not head then
+		return
+	end
+
 	-- Rimuovi eventuali vecchi UI
 	local existing = head:FindFirstChild("HungerUI")
-	if existing then existing:Destroy() end
-	
+	if existing then
+		existing:Destroy()
+	end
+
 	local bgui = Instance.new("BillboardGui")
 	bgui.Name = "HungerUI"
 	bgui.Size = UDim2.new(5, 0, 0.7, 0)
@@ -42920,20 +42995,20 @@ function NPCService.createHungerUI(npc: Model)
 	bgui.AlwaysOnTop = true
 	bgui.ExtentsOffset = Vector3.new(0, 2.5, 0)
 	bgui.Parent = head
-	
+
 	local frame = Instance.new("Frame")
 	frame.Size = UDim2.new(1, 0, 1, 0)
 	frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 	frame.BorderSizePixel = 2
 	frame.Parent = bgui
-	
+
 	local bar = Instance.new("Frame")
 	bar.Name = "Bar"
 	bar.Size = UDim2.new(1, 0, 1, 0)
 	bar.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
 	bar.BorderSizePixel = 0
 	bar.Parent = frame
-	
+
 	local text = Instance.new("TextLabel")
 	text.Name = "Percent"
 	text.Size = UDim2.new(1, 0, 1, 0)
@@ -42944,7 +43019,7 @@ function NPCService.createHungerUI(npc: Model)
 	text.Text = "100%"
 	text.ZIndex = 3
 	text.Parent = frame
-	
+
 	-- Adjust Tag size of NPC Name (if any)
 	for _, d in npc:GetDescendants() do
 		if d:IsA("BillboardGui") and d.Name ~= "HungerUI" then
@@ -42955,8 +43030,10 @@ end
 
 function NPCService.updateHungerUI(npc: Model, hunger: number)
 	local head = npc:FindFirstChild("Head") or npc:FindFirstChildWhichIsA("BasePart", true)
-	if not head then return end
-	
+	if not head then
+		return
+	end
+
 	local bgui = head:FindFirstChild("HungerUI")
 	if bgui and bgui:IsA("BillboardGui") then
 		local bar = bgui.Frame:FindFirstChild("Bar")
