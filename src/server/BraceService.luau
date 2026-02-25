@@ -153,7 +153,7 @@ function BraceService.setupBrace(brace: Model)
 	insertPrompt.ObjectText = "Braciere"
 	insertPrompt.Style = Enum.ProximityPromptStyle.Custom
 	insertPrompt.KeyboardKeyCode = Enum.KeyCode.E
-	insertPrompt.HoldDuration = 0.8
+	insertPrompt.HoldDuration = 0.5
 	insertPrompt.RequiresLineOfSight = false
 	insertPrompt.MaxActivationDistance = Settings.INTERACTION_DISTANCE
 	insertPrompt.Parent = parentPart
@@ -165,7 +165,7 @@ function BraceService.setupBrace(brace: Model)
 	takePrompt.ObjectText = "Pronta!"
 	takePrompt.Style = Enum.ProximityPromptStyle.Custom
 	takePrompt.KeyboardKeyCode = Enum.KeyCode.R
-	takePrompt.HoldDuration = 0.8
+	takePrompt.HoldDuration = 1.2
 	takePrompt.Enabled = false
 	takePrompt.RequiresLineOfSight = false
 	takePrompt.MaxActivationDistance = Settings.INTERACTION_DISTANCE

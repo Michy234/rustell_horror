@@ -51,15 +51,24 @@ function NPCService.setupNPC(npc: Model)
 	local animator = humanoid:FindFirstChildOfClass("Animator") or Instance.new("Animator", humanoid)
 	local walkAnim = Instance.new("Animation")
 	
+	print("NPCService: RigType detected for " .. npc.Name .. " -> " .. tostring(humanoid.RigType))
+	
 	if humanoid.RigType == Enum.HumanoidRigType.R6 then
 		walkAnim.AnimationId = "rbxassetid://180426354" -- Standard R6 Walk
 	else
 		walkAnim.AnimationId = "rbxassetid://507767714" -- Standard R15 Walk
 	end
 	
-	local walkTrack = animator:LoadAnimation(walkAnim)
-	if walkTrack then
+	local walkTrack: AnimationTrack?
+	local success, err = pcall(function()
+		walkTrack = animator:LoadAnimation(walkAnim)
+	end)
+	
+	if not success or not walkTrack then
+		warn("NPCService: [FAIL] Impossibile caricare animazione per " .. npc.Name .. ": " .. tostring(err))
+	else
 		walkTrack.Looped = true
+		print("NPCService: [OK] Animazione caricata per " .. npc.Name)
 	end
 	
 	-- T-Pose Animation for death (Common Roblox ID)
@@ -90,6 +99,15 @@ function NPCService.setupNPC(npc: Model)
 			npc:SetAttribute("Hunger", hunger)
 			NPCService.updateHungerUI(npc, hunger)
 			task.wait(1)
+		end
+	end)
+	
+	-- AI Watchdog
+	task.spawn(function()
+		while npc.Parent do
+			print(string.format("NPCService: [WATCHDOG] %s | Hunger: %.1f | Eating: %s | Rig: %s", 
+				npc.Name, npc:GetAttribute("Hunger") or 0, tostring(npc:GetAttribute("IsEating")), tostring(humanoid.RigType)))
+			task.wait(10)
 		end
 	end)
 	
@@ -152,16 +170,29 @@ function NPCService.setupNPC(npc: Model)
 					goalPos = centerPos + Vector3.new(math.cos(angle) * dist, 0, math.sin(angle) * dist)
 				end
 				
+				-- MOVE-TO CON TIMEOUT (Antistuck)
 				humanoid:MoveTo(goalPos)
 				
-				-- Start walking animation (Ensure it plays while moving)
+				-- Start walking animation
 				if walkTrack then
 					walkTrack:Play(0.2)
-					walkTrack:AdjustSpeed(humanoid.WalkSpeed / 16) -- Sync with speed
+					walkTrack:AdjustSpeed(humanoid.WalkSpeed / 16)
 				end
 				
-				-- CONTROLLO STUCK & WAIT
-				humanoid.MoveToFinished:Wait()
+				-- Aspetta il completamento o timeout di 8 secondi
+				local finished = false
+				local conn
+				conn = humanoid.MoveToFinished:Connect(function()
+					finished = true
+					if conn then conn:Disconnect() end
+				end)
+				
+				local startWait = tick()
+				while not finished and (tick() - startWait) < 8 do
+					task.wait(0.5)
+				end
+				if conn then conn:Disconnect() end
+				
 				if walkTrack then walkTrack:Stop(0.3) end
 				task.wait(Settings.NPC_IDLE_TIME or 5)
 			else
