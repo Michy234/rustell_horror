@@ -21,8 +21,8 @@ function NotificationService.init()
 	-- List Container
 	local mainList = Instance.new("Frame")
 	mainList.Name = "NotifyList"
-	mainList.Size = UDim2.fromScale(0.4, 0.8) -- Larger width for readability
-	mainList.Position = UDim2.fromScale(0.02, 0.02) -- Top Left
+	mainList.Size = UDim2.fromScale(0.25, 0.6) -- Smaller UI
+	mainList.Position = UDim2.fromScale(0.01, 0.01)
 	mainList.BackgroundTransparency = 1
 	mainList.Parent = screenGui
 	
@@ -46,7 +46,7 @@ function NotificationService.init()
 		-- Create individual notification item
 		local item = Instance.new("CanvasGroup")
 		item.Name = "NotifyItem"
-		item.Size = UDim2.fromScale(1, 0.12) -- Larger height for larger text
+		item.Size = UDim2.fromScale(1, 0.06) -- Thinner items
 		item.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 		item.GroupTransparency = 1
 		item.BorderSizePixel = 0
