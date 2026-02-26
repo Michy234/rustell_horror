@@ -62,12 +62,25 @@ Settings.BG_MUSIC = {
 Settings.WIN_TIME = 300 -- 5 minutes
 Settings.WIN_SOUND_ID = "rbxassetid://356817586"
 Settings.DOG_SOUND_ID = "rbxassetid://9097860409"
-Settings.DOG_SPAWN_INTERVAL = 45 -- Seconds
+Settings.DOG_WALK_SOUND_ID = "rbxassetid://7676505509"
+Settings.DOG_SPAWN_INTERVAL = 65 -- Seconds (increased to follow user request)
 
 Settings.ADMINS = {
 	"Michy234", -- User's potential name
 	"Moltarobba",
 	"marco"
 }
+
+-- Rain Malus Settings
+Settings.RAIN_INTERVAL = 150    -- Seconds between rain checks
+Settings.RAIN_CHANCE = 0.4      -- 40% chance per interval
+Settings.RAIN_DURATION = 10     -- Seconds rain lasts
+Settings.RAIN_SOUND_ID = "rbxassetid://237985445"
+
+-- Brace Coal Settings
+Settings.COAL_DURATION = 40     -- Seconds coal burns before brace goes out
+
+-- Salt Settings
+Settings.SALT_SOUND_ID = "rbxassetid://6042053626"  -- shaker SFX (swap if needed)
 
 return Settings

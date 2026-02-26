@@ -6,12 +6,16 @@ local NPCService = require(script:WaitForChild("NPCService"))
 local WorldService = require(script:WaitForChild("WorldService"))
 local DogService = require(script:WaitForChild("DogService"))
 local AdminService = require(script:WaitForChild("AdminService"))
+local RainService = require(script:WaitForChild("RainService"))
+local SaltService = require(script:WaitForChild("SaltService"))
 
 BraceService.init()
 NPCService.init()
 WorldService.init()
 DogService.init()
 AdminService.init()
+RainService.init()
+SaltService.init()
 
 local startEvent = Instance.new("RemoteEvent")
 startEvent.Name = "GameStartEvent"
@@ -62,7 +66,9 @@ resetEvent.OnServerEvent:Connect(function(player)
 	
 	print("[DEBUG-SERVER] Clearing NPCs...")
 	NPCService.reset()
-	print("[DEBUG-SERVER] NPC Reset complete.")
+	print("[DEBUG-SERVER] Clearing Braces...")
+	BraceService.resetAll()
+	print("[DEBUG-SERVER] Reset complete.")
 end)
 
 print("Server started: Services initialized.")

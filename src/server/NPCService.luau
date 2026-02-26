@@ -121,6 +121,7 @@ function NPCService.init()
 				end
 				local elapsed = os.clock() - startTime
 				local remaining = math.max(0, Settings.WIN_TIME - elapsed)
+				Workspace:SetAttribute("GameRemainingTime", remaining)
 				
 				local timerUpdate = ReplicatedStorage:FindFirstChild("TimerUpdateEvent")
 				if timerUpdate then
@@ -168,8 +169,24 @@ function NPCService.setupNPC(npc: Model)
 		end
 	end
 
-	npc:SetAttribute("Hunger", 100)
+	-- Each NPC gets a unique random hunger profile so they don't all die together
+	local startingHunger = math.random(70, 100)
+	local hungerSpeed = 0.5 + math.random() * 1.3
+	npc:SetAttribute("Hunger", startingHunger)
+	npc:SetAttribute("HungerSpeed", hungerSpeed)
+	-- Salt preference: random, flips periodically
+	npc:SetAttribute("WantsSalted", math.random() > 0.5)
 	NPCService.createHungerUI(npc)
+
+	-- Flip salt preference every 30-90 seconds
+	task.spawn(function()
+		while npc.Parent do
+			task.wait(math.random(30, 90))
+			if not npc.Parent then break end
+			npc:SetAttribute("WantsSalted", math.random() > 0.5)
+			NPCService.updateSaltIcon(npc)
+		end
+	end)
 
 	-- FINAL ROBUST ANIMATOR (Server-Side)
 	task.spawn(function()
@@ -239,12 +256,16 @@ function NPCService.setupNPC(npc: Model)
 					break
 				end
 				local difficulty = game:GetAttribute("Difficulty") or Settings.DIFFICULTY or 1.0
-				local decay = (Settings.HUNGER_DECAY_RATE or 0.5) * difficulty
+				local npcHungerSpeed = npc:GetAttribute("HungerSpeed") or 1.0
+				local decay = (Settings.HUNGER_DECAY_RATE or 0.5) * difficulty * npcHungerSpeed
+				-- tiny tick jitter so even same-speed NPCs drift apart
+				decay = decay * (0.9 + math.random() * 0.2)
 				hunger = math.max(0, hunger - decay)
 				npc:SetAttribute("Hunger", hunger)
 				NPCService.updateHungerUI(npc, hunger)
 			end
-			task.wait(1)
+			-- randomise wait too: 0.8-1.2s, adds natural drift over time
+			task.wait(0.8 + math.random() * 0.4)
 		end
 	end)
 
@@ -269,38 +290,85 @@ function NPCService.setupNPC(npc: Model)
 		while npc.Parent and not npc:GetAttribute("IsDead") do
 			if game:GetAttribute("GameStarted") and not npc:GetAttribute("IsEating") then
 				local targetBrace = NPCService.findNearestBrace(npc:GetPivot().Position)
-				local goalPos
+				local goalPos = nil
+				
 				if targetBrace then
 					local center = targetBrace:GetPivot().Position
+					-- Try multiple times to find a spot well away from ALL braces
+					for _ = 1, 8 do
+						local angle = math.random() * math.pi * 2
+						local dist = math.random(35, Settings.NPC_WALK_RADIUS)
+						local testPos = center + Vector3.new(math.cos(angle) * dist, 0, math.sin(angle) * dist)
+						
+						-- Must be at least 35 studs from ANY brace
+						local tooClose = false
+						for _, b in Workspace:GetDescendants() do
+							if b:IsA("Model") and b.Name:lower():match("brace") then
+								if (b:GetPivot().Position - testPos).Magnitude < 35 then
+									tooClose = true
+									break
+								end
+							end
+						end
+						
+						if not tooClose then
+							goalPos = testPos
+							break
+						end
+					end
+				end
+				
+				-- Fallback random movement if no good spot found
+				if not goalPos then
 					local angle = math.random() * math.pi * 2
-					local dist = math.random(Settings.NPC_MIN_DISTANCE, Settings.NPC_WALK_RADIUS)
-					goalPos = center + Vector3.new(math.cos(angle) * dist, 0, math.sin(angle) * dist)
-					
-					local path = PathfindingService:CreatePath({AgentRadius = 2, AgentHeight = 5})
+					local dist = math.random(10, 30)
+					goalPos = npc:GetPivot().Position + Vector3.new(math.cos(angle) * dist, 0, math.sin(angle) * dist)
+				end
+
+				if goalPos then
+					local path = PathfindingService:CreatePath({
+						AgentRadius = 4,
+						AgentHeight = 6,
+						AgentCanJump = false,
+					})
 					path:ComputeAsync(npc:GetPivot().Position, goalPos)
 					if path.Status == Enum.PathStatus.Success then
 						for _, waypoint in path:GetWaypoints() do
-							if not game:GetAttribute("GameStarted") or npc:GetAttribute("IsEating") or npc:GetAttribute("IsDead") then break end
+							if not game:GetAttribute("GameStarted") or npc:GetAttribute("IsEating") or npc:GetAttribute("IsDead") then 
+								break 
+							end
+							
+							-- Skip waypoints too close to any brace
+							local waypointTooClose = false
+							for _, b in Workspace:GetDescendants() do
+								if b:IsA("Model") and b.Name:lower():match("brace") then
+									if (b:GetPivot().Position - waypoint.Position).Magnitude < 20 then
+										waypointTooClose = true
+										break
+									end
+								end
+							end
+							if waypointTooClose then continue end
+							
 							humanoid:MoveTo(waypoint.Position)
 							
 							local reached = false
-							local conn;
-							conn = humanoid.MoveToFinished:Connect(function() reached = true end)
+							local conn = humanoid.MoveToFinished:Connect(function() reached = true end)
 							
 							local t = 0
-							-- Shorter timeout for individual waypoints
-							while t < 2 and not reached do
+							while t < 1.0 and not reached do
 								t += task.wait(0.1)
-								if (npc:GetPivot().Position - waypoint.Position).Magnitude < 3 then
+								if (npc:GetPivot().Position - waypoint.Position).Magnitude < 4 then
 									reached = true
 								end
 							end
 							if conn then conn:Disconnect() end
+							task.wait(0.05)
 						end
 					end
 				end
 			end
-			task.wait(math.random(3, 7))
+			task.wait(math.random(4, 9))
 		end
 	end)
 end
@@ -310,9 +378,27 @@ function NPCService.handleInteraction(npc: Model, player: Player, prompt: Proxim
 	local char = player.Character
 	if not char then return end
 
-	local tool = char:FindFirstChild("Rustella") or char:FindFirstChild("Rustella Bruciata")
+	-- Check both Character (equipped) and Backpack (in inventory)
+	local function findRustellaTool()
+		local playerChar = player.Character
+		for _, toolName in {"Rustella Salata", "Rustella Bruciata", "Rustella"} do
+			if playerChar then
+				local t = playerChar:FindFirstChild(toolName)
+				if t then return t end
+			end
+			local bp = player:FindFirstChild("Backpack")
+			if bp then
+				local t = bp:FindFirstChild(toolName)
+				if t then return t end
+			end
+		end
+		return nil
+	end
+	local tool = findRustellaTool()
 	if tool then
-		local isBurnt = (tool.Name == "Rustella Bruciata")
+		local isBurnt   = (tool.Name == "Rustella Bruciata")
+		local isSalted  = (tool.Name == "Rustella Salata")
+		local wantsSalt = npc:GetAttribute("WantsSalted") == true
 		tool:Destroy()
 		npc:SetAttribute("IsEating", true)
 		prompt.Enabled = false
@@ -322,11 +408,26 @@ function NPCService.handleInteraction(npc: Model, player: Player, prompt: Proxim
 			NPCService.notify(player, npc.Name .. ": 'Bleah! Che schifo!'")
 			local hunger = npc:GetAttribute("Hunger") or 0
 			npc:SetAttribute("Hunger", math.max(0, hunger - 20))
-		else
+		elseif isSalted and wantsSalt then
+			-- Perfect match!
+			NPCService.playSound(npc:GetPivot().Position, Settings.SOUNDS.WOAH)
+			NPCService.notify(player, npc.Name .. ": 'Mmmh, salata! PERFETTA!'")
+			local hunger = npc:GetAttribute("Hunger") or 0
+			npc:SetAttribute("Hunger", math.min(100, hunger + 50))  -- bonus
+		elseif (not isSalted) and (not wantsSalt) then
+			-- Also fine — natural when they want natural
 			NPCService.playSound(npc:GetPivot().Position, Settings.SOUNDS.WOAH)
 			NPCService.notify(player, npc.Name .. ": 'Woah! Grazie!'")
 			local hunger = npc:GetAttribute("Hunger") or 0
 			npc:SetAttribute("Hunger", math.min(100, hunger + 35))
+		else
+			-- Wrong type (salted when they didn't want, or plain when they wanted salt)
+			local msg = wantsSalt
+				and npc.Name .. ": 'Dove e' il sale?!'"
+				or npc.Name .. ": 'Bleah, troppo sale!'"
+			NPCService.notify(player, msg)
+			local hunger = npc:GetAttribute("Hunger") or 0
+			npc:SetAttribute("Hunger", math.min(100, hunger + 15))  -- small gain
 		end
 
 		task.wait(Settings.NPC_HOLD_TIME)
@@ -387,14 +488,14 @@ function NPCService.createHungerUI(npc: Model)
 	
 	local frame = Instance.new("Frame", bgui)
 	frame.Size = UDim2.fromScale(1, 0.4)
-	frame.Position = UDim2.fromScale(0, 0.6)
+	frame.Position = UDim2.fromScale(0, 0.5)
 	frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-	
+
 	local bar = Instance.new("Frame", frame)
 	bar.Name = "Bar"
 	bar.Size = UDim2.fromScale(1, 1)
 	bar.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
-	
+
 	local nl = Instance.new("TextLabel", frame)
 	nl.Size = UDim2.fromScale(1, 1)
 	nl.Position = UDim2.fromScale(0, -1.2)
@@ -413,6 +514,20 @@ function NPCService.createHungerUI(npc: Model)
 	pl.Font = Enum.Font.GothamBold
 	pl.TextColor3 = Color3.new(1, 1, 1)
 	pl.TextScaled = true
+
+	-- Salt preference icon — shown BELOW the hunger bar so it doesn't overlap the name
+	local saltIcon = Instance.new("TextLabel")
+	saltIcon.Name = "SaltIcon"
+	saltIcon.Size = UDim2.fromScale(1, 0.35)
+	saltIcon.Position = UDim2.fromScale(0, 1.05)    -- below the frame (hunger bar)
+	saltIcon.BackgroundTransparency = 1
+	saltIcon.Font = Enum.Font.GothamBold
+	saltIcon.TextColor3 = Color3.fromRGB(255, 245, 180)
+	saltIcon.TextScaled = true
+	saltIcon.Parent = frame
+	Instance.new("UIStroke", saltIcon)
+	local wantsSalt = npc:GetAttribute("WantsSalted") == true
+	saltIcon.Text = wantsSalt and "🧂 SALATA" or "🍖 NATURALE"
 end
 
 function NPCService.updateHungerUI(npc: Model, hunger: number)
@@ -431,9 +546,24 @@ function NPCService.updateHungerUI(npc: Model, hunger: number)
 	end
 end
 
+function NPCService.updateSaltIcon(npc: Model)
+	local head = npc:FindFirstChild("Head") or npc:FindFirstChildWhichIsA("BasePart", true)
+	if not head then return end
+	local bgui = head:FindFirstChild("HungerUI")
+	if not bgui then return end
+	local frame = bgui:FindFirstChild("Frame")
+	if not frame then return end
+	local icon = frame:FindFirstChild("SaltIcon")
+	if not icon then return end
+	local wantsSalt = npc:GetAttribute("WantsSalted") == true
+	icon.Text = wantsSalt and "🧂 SALATA" or "🍖 NATURALE"
+end
+
 function NPCService.notify(player: Player, message: string)
 	local ev = ReplicatedStorage:FindFirstChild("NotificationEvent")
-	if ev then ev:FireClient(player, message) end
+	if ev then
+		ev:FireClient(player, message)
+	end
 end
 
 return NPCService

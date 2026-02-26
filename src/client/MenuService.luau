@@ -426,6 +426,60 @@ function MenuService.init()
 		local difficulty = 0.5 + (v * 2.0)
 		game:SetAttribute("Difficulty", difficulty)
 	end)
+	
+	-- FIRST PERSON TOGGLE CHECKBOX
+	do
+		local isFirstPerson = true  -- default ON
+		
+		local row = Instance.new("Frame")
+		row.Size = UDim2.new(0.95, 0, 0, 44)
+		row.BackgroundTransparency = 1
+		row.ZIndex = 202
+		row.Parent = settingsList
+		
+		local rowLabel = Instance.new("TextLabel")
+		rowLabel.Size = UDim2.new(0.75, 0, 1, 0)
+		rowLabel.BackgroundTransparency = 1
+		rowLabel.Font = Enum.Font.FredokaOne
+		rowLabel.TextColor3 = Color3.fromRGB(100, 100, 100)
+		rowLabel.TextSize = 18
+		rowLabel.TextXAlignment = Enum.TextXAlignment.Left
+		rowLabel.Text = "Prima Persona"
+		rowLabel.ZIndex = 203
+		rowLabel.Parent = row
+		
+		local checkBtn = Instance.new("TextButton")
+		checkBtn.Size = UDim2.fromOffset(36, 36)
+		checkBtn.Position = UDim2.new(1, -36, 0.5, -18)
+		checkBtn.BackgroundColor3 = Color3.fromRGB(0, 160, 80) -- green = ON
+		checkBtn.Text = "✓"
+		checkBtn.Font = Enum.Font.GothamBold
+		checkBtn.TextSize = 20
+		checkBtn.TextColor3 = Color3.new(1, 1, 1)
+		checkBtn.ZIndex = 204
+		checkBtn.Parent = row
+		Instance.new("UICorner", checkBtn).CornerRadius = UDim.new(0, 6)
+		
+		local function updateCheckbox()
+			if isFirstPerson then
+				checkBtn.BackgroundColor3 = Color3.fromRGB(0, 160, 80)
+				checkBtn.Text = "✓"
+			else
+				checkBtn.BackgroundColor3 = Color3.fromRGB(160, 50, 50)
+				checkBtn.Text = "✗"
+			end
+			if _G.SetFirstPerson then
+				_G.SetFirstPerson(isFirstPerson)
+			end
+		end
+		
+		checkBtn.MouseButton1Click:Connect(function()
+			isFirstPerson = not isFirstPerson
+			updateCheckbox()
+		end)
+		
+		updateCheckbox()  -- Apply default state
+	end
 
 	-- TOP-DOWN CAMERA LOGIC
 	local cameraConn: RBXScriptConnection?
@@ -647,6 +701,54 @@ function MenuService.init()
 		menuFrame.Visible = false
 	end)
 
+	-- TIMER UI CONTAINER
+	local timerContainer = Instance.new("Frame")
+	timerContainer.Name = "TimerContainer"
+	timerContainer.Size = UDim2.fromOffset(220, 80)
+	timerContainer.Position = UDim2.new(0.5, 0, 1, -20)
+	timerContainer.AnchorPoint = Vector2.new(0.5, 1)
+	timerContainer.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	timerContainer.BackgroundTransparency = 0.5
+	timerContainer.Visible = false
+	timerContainer.ZIndex = 100000
+	timerContainer.Parent = screenGui
+	
+	local containerCorner = Instance.new("UICorner")
+	containerCorner.CornerRadius = UDim.new(0, 12)
+	containerCorner.Parent = timerContainer
+
+	local timerTitle = Instance.new("TextLabel")
+	timerTitle.Name = "Title"
+	timerTitle.Size = UDim2.fromScale(1, 0.4)
+	timerTitle.Position = UDim2.fromScale(0, 0.1)
+	timerTitle.BackgroundTransparency = 1
+	timerTitle.Font = Enum.Font.LuckiestGuy
+	timerTitle.TextColor3 = Color3.new(1, 1, 1)
+	timerTitle.TextSize = 18
+	timerTitle.Text = "Tempo rimanente:"
+	timerTitle.ZIndex = 100001
+	timerTitle.Parent = timerContainer
+	
+	local titleStroke = Instance.new("UIStroke")
+	titleStroke.Thickness = 2
+	titleStroke.Parent = timerTitle
+
+	local timerLabel = Instance.new("TextLabel")
+	timerLabel.Name = "WinTimer"
+	timerLabel.Size = UDim2.fromScale(1, 0.6)
+	timerLabel.Position = UDim2.fromScale(0, 0.4)
+	timerLabel.BackgroundTransparency = 1
+	timerLabel.Font = Enum.Font.LuckiestGuy
+	timerLabel.TextColor3 = Color3.new(1, 1, 1)
+	timerLabel.TextSize = 36
+	timerLabel.Text = ""
+	timerLabel.ZIndex = 100001
+	timerLabel.Parent = timerContainer
+	
+	local timerStroke = Instance.new("UIStroke")
+	timerStroke.Thickness = 3
+	timerStroke.Parent = timerLabel
+
 	-- RESET LOGIC
 	local function fullReset()
 		print("[DEBUG-CLIENT] Inizio fullReset...")
@@ -685,6 +787,7 @@ function MenuService.init()
 
 		menuFrame.Visible = true
 		settingsIcon.Visible = false
+		timerContainer.Visible = false
 		
 		settingsFrame.Visible = false
 		settingsFrame.Position = UDim2.fromScale(0.5, 1.5)
@@ -813,7 +916,7 @@ function MenuService.init()
 		jumpscareOverlay.Visible = true
 		local scarySound = Instance.new("Sound")
 		scarySound.SoundId = "rbxassetid://8395374561"
-		scarySound.Volume = 1
+		scarySound.Volume = 5
 		scarySound.PlaybackSpeed = 0.5 -- SLOWED DOWN BY 50%
 		scarySound.Parent = SoundService
 		scarySound:Play()
@@ -831,24 +934,6 @@ function MenuService.init()
 		fullReset()
 	end
 
-	-- TIMER UI (BOTTOM CENTER)
-	local timerLabel = Instance.new("TextLabel")
-	timerLabel.Name = "WinTimer"
-	timerLabel.Size = UDim2.fromScale(0.2, 0.05)
-	timerLabel.Position = UDim2.fromScale(0.5, 0.95)
-	timerLabel.AnchorPoint = Vector2.new(0.5, 1)
-	timerLabel.BackgroundTransparency = 1
-	timerLabel.Font = Enum.Font.LuckiestGuy
-	timerLabel.TextColor3 = Color3.new(1, 1, 1)
-	timerLabel.TextSize = 36
-	timerLabel.Text = ""
-	timerLabel.Visible = false
-	timerLabel.ZIndex = 100000
-	timerLabel.Parent = screenGui
-	
-	local timerStroke = Instance.new("UIStroke")
-	timerStroke.Thickness = 3
-	timerStroke.Parent = timerLabel
 
 	-- WIN UI
 	local winLabel = Instance.new("TextLabel")
@@ -884,7 +969,7 @@ function MenuService.init()
 		-- 2. Wait half a second before celebration
 		task.wait(0.5)
 		
-		timerLabel.Visible = false
+		timerContainer.Visible = false  -- hide entire timer (title + number)
 		winLabel.Visible = true
 		winLabel.TextTransparency = 0 -- FORCE VISIBLE
 		winLabel.Position = UDim2.fromScale(0.5, 1.2)
@@ -943,12 +1028,15 @@ function MenuService.init()
 	local timerUpdateEvent = ReplicatedStorage:WaitForChild("TimerUpdateEvent")
 	timerUpdateEvent.OnClientEvent:Connect(function(remaining)
 		if not game:GetAttribute("GameStarted") then 
-			timerLabel.Visible = false 
+			timerContainer.Visible = false 
 			return 
 		end
 		
-		timerLabel.Visible = true
+		timerContainer.Visible = true
 		timerLabel.TextTransparency = 0 -- FORCE VISIBLE
+		timerTitle.TextTransparency = 0
+		timerContainer.BackgroundTransparency = 0.5
+		
 		local mins = math.floor(remaining / 60)
 		local secs = math.floor(remaining % 60)
 		timerLabel.Text = string.format("%02d:%02d", mins, secs)

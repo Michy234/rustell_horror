@@ -7,6 +7,7 @@ local RunService = game:GetService("RunService")
 local Settings = require(ReplicatedStorage.Shared.Settings)
 local DogService = require(script.Parent.DogService)
 local NPCService = require(script.Parent.NPCService)
+local RainService = require(script.Parent.RainService)
 
 local AdminService = {}
 
@@ -51,7 +52,7 @@ function AdminService.handleCommand(player: Player, message: string)
 		
 	elseif cmd == ":dog" then
 		print("[ADMIN] " .. player.Name .. " triggered DOG")
-		DogService.spawnDog()
+		DogService.spawnDog(false)
 		
 	elseif cmd == ":reset" then
 		print("[ADMIN] " .. player.Name .. " triggered RESET")
@@ -75,6 +76,12 @@ function AdminService.handleCommand(player: Player, message: string)
 				v:SetAttribute("Hunger", 100)
 			end
 		end
+		
+	elseif cmd == ":rain" then
+		print("[ADMIN] " .. player.Name .. " triggered RAIN")
+		task.spawn(function()
+			RainService.trigger()
+		end)
 	end
 end
 

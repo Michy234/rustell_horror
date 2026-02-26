@@ -9,96 +9,476 @@ local NPCService = require(script.Parent.NPCService)
 
 local DogService = {}
 
+local originalHomeCFrame: CFrame? = nil
+
 function DogService.init()
+	-- Cache the dog's spawn position once at boot
+	task.spawn(function()
+		task.wait(2) -- Wait for Workspace to load
+		local dog = Workspace:FindFirstChild("dogMalus", true)
+		if dog then
+			originalHomeCFrame = dog:GetPivot()
+			print("[DogService] Cached original home position.")
+		end
+	end)
+
 	task.spawn(function()
 		while true do
-			task.wait(Settings.DOG_SPAWN_INTERVAL or 45)
+			-- Random interval: 45s to 75s (45s to 1m15s as requested)
+			local interval = math.random(45, 75)
+			task.wait(interval)
 			if game:GetAttribute("GameStarted") then
-				DogService.spawnDog()
+				DogService.spawnDog(true)
 			end
 		end
 	end)
 end
 
-function DogService.spawnDog()
-	print("[DEBUG-SERVER] DogService: Spawning dogMalus...")
+local isMoving = false
+local dogChased = false
+local clickCount = 0
+local CLICKS_TO_CHASE = 20  -- computed dynamically per trip, default 20
+
+-- Create/Get RemoteEvent for dog clicks
+local DogClickEvent = ReplicatedStorage:FindFirstChild("DogClickEvent")
+if not DogClickEvent then
+	DogClickEvent = Instance.new("RemoteEvent")
+	DogClickEvent.Name = "DogClickEvent"
+	DogClickEvent.Parent = ReplicatedStorage
+end
+
+local function createDogUI(rootPart: BasePart): BillboardGui
+	local existing = rootPart:FindFirstChild("DogChaseUI")
+	if existing then existing:Destroy() end
 	
-	-- Create a simple dog visualization (using a small block for now as per instructions to "add code for the model")
-	-- The user will provide the actual model named "dogMalus", but I'll write logic to handle it.
-	local dog = Workspace:FindFirstChild("dogMalus")
-	if not dog then
-		-- Fallback to a placeholder if model isn't there yet
-		dog = Instance.new("Model")
-		dog.Name = "dogMalus"
-		local h = Instance.new("Humanoid", dog)
-		local hrp = Instance.new("Part", dog)
-		hrp.Name = "HumanoidRootPart"
-		hrp.Size = Vector3.new(3, 2, 4)
-		hrp.Color = Color3.fromRGB(139, 69, 19)
-		dog.PrimaryPart = hrp
-		dog.Parent = Workspace
+	local billboard = Instance.new("BillboardGui")
+	billboard.Name = "DogChaseUI"
+	-- Use world-space studs so text shrinks with distance
+	billboard.Size = UDim2.fromOffset(180, 55)
+	billboard.MaxDistance = 50  -- invisible beyond 30 studs
+	billboard.StudsOffset = Vector3.new(0, 3, 0)
+	billboard.AlwaysOnTop = false  -- occludes behind walls
+	billboard.ResetOnSpawn = false
+	billboard.Parent = rootPart
+	
+	-- NO background frame: transparent
+	local label = Instance.new("TextLabel")
+	label.Name = "CountLabel"
+	label.Size = UDim2.fromScale(1, 0.5)
+	label.Position = UDim2.fromScale(0, 0)
+	label.BackgroundTransparency = 1
+	label.Font = Enum.Font.GothamBold
+	label.TextColor3 = Color3.new(1, 1, 0)
+	label.TextSize = 13
+	label.Text = "Clicca per scacciarmi!"
+	label.Parent = billboard
+	Instance.new("UIStroke", label).Thickness = 1
+	
+	local bar = Instance.new("TextLabel")
+	bar.Name = "BarLabel"
+	bar.Size = UDim2.fromScale(1, 0.5)
+	bar.Position = UDim2.fromScale(0, 0.5)
+	bar.BackgroundTransparency = 1
+	bar.Font = Enum.Font.GothamBold
+	bar.TextColor3 = Color3.new(1, 0.4, 0.1)
+	bar.TextSize = 16
+	bar.Text = "0 / " .. CLICKS_TO_CHASE
+	bar.Parent = billboard
+	Instance.new("UIStroke", bar).Thickness = 1
+	
+	return billboard
+end
+
+local function updateDogUI(rootPart: BasePart, count: number)
+	local billboard = rootPart:FindFirstChild("DogChaseUI")
+	if not billboard then return end
+	local bar = billboard:FindFirstChild("BarLabel")
+	if bar then
+		bar.Text = count .. " / " .. CLICKS_TO_CHASE
+		if count >= CLICKS_TO_CHASE * 0.7 then
+			bar.TextColor3 = Color3.new(1, 0, 0)
+		end
+	end
+end
+
+local function cleanDogUI(rootPart: BasePart)
+	local billboard = rootPart:FindFirstChild("DogChaseUI")
+	if billboard then billboard:Destroy() end
+end
+
+local function showDogSpeech(rootPart: BasePart, text: string, duration: number?)
+	local existing = rootPart:FindFirstChild("DogSpeech")
+	if existing then existing:Destroy() end
+	
+	local bubble = Instance.new("BillboardGui")
+	bubble.Name = "DogSpeech"
+	bubble.Size = UDim2.fromOffset(200, 70)
+	bubble.MaxDistance = 50
+	bubble.StudsOffset = Vector3.new(0, 6, 0)
+	bubble.AlwaysOnTop = false
+	bubble.ResetOnSpawn = false
+	bubble.Parent = rootPart
+	
+	-- Bubble background panel
+	local bg = Instance.new("Frame")
+	bg.Name = "BubbleBG"
+	bg.Size = UDim2.new(1, 0, 0.78, 0)
+	bg.Position = UDim2.fromScale(0, 0)
+	bg.BackgroundColor3 = Color3.fromRGB(255, 255, 240)
+	bg.BorderSizePixel = 0
+	bg.Parent = bubble
+	local bgCorner = Instance.new("UICorner")
+	bgCorner.CornerRadius = UDim.new(0, 10)
+	bgCorner.Parent = bg
+	local bgStroke = Instance.new("UIStroke")
+	bgStroke.Color = Color3.fromRGB(80, 50, 20)
+	bgStroke.Thickness = 2
+	bgStroke.Parent = bg
+	
+	-- Text inside bubble
+	local label = Instance.new("TextLabel")
+	label.Size = UDim2.fromScale(1, 1)
+	label.BackgroundTransparency = 1
+	label.Font = Enum.Font.GothamBold
+	label.TextColor3 = Color3.fromRGB(50, 25, 0)
+	label.TextSize = 16
+	label.Text = text
+	label.TextWrapped = true
+	label.Parent = bg
+	
+	-- Triangle pointer (downward notch) using a rotated frame
+	local tail = Instance.new("Frame")
+	tail.Name = "Tail"
+	tail.Size = UDim2.fromOffset(18, 18)
+	tail.Position = UDim2.new(0.5, -9, 0.78, -2)
+	tail.BackgroundColor3 = Color3.fromRGB(255, 255, 240)
+	tail.BorderSizePixel = 0
+	tail.Rotation = 45
+	tail.ZIndex = 0
+	tail.Parent = bubble
+	
+	task.delay(duration or 4, function()
+		if bubble and bubble.Parent then bubble:Destroy() end
+	end)
+end
+
+local function moveModel(model: Model, targetPos: Vector3, speed: number)
+	local root = model.PrimaryPart or model:FindFirstChildWhichIsA("BasePart", true)
+	if not root then return end
+	
+	-- PRESERVE the model's current Y height — pathfinding waypoints are at ground level
+	-- but the dog's PrimaryPart pivot is at its center, not feet. Moving to waypoint Y buries it.
+	local startPos = root.Position
+	local originalY = startPos.Y
+	local flatTarget = Vector3.new(targetPos.X, originalY, targetPos.Z)
+	
+	local distance = (flatTarget - startPos).Magnitude
+	if distance < 0.1 then return end
+	
+	local duration = distance / speed
+	local startCFrame = model:GetPivot()
+	
+	-- Rotation: face the direction of movement (flat)
+	local dir = (flatTarget - startPos)
+	local targetRotation
+	if dir.Magnitude > 0.1 then
+		targetRotation = CFrame.lookAt(startPos, flatTarget).Rotation
 	else
-		-- Clone existing model
-		dog = dog:Clone()
-		dog.Name = "DogMalus_Active"
-		dog.Parent = Workspace
+		targetRotation = startCFrame.Rotation
+	end
+
+	-- Phase 1: Rotate in place to face target (max 0.25s)
+	local rotDuration = math.min(0.25, duration * 0.4)
+	local rotStart = os.clock()
+	while (os.clock() - rotStart) < rotDuration do
+		local alpha = (os.clock() - rotStart) / rotDuration
+		model:PivotTo(CFrame.new(root.Position) * startCFrame.Rotation:Lerp(targetRotation, alpha))
+		task.wait()
 	end
 	
-	local rootPart = dog.PrimaryPart
-	if not rootPart then return end
-	
-	-- Spawn far away
-	-- Spawn far away but on ground
-	rootPart.CFrame = CFrame.new(Settings.DOG_SPAWN_POS or Vector3.new(200, 2, 200))
-	
-	local humanoid = dog:FindFirstChildOfClass("Humanoid")
-	if humanoid then humanoid.WalkSpeed = 20 end
-	
-	-- Target Brace
-	local targetBrace = NPCService.findNearestBrace(rootPart.Position)
-	if not targetBrace then 
-		dog:Destroy()
-		return 
+	-- Phase 2: Glide forward (keep Y constant)
+	local moveStart = os.clock()
+	local currentStartPos = Vector3.new(startPos.X, originalY, startPos.Z)
+	while (os.clock() - moveStart) < duration do
+		local alpha = math.min(1, (os.clock() - moveStart) / duration)
+		local p = currentStartPos:Lerp(flatTarget, alpha)
+		model:PivotTo(CFrame.new(p) * targetRotation)
+		task.wait()
+		if (root.Position - flatTarget).Magnitude < 0.2 then break end
 	end
+	model:PivotTo(CFrame.new(flatTarget) * targetRotation)
+end
+
+local function rigDog(model: Model)
+	local root = model.PrimaryPart or model:FindFirstChild("HumanoidRootPart") or model:FindFirstChildWhichIsA("BasePart", true)
+	if not root then return end
+	if not model.PrimaryPart then model.PrimaryPart = root end
 	
-	local bracePos = targetBrace.PrimaryPart.Position
-	
-	-- Pathfinding to Brace
-	local path = PathfindingService:CreatePath({AgentRadius = 3, AgentCanJump = true})
-	path:ComputeAsync(rootPart.Position, bracePos)
-	
-	if path.Status == Enum.PathStatus.Success then
-		local waypoints = path:GetWaypoints()
-		for i, waypoint in waypoints do
-			if not game:GetAttribute("GameStarted") then break end
-			if humanoid then humanoid:MoveTo(waypoint.Position) end
-			humanoid.MoveToFinished:Wait()
-			
-			-- If close to brace
-			if (rootPart.Position - bracePos).Magnitude < 10 then
-				print("[DEBUG-SERVER] Dog reached brace!")
-				-- Play Bark
-				NPCService.playSound(rootPart, Settings.DOG_SOUND_ID, 1.0)
-				
-				-- Steal Meat
-				local stolen = BraceService.stealMeat(targetBrace)
-				if stolen then
-					print("[DEBUG-SERVER] Dog stole meat!")
-				end
-				
-				task.wait(1)
-				break
+	for _, p in model:GetDescendants() do
+		if p:IsA("BasePart") then
+			p.Anchored = true
+			p.Massless = true
+			p.CanCollide = false
+		elseif p:IsA("Humanoid") then
+			p:Destroy()
+		end
+	end
+
+	for _, p in model:GetDescendants() do
+		if p:IsA("BasePart") and p ~= root then
+			local hasJoint = false
+			for _, joint in p:GetJoints() do
+				if joint.Part0 and joint.Part1 then hasJoint = true break end
+			end
+			if not hasJoint then
+				local weld = Instance.new("WeldConstraint")
+				weld.Part0 = root
+				weld.Part1 = p
+				weld.Parent = p
 			end
 		end
 	end
+end
+
+function DogService.spawnDog(isAuto: boolean?)
+	if isMoving then return end
+	if isAuto and math.random() < 0.3 then return end
 	
-	-- Run Away
-	if humanoid then
-		humanoid:MoveTo(Vector3.new(300, 10, 300))
-		task.wait(5)
+	local dog = Workspace:FindFirstChild("dogMalus", true)
+	if not dog then return end
+	
+	-- Use cached home or current if not cached
+	local homeCFrame = originalHomeCFrame or dog:GetPivot()
+
+	isMoving = true
+	dogChased = false
+	clickCount = 0
+	
+	-- Dynamic click threshold: more clicks needed when less time remains
+	-- Range: 20 (lots of time) → 40 (almost no time)
+	do
+		local remaining = Workspace:GetAttribute("GameRemainingTime") or 300
+		local winTime = Settings.WIN_TIME or 300
+		local t = math.clamp(remaining / winTime, 0, 1) -- 1 = full time, 0 = no time
+		CLICKS_TO_CHASE = math.floor(20 + (1 - t) * 20)
 	end
 	
-	dog:Destroy()
+	-- Server-side click listener (valid only for this trip)
+	local clickConn = DogClickEvent.OnServerEvent:Connect(function(_player)
+		if not isMoving or dogChased then return end
+		clickCount += 1
+		local rootPart = dog.PrimaryPart
+		if rootPart then updateDogUI(rootPart, clickCount) end
+		if clickCount >= CLICKS_TO_CHASE then
+			dogChased = true
+		end
+	end)
+	
+	local successSequence, err = pcall(function()
+		rigDog(dog)
+		
+		local allBraces = {}
+		local hasMeat = false
+		for _, obj in Workspace:GetDescendants() do
+			if obj:IsA("Model") and obj.Name:lower():match("brace") then
+				table.insert(allBraces, obj)
+				for i = 1, 4 do
+					if obj:GetAttribute("Slot" .. i .. "_Status") ~= Settings.STATUS.EMPTY then
+						hasMeat = true
+						break
+					end
+				end
+			end
+		end
+		
+		if not hasMeat then 
+			isMoving = false
+			return 
+		end
+
+		local rootPart = dog.PrimaryPart
+		
+		-- Show click counter UI on the dog
+		createDogUI(rootPart)
+		
+		local walkSound = Instance.new("Sound")
+		walkSound.Name = "DogWalkLoop"
+		walkSound.SoundId = Settings.DOG_WALK_SOUND_ID
+		walkSound.Looped = true
+		walkSound.Volume = 0.5
+		walkSound.Parent = rootPart
+		walkSound:Play()
+		
+		local targetBrace = nil
+		local minDist = math.huge
+		for _, brace in allBraces do
+			local braceHasMeat = false
+			for i = 1, 4 do
+				if brace:GetAttribute("Slot" .. i .. "_Status") ~= Settings.STATUS.EMPTY then
+					braceHasMeat = true
+					break
+				end
+			end
+			if braceHasMeat then
+				local d = (rootPart.Position - brace:GetPivot().Position).Magnitude
+				if d < minDist then
+					minDist = d
+					targetBrace = brace
+				end
+			end
+		end
+
+		if not targetBrace then 
+			walkSound:Destroy()
+			return 
+		end
+		
+		local bracePos = targetBrace:GetPivot().Position
+		
+		local path = PathfindingService:CreatePath({AgentRadius = 3})
+		local ok = pcall(function() path:ComputeAsync(rootPart.Position, bracePos) end)
+		
+		if ok and path.Status == Enum.PathStatus.Success then
+			for _, waypoint in path:GetWaypoints() do
+				if dogChased then break end
+				moveModel(dog, waypoint.Position, 20)
+				if (rootPart.Position - bracePos).Magnitude < 8 then break end
+			end
+		else
+			if not dogChased then
+				moveModel(dog, bracePos, 20)
+			end
+		end
+		
+		if (rootPart.Position - bracePos).Magnitude < 15 and not dogChased then
+			walkSound:Stop()
+			task.wait(1.5)
+			
+			local remaining = Workspace:GetAttribute("GameRemainingTime") or 0
+			local m = math.floor(remaining / 60)
+			local s = math.floor(remaining % 60)
+			
+			local d1 = m
+			local d2 = math.floor(s / 10)
+			local d3 = s % 10
+			local sum = d1 + d2 + d3
+			
+			local countToSteal = (sum % 2 == 0) and 1 or 2
+			print("[DogService] Time: " .. m .. ":" .. string.format("%02d", s) .. " | Sum: " .. sum .. " -> " .. countToSteal)
+
+			for _ = 1, countToSteal do
+				local meatModel = BraceService.stealMeat(targetBrace)
+				if meatModel then
+					NPCService.playSound(rootPart, Settings.DOG_SOUND_ID, 1.0)
+					
+					-- Clone the meat and attach to the dog's mouth
+					local carriedMeat = meatModel:Clone()
+					carriedMeat.Name = "CarriedMeat"
+					carriedMeat.Parent = dog
+					
+					-- Find the head/snout part dynamically for correct positioning
+					local headPart = dog:FindFirstChild("Head")
+						or dog:FindFirstChild("DogHead")
+						or dog:FindFirstChild("UpperTorso")
+						or rootPart
+					
+					-- 1) Place meat at the snout: front of head, chin level
+					local snoutCFrame = headPart.CFrame * CFrame.new(0, -0.4, -1.2)
+					carriedMeat:PivotTo(snoutCFrame)
+					
+					-- 2) THEN weld each meat part to rootPart (offset is recorded from current world position)
+					for _, p in carriedMeat:GetDescendants() do
+						if p:IsA("BasePart") then
+							p.Transparency = 0
+							p.Anchored = false
+							p.CanCollide = false
+							local weld = Instance.new("WeldConstraint")
+							weld.Part0 = rootPart
+							weld.Part1 = p
+							weld.Parent = p
+						end
+					end
+					task.wait(0.3)
+				end
+			end
+			
+			task.wait(0.5)
+			
+			-- Dog won! Hide click counter, show victory taunt
+			cleanDogUI(rootPart)
+			showDogSpeech(rootPart, "rustell :]")
+			
+			walkSound:Play()
+			
+			local pathBack = PathfindingService:CreatePath({AgentRadius = 3})
+			local okBack = pcall(function() pathBack:ComputeAsync(rootPart.Position, homeCFrame.Position) end)
+			
+			if okBack and pathBack.Status == Enum.PathStatus.Success then
+				for _, waypoint in pathBack:GetWaypoints() do
+					moveModel(dog, waypoint.Position, 18)
+				end
+			else
+				moveModel(dog, homeCFrame.Position, 18)
+			end
+			
+			for _, child in dog:GetChildren() do
+				if child.Name == "CarriedMeat" then child:Destroy() end
+			end
+		end
+		
+		if dogChased then
+			-- CHASED HOME: walk back sadly with slow bark, no steal
+			walkSound:Stop()
+			walkSound:Destroy()  -- destroy immediately so it can't replay
+			task.wait(0.3)
+			
+			-- Player won! Hide click counter, show sad message
+			cleanDogUI(rootPart)
+			showDogSpeech(rootPart, "che palle :[", 5)
+			
+			-- One-shot sad bark: create directly (not via NPCService) to ensure it's one-shot
+			local barkSound = Instance.new("Sound")
+			barkSound.SoundId = Settings.DOG_SOUND_ID
+			barkSound.Volume = 0.5
+			barkSound.Looped = false
+			barkSound.PlaybackSpeed = 0.75
+			barkSound.Parent = rootPart
+			barkSound:Play()
+			barkSound.Ended:Connect(function() barkSound:Destroy() end)
+			
+			-- Sad walk: slow trudge home
+			local sadWalk = Instance.new("Sound")
+			sadWalk.Name = "SadWalkLoop"
+			sadWalk.SoundId = Settings.DOG_WALK_SOUND_ID
+			sadWalk.Looped = true
+			sadWalk.Volume = 0.3
+			sadWalk.PlaybackSpeed = 0.6
+			sadWalk.Parent = rootPart
+			sadWalk:Play()
+			
+			local pathHome = PathfindingService:CreatePath({AgentRadius = 3})
+			local okHome = pcall(function() pathHome:ComputeAsync(rootPart.Position, homeCFrame.Position) end)
+			
+			if okHome and pathHome.Status == Enum.PathStatus.Success then
+				for _, waypoint in pathHome:GetWaypoints() do
+					moveModel(dog, waypoint.Position, 12)
+				end
+			else
+				moveModel(dog, homeCFrame.Position, 12)
+			end
+			
+			sadWalk:Destroy()
+		end
+		
+		walkSound:Destroy()
+		dog:PivotTo(homeCFrame)
+	end)
+	
+	clickConn:Disconnect()
+	cleanDogUI(dog.PrimaryPart)
+	
+	if not successSequence then warn("[DogService] Error: " .. tostring(err)) end
+	isMoving = false
 end
 
 return DogService

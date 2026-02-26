@@ -103,6 +103,12 @@ function BraceService.playSound(parent: Instance, soundId: string, looped: boole
 		sound.Ended:Connect(function()
 			sound:Destroy()
 		end)
+	else
+		-- Ensure looped sounds are cleaned up if a new one is started on same parent
+		local existing = parent:FindFirstChild(sound.Name)
+		if existing and existing ~= sound then
+			existing:Destroy()
+		end
 	end
 	return sound
 end
@@ -113,10 +119,12 @@ function BraceService.setupBrace(brace: Model)
 	
 	-- Initial State
 	brace:SetAttribute("HasCoal", false)
+	brace:SetAttribute("SaltActive", false)   -- salt state for the whole brace
 	for i = 1, 4 do
 		brace:SetAttribute("Slot" .. i .. "_Status", Settings.STATUS.EMPTY)
 		brace:SetAttribute("Slot" .. i .. "_StartTime", 0)
 		brace:SetAttribute("Slot" .. i .. "_CookedTime", 0)
+		brace:SetAttribute("Slot" .. i .. "_Salted", false)
 	end
 	
 	-- Store original colors
@@ -189,29 +197,115 @@ function BraceService.setupBrace(brace: Model)
 	takePrompt.MaxActivationDistance = Settings.INTERACTION_DISTANCE
 	takePrompt.Parent = parentPart
 	
+	takePrompt.MaxActivationDistance = Settings.INTERACTION_DISTANCE
+	takePrompt.Parent = parentPart
+	
+	-- No more RekindlePrompt (Q), everything is on insertPrompt (E) as requested
+
+	
+	-- Helper: start the fire opacity watcher for the coal timer
+	local function startCoalTimer()
+		brace:SetAttribute("CoalStartTime", os.clock())
+
+		
+		-- Find fire by CLASS (works regardless of instance name)
+		local fireObj = brace:FindFirstChildWhichIsA("Fire", true)
+			if not fireObj then fireObj = brace:FindFirstChildWhichIsA("ParticleEmitter", true) end
+		
+		task.spawn(function()
+			local duration = Settings.COAL_DURATION or 40
+			while true do
+				local elapsed = os.clock() - (brace:GetAttribute("CoalStartTime") or os.clock())
+				local remaining = duration - elapsed
+				local ratio = math.clamp(remaining / duration, 0, 1)
+				
+				-- Update Fire opacity linearly
+				if fireObj then
+					if fireObj:IsA("ParticleEmitter") then
+						local maxRate = fireObj:GetAttribute("OriginalRate") or 50
+						fireObj.Rate = ratio * maxRate
+						fireObj.Enabled = ratio > 0
+					elseif fireObj:IsA("Fire") then
+						-- Calibrated values: Size 2 (off) to 4 (on), Heat 0.8 - 1.7 based on ratio
+						-- Fire scales with remaining coal: Size 1.5-4.5, Heat 3-9
+						fireObj.Size = 1.5 + (ratio * 3.0)
+						fireObj.Heat = 3 + (ratio * 6)
+						fireObj.Enabled = ratio > 0.02
+						if elapsed % 5 < 0.5 then
+							print(string.format("[DEBUG] Fire - Ratio: %.2f, Size: %.1f, Heat: %.1f", ratio, fireObj.Size, fireObj.Heat))
+						end
+					end
+				end
+				
+				if remaining <= 0 then
+					-- Coal exhausted — extinguish and restore E-key prompt
+					brace:SetAttribute("HasCoal", false)
+					if fireObj then
+						if fireObj:IsA("ParticleEmitter") then
+							fireObj.Enabled = false
+							fireObj.Rate = 0
+						elseif fireObj:IsA("Fire") then
+						fireObj.Size = 1.5
+						fireObj.Heat = 2
+						fireObj.Enabled = false
+					end
+					print("[DEBUG] Fire Extinguished")
+					end
+					local coalSound = parentPart:FindFirstChild("CoalLoopSound")
+					if coalSound then
+						coalSound:Stop()
+						coalSound:Destroy()
+					end
+					
+					-- Restore E-key: show 'Inserisci Carbone' again so player can relight
+					insertPrompt.ActionText = "Inserisci Carbone"
+					insertPrompt.Enabled = true
+					print("[BraceService] Carbonella esaurita, brace spenta. Premi E per riaccendere.")
+					return
+				end
+				
+				task.wait(0.5)
+			end
+		end)
+	end
+	
 	BraceService.setupSpawn(parentPart)
 	
 	insertPrompt.Triggered:Connect(function(player)
 		local hasCoal = brace:GetAttribute("HasCoal")
 		if not hasCoal then
 			brace:SetAttribute("HasCoal", true)
-			insertPrompt.ActionText = "Inserisci Rustella (0/4)"
 			BraceService.notify(player, "Hai inserito il carbone!")
-			BraceService.playSound(parentPart, Settings.SOUNDS.COAL, true)
+			local s = BraceService.playSound(parentPart, Settings.SOUNDS.COAL, true)
+			s.Name = "CoalLoopSound"
 			
-			-- Gradual Fire Fade-In
-			local fireObj = brace:FindFirstChild("Fire", true)
-			if fireObj and fireObj:IsA("ParticleEmitter") then
-				fireObj.Enabled = true
-				local targetRate = fireObj:GetAttribute("OriginalRate") or 50
-				task.spawn(function()
-					for i = 1, 20 do
-						fireObj.Rate = (i / 20) * targetRate
-						task.wait(0.1)
-					end
-					fireObj.Rate = targetRate
-				end)
+			-- Gradual Fire Fade-In — search by class, ignore name
+			local fireObj = brace:FindFirstChildWhichIsA("Fire", true)
+				if not fireObj then fireObj = brace:FindFirstChildWhichIsA("ParticleEmitter", true) end
+			
+			print("[DEBUG] Coal inserted (E-key). Fire found:", fireObj and fireObj.Name or "NONE")
+			
+			if fireObj then
+				if fireObj:IsA("ParticleEmitter") then
+					fireObj.Enabled = true
+					local targetRate = fireObj:GetAttribute("OriginalRate") or 50
+					task.spawn(function()
+						for i = 1, 20 do
+							fireObj.Rate = (i / 20) * targetRate
+							task.wait(0.1)
+						end
+						fireObj.Rate = targetRate
+						fireObj:SetAttribute("OriginalRate", targetRate)
+					end)
+				elseif fireObj:IsA("Fire") then
+					fireObj.Size = 4.5
+					fireObj.Heat = 9
+					fireObj.Enabled = true
+					print("[DEBUG] Fire activated (Size 4.5, Heat 9)")
+				end
 			end
+			startCoalTimer()
+			BraceService.updatePrompts(brace, insertPrompt, takePrompt)
 		else
 			BraceService.handleInsert(brace, player, insertPrompt, takePrompt)
 		end
@@ -310,9 +404,32 @@ function BraceService.handleInsert(brace: Model, player: Player, insertPrompt: P
 	task.spawn(function()
 		local cookingTime = Settings.COOKING_TIME
 		local start = os.clock()
+		local totalPausedTime = 0       -- accumulated seconds spent without coal
+		local pauseStart: number? = nil -- when the current pause began
 		
-		while (os.clock() - start) < cookingTime do
-			local alpha = (os.clock() - start) / cookingTime
+		while true do
+			local now = os.clock()
+			
+			-- Track pause start/end
+			if not brace:GetAttribute("HasCoal") then
+				if pauseStart == nil then
+					pauseStart = now
+				end
+				task.wait(0.3)
+				continue
+			else
+				if pauseStart ~= nil then
+					-- Coal was just re-lit: accumulate the pause duration
+					totalPausedTime += now - pauseStart
+					pauseStart = nil
+				end
+			end
+			
+			-- Actual elapsed cooking time (excluding pauses)
+			local elapsed = now - start - totalPausedTime
+			if elapsed >= cookingTime then break end
+			
+			local alpha = elapsed / cookingTime
 			if slotModel then
 				for _, p in slotModel:GetDescendants() do
 					if p:IsA("BasePart") and p.Name ~= "stecca" then
@@ -385,14 +502,18 @@ function BraceService.handleTake(brace: Model, player: Player, insertPrompt: Pro
 	
 	local status = brace:GetAttribute("Slot" .. targetSlot .. "_Status")
 	local isBurnt = (status == "Burnt")
+	local isSalted = brace:GetAttribute("Slot" .. targetSlot .. "_Salted") == true
 	
 	-- Give Tool logic
+	local toolName = isBurnt and "Rustella Bruciata"
+		or isSalted and "Rustella Salata"
+		or "Rustella"
 	local rustelleModel = brace:FindFirstChild("Model") :: Model
 	local rOriginal = rustelleModel and rustelleModel:FindFirstChild("rustell" .. targetSlot)
 	
 	if rOriginal then
-		local tool = Instance.new("Tool")
-		tool.Name = isBurnt and "Rustella Bruciata" or "Rustella"
+	local tool = Instance.new("Tool")
+			tool.Name = toolName
 		tool.RequiresHandle = true
 		
 		local handle = Instance.new("Part")
@@ -416,7 +537,12 @@ function BraceService.handleTake(brace: Model, player: Player, insertPrompt: Pro
 				p.Transparency = 0
 				p.Anchored = false
 				p.CanCollide = false
-				if isBurnt then p.Color = Settings.BURNT_COLOR end
+				if isBurnt then
+					p.Color = Settings.BURNT_COLOR
+				elseif isSalted then
+					-- Slightly lighter/whitish tint for salted rustelle
+					p.Color = p.Color:Lerp(Color3.new(1,1,1), 0.25)
+				end
 				local w = Instance.new("WeldConstraint")
 				w.Part0 = handle
 				w.Part1 = p
@@ -430,11 +556,15 @@ function BraceService.handleTake(brace: Model, player: Player, insertPrompt: Pro
 		local currentCount = player:GetAttribute("RustelleCount") or 0
 		player:SetAttribute("RustelleCount", currentCount + 1)
 		
-		BraceService.notify(player, isBurnt and "Hai preso una rustella... ma è bruciata!" or "Hai preso una rustella cotta!")
+		BraceService.notify(player,
+			isBurnt and "Hai preso una rustella... ma è bruciata!"
+			or isSalted and "Hai preso una rustella salata!"
+			or "Hai preso una rustella cotta!")
 	end
 	
-	-- Reset slot
+	-- Reset slot (including salt)
 	brace:SetAttribute("Slot" .. targetSlot .. "_Status", Settings.STATUS.EMPTY)
+	brace:SetAttribute("Slot" .. targetSlot .. "_Salted", false)
 	local slotModel = rustelleModel and rustelleModel:FindFirstChild("rustell" .. targetSlot)
 	if slotModel then
 		for _, p in slotModel:GetDescendants() do
@@ -455,7 +585,7 @@ function BraceService.stealMeat(brace: Model)
 		end
 	end
 	
-	if #occupied == 0 then return false end
+	if #occupied == 0 then return nil end
 	
 	local targetSlot = occupied[math.random(1, #occupied)]
 	brace:SetAttribute("Slot" .. targetSlot .. "_Status", Settings.STATUS.EMPTY)
@@ -478,7 +608,77 @@ function BraceService.stealMeat(brace: Model)
 		end
 	end
 	
-	return true
+	return slotModel
+end
+
+function BraceService.resetAll()
+	print("BraceService: [RESET] Resetting all braces...")
+	for _, obj in Workspace:GetDescendants() do
+		if obj:IsA("Model") then
+			local name = obj.Name
+			local lowerName = string.lower(name)
+			if name == "Brace" or name == "brace" or string.find(lowerName, "brace") or string.find(lowerName, "braciere") then
+				BraceService.resetBrace(obj)
+			end
+		end
+	end
+end
+
+function BraceService.resetBrace(brace: Model)
+	brace:SetAttribute("HasCoal", false)
+	for i = 1, 4 do
+		brace:SetAttribute("Slot" .. i .. "_Status", Settings.STATUS.EMPTY)
+		brace:SetAttribute("Slot" .. i .. "_StartTime", 0)
+		brace:SetAttribute("Slot" .. i .. "_CookedTime", 0)
+	end
+	
+	-- Reset Visuals
+	BraceService.setRustelleVisibility(brace, false)
+	local fireObj = brace:FindFirstChild("Fire", true)
+	if fireObj and fireObj:IsA("ParticleEmitter") then
+		fireObj.Enabled = false
+		fireObj.Rate = 0
+	end
+	
+	-- Stop Sounds
+	local parentPart = brace.PrimaryPart or brace:FindFirstChildWhichIsA("BasePart", true)
+	if parentPart then
+		local coalLoop = parentPart:FindFirstChild("CoalLoopSound")
+		if coalLoop then coalLoop:Destroy() end
+		
+		-- Update prompts
+		local insertP = parentPart:FindFirstChild("InsertPrompt")
+		local takeP = parentPart:FindFirstChild("TakePrompt")
+		if insertP and takeP then
+			BraceService.updatePrompts(brace, insertP, takeP)
+		end
+	end
+	print("BraceService: [RESET] Brace reset -> " .. brace.Name)
+end
+
+-- PUBLIC API: Called by SaltService when the player interacts with the Salt model.
+-- Marks every non-empty slot in the brace as salted and adds a subtle white tint.
+function BraceService.applySalt(brace: Model)
+	brace:SetAttribute("SaltActive", true)
+	local rustelleModel = brace:FindFirstChild("Model") :: Model
+	for i = 1, 4 do
+		local status = brace:GetAttribute("Slot" .. i .. "_Status")
+		if status ~= nil and status ~= Settings.STATUS.EMPTY then
+			brace:SetAttribute("Slot" .. i .. "_Salted", true)
+			-- Visual: lighten the meat colour slightly
+			if rustelleModel then
+				local slot = rustelleModel:FindFirstChild("rustell" .. i)
+				if slot then
+					for _, p in slot:GetDescendants() do
+						if p:IsA("BasePart") and p.Name ~= "stecca" then
+							p.Color = p.Color:Lerp(Color3.new(1, 1, 1), 0.2)
+						end
+					end
+				end
+			end
+		end
+	end
+	print("[BraceService] Sale applicato a " .. brace.Name)
 end
 
 return BraceService
