@@ -274,27 +274,27 @@ gAaOGIAGjhiABo4YgAaOGIAGjhiABo4YgAaOGIAGjhiABo4YgAaOGIDm]]></BinaryString>
 		<Item class="Camera" referent="RBXB3C141A78F5F4601A36C7E00F3ECBCA4">
 			<Properties>
 				<CoordinateFrame name="CFrame">
-					<X>-15.1266403</X>
-					<Y>32.0657501</Y>
-					<Z>3.2541256</Z>
-					<R00>-0.28678149</R00>
-					<R01>0.439262986</R01>
-					<R02>-0.85135448</R02>
-					<R10>7.4505806e-09</R10>
-					<R11>0.888682723</R11>
-					<R12>0.458522737</R12>
-					<R20>0.95799607</R20>
-					<R21>0.131495833</R21>
-					<R22>-0.254857749</R22>
+					<X>1.79769707</X>
+					<Y>10.3626089</Y>
+					<Z>6.35417843</Z>
+					<R00>0.967986941</R00>
+					<R01>-0.0935809761</R01>
+					<R02>0.232903451</R02>
+					<R10>-0</R10>
+					<R11>0.927899241</R11>
+					<R12>0.372831315</R12>
+					<R20>-0.251000851</R20>
+					<R21>-0.360895842</R21>
+					<R22>0.898194194</R22>
 				</CoordinateFrame>
 				<Ref name="CameraSubject">null</Ref>
 				<token name="CameraType">0</token>
 				<float name="FieldOfView">70</float>
 				<token name="FieldOfViewMode">0</token>
 				<CoordinateFrame name="Focus">
-					<X>-13.4239311</X>
-					<Y>31.1487045</Y>
-					<Z>3.76384115</Z>
+					<X>1.33189011</X>
+					<Y>9.61694622</Y>
+					<Z>4.5577898</Z>
 					<R00>1</R00>
 					<R01>0</R01>
 					<R02>0</R02>
@@ -44041,6 +44041,105 @@ return TextureConfiguration]]></ProtectedString>
 				<UniqueId name="UniqueId">6a0ef62632b7d06309b1a35500000986</UniqueId>
 			</Properties>
 		</Item>
+		<Item class="ImageLabel" referent="RBX2F34F38D2F284AB7A555D50E400A3816">
+			<Properties>
+				<Content name="Image"><url>rbxasset://textures/ui/GuiImagePlaceholder.png</url></Content>
+				<Color3 name="ImageColor3">
+					<R>1</R>
+					<G>1</G>
+					<B>1</B>
+				</Color3>
+				<Vector2 name="ImageRectOffset">
+					<X>0</X>
+					<Y>0</Y>
+				</Vector2>
+				<Vector2 name="ImageRectSize">
+					<X>0</X>
+					<Y>0</Y>
+				</Vector2>
+				<float name="ImageTransparency">0</float>
+				<token name="ResampleMode">0</token>
+				<token name="ScaleType">0</token>
+				<Rect2D name="SliceCenter">
+					<min>
+						<X>0</X>
+						<Y>0</Y>
+					</min>
+					<max>
+						<X>0</X>
+						<Y>0</Y>
+					</max>
+				</Rect2D>
+				<float name="SliceScale">1</float>
+				<UDim2 name="TileSize">
+					<XS>1</XS>
+					<XO>0</XO>
+					<YS>1</YS>
+					<YO>0</YO>
+				</UDim2>
+				<bool name="Active">false</bool>
+				<Vector2 name="AnchorPoint">
+					<X>0</X>
+					<Y>0</Y>
+				</Vector2>
+				<token name="AutomaticSize">0</token>
+				<Color3 name="BackgroundColor3">
+					<R>1</R>
+					<G>1</G>
+					<B>1</B>
+				</Color3>
+				<float name="BackgroundTransparency">0</float>
+				<Color3 name="BorderColor3">
+					<R>0</R>
+					<G>0</G>
+					<B>0</B>
+				</Color3>
+				<token name="BorderMode">0</token>
+				<int name="BorderSizePixel">0</int>
+				<bool name="ClipsDescendants">false</bool>
+				<bool name="Draggable">false</bool>
+				<bool name="Interactable">true</bool>
+				<int name="LayoutOrder">0</int>
+				<Ref name="NextSelectionDown">null</Ref>
+				<Ref name="NextSelectionLeft">null</Ref>
+				<Ref name="NextSelectionRight">null</Ref>
+				<Ref name="NextSelectionUp">null</Ref>
+				<UDim2 name="Position">
+					<XS>0</XS>
+					<XO>0</XO>
+					<YS>0</YS>
+					<YO>0</YO>
+				</UDim2>
+				<float name="Rotation">0</float>
+				<bool name="Selectable">false</bool>
+				<Ref name="SelectionImageObject">null</Ref>
+				<int name="SelectionOrder">0</int>
+				<UDim2 name="Size">
+					<XS>0</XS>
+					<XO>100</XO>
+					<YS>0</YS>
+					<YO>100</YO>
+				</UDim2>
+				<token name="SizeConstraint">0</token>
+				<bool name="Visible">true</bool>
+				<int name="ZIndex">1</int>
+				<bool name="AutoLocalize">true</bool>
+				<Ref name="RootLocalizationTable">null</Ref>
+				<token name="SelectionBehaviorDown">0</token>
+				<token name="SelectionBehaviorLeft">0</token>
+				<token name="SelectionBehaviorRight">0</token>
+				<token name="SelectionBehaviorUp">0</token>
+				<bool name="SelectionGroup">false</bool>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">ImageLabel</string>
+				<int64 name="SourceAssetId">-1</int64>
+				<BinaryString name="Tags"></BinaryString>
+				<UniqueId name="UniqueId">6a0ef62632b7d06309b1a35500001071</UniqueId>
+			</Properties>
+		</Item>
 	</Item>
 	<Item class="TimerService" referent="RBXBF223C0B08D048F988127EB02C5D1860">
 		<Properties>
@@ -45747,17 +45846,20 @@ function MenuService.init()
 	jumpscareOverlay.Name = "JumpscareOverlay"
 	jumpscareOverlay.Size = UDim2.fromScale(1, 1)
 	jumpscareOverlay.BackgroundColor3 = Color3.new(0, 0, 0)
+	jumpscareOverlay.BackgroundTransparency = 0
 	jumpscareOverlay.ZIndex = 50000
 	jumpscareOverlay.Visible = false
 	jumpscareOverlay.Parent = screenGui
 
 	local jumpscareImage = Instance.new("ImageLabel")
 	jumpscareImage.Name = "IShowSpeed"
-	jumpscareImage.Size = UDim2.fromScale(0.8, 0.8)
+	jumpscareImage.Size = UDim2.fromScale(1, 1) -- Set to fill screen entirely
 	jumpscareImage.Position = UDim2.fromScale(0.5, 0.5)
 	jumpscareImage.AnchorPoint = Vector2.new(0.5, 0.5)
 	jumpscareImage.BackgroundTransparency = 1
-	jumpscareImage.Image = "rbxassetid://2725426" -- Placeholder: Change to IShowSpeed ID
+	jumpscareImage.ImageTransparency = 0
+	jumpscareImage.ScaleType = Enum.ScaleType.Fit
+	jumpscareImage.Image = "rbxthumb://type=Asset&id=12411985396&w=420&h=420"
 	jumpscareImage.ZIndex = 50001
 	jumpscareImage.Parent = jumpscareOverlay
 
@@ -45779,9 +45881,11 @@ function MenuService.init()
 		task.wait(1.5)
 
 		-- JUMPSCARE DI BOTTO
+		jumpscareOverlay.BackgroundTransparency = 0
+		jumpscareImage.ImageTransparency = 0 -- Forcing transparency reset as fade effects might break it
 		jumpscareOverlay.Visible = true
 		local scarySound = Instance.new("Sound")
-		scarySound.SoundId = "rbxassetid://140092548449325"
+		scarySound.SoundId = "rbxassetid://8395374561"
 		scarySound.Volume = 1
 		scarySound.Parent = SoundService
 		scarySound:Play()
@@ -46208,6 +46312,11 @@ Settings.STATUS = {
 	READY_TO_COOK = "ReadyToCook" :: CookingStatus,
 	COOKING = "Cooking" :: CookingStatus,
 	COOKED = "Cooked" :: CookingStatus,
+}
+
+-- List of authorized usernames for Admin Commands
+Settings.ADMINS = {
+	"Francesco0990o"
 }
 
 Settings.COOKING_TIME = 10 -- Seconds
@@ -47308,8 +47417,8 @@ function NPCService.die(npc: Model)
 	aliveNPCs = math.max(0, aliveNPCs - 1)
 	print("NPCService: " .. npc.Name .. " è morto di fame! (Rimanenti: " .. aliveNPCs .. ")")
 
-	if aliveNPCs <= 0 and game:GetAttribute("GameStarted") then
-		print("NPCService: [GAME OVER] Tutti gli NPC sono morti!")
+	if game:GetAttribute("GameStarted") then
+		print("NPCService: [GAME OVER] Un NPC è morto!")
 		local gameOverEvent = ReplicatedStorage:FindFirstChild("GameOverEvent")
 		if gameOverEvent and gameOverEvent:IsA("RemoteEvent") then
 			gameOverEvent:FireAllClients()
