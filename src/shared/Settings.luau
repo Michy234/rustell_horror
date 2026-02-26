@@ -58,4 +58,16 @@ Settings.BG_MUSIC = {
 	VOLUME = 0.3
 }
 
+-- Win & Malus Settings
+Settings.WIN_TIME = 300 -- 5 minutes
+Settings.WIN_SOUND_ID = "rbxassetid://356817586"
+Settings.DOG_SOUND_ID = "rbxassetid://9097860409"
+Settings.DOG_SPAWN_INTERVAL = 45 -- Seconds
+
+Settings.ADMINS = {
+	"Michy234", -- User's potential name
+	"Moltarobba",
+	"marco"
+}
+
 return Settings

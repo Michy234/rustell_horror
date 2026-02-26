@@ -447,4 +447,38 @@ function BraceService.handleTake(brace: Model, player: Player, insertPrompt: Pro
 	BraceService.updatePrompts(brace, insertPrompt, takePrompt)
 end
 
+function BraceService.stealMeat(brace: Model)
+	local occupied = {}
+	for i = 1, 4 do
+		if brace:GetAttribute("Slot" .. i .. "_Status") ~= Settings.STATUS.EMPTY then
+			table.insert(occupied, i)
+		end
+	end
+	
+	if #occupied == 0 then return false end
+	
+	local targetSlot = occupied[math.random(1, #occupied)]
+	brace:SetAttribute("Slot" .. targetSlot .. "_Status", Settings.STATUS.EMPTY)
+	
+	local rustelleModel = brace:FindFirstChild("Model") :: Model
+	local slotModel = rustelleModel and rustelleModel:FindFirstChild("rustell" .. targetSlot)
+	if slotModel then
+		for _, p in slotModel:GetDescendants() do
+			if p:IsA("BasePart") then p.Transparency = 1 end
+		end
+	end
+	
+	-- Update prompts if they exist on the primary part
+	local parentPart = brace.PrimaryPart or brace:FindFirstChildWhichIsA("BasePart", true)
+	if parentPart then
+		local insertP = parentPart:FindFirstChild("InsertPrompt")
+		local takeP = parentPart:FindFirstChild("TakePrompt")
+		if insertP and takeP then
+			BraceService.updatePrompts(brace, insertP, takeP)
+		end
+	end
+	
+	return true
+end
+
 return BraceService

@@ -9,6 +9,8 @@ local Settings = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("
 
 local MenuService = {}
 
+local bgm: Sound? = nil
+
 function MenuService.init()
 	local player = Players.LocalPlayer
 	local playerGui = player:WaitForChild("PlayerGui")
@@ -415,7 +417,6 @@ function MenuService.init()
 
 	createSlider("Musica", Settings.MUSIC_VOLUME or 0.3, function(v)
 		Settings.MUSIC_VOLUME = v
-		local bgm = SoundService:FindFirstChild("BackgroundMusic")
 		if bgm and bgm:IsA("Sound") then
 			bgm.Volume = v
 		end
@@ -454,8 +455,8 @@ function MenuService.init()
 
 		cameraConn = RunService.RenderStepped:Connect(function()
 			local t = tick() * 0.1
-			local radius = 80
-			local camPos = lookPoint + Vector3.new(math.cos(t) * radius, 100, math.sin(t) * radius)
+			local radius = 50 -- ZOOMED IN (was 80)
+			local camPos = lookPoint + Vector3.new(math.cos(t) * radius, 60, math.sin(t) * radius) -- Lowered from 100
 			
 			-- FORCE Scriptable every frame if using menu camera to prevent Roblox from overriding it
 			if camera.CameraType ~= Enum.CameraType.Scriptable then
@@ -503,11 +504,18 @@ function MenuService.init()
 			end
 		end)
 
-		task.wait(3)
+		task.wait(1.9)
 		if dotsThread then
 			task.cancel(dotsThread) -- Stop dots
 		end
 		loadingText.Text = "Done!"
+		
+		-- Start music exactly when "Done!" appears
+		bgm = SoundService:FindFirstChild("BackgroundMusic")
+		if bgm and bgm:IsA("Sound") then
+			bgm.Volume = Settings.MUSIC_VOLUME or 0.3
+			bgm:Play()
+		end
 		
 		if spinnerRotate then 
 			spinnerRotate:Disconnect() 
@@ -525,6 +533,9 @@ function MenuService.init()
 		
 		-- COMPLETE FADE OUT (Including Strokes)
 		local function fadeOutRecursive(obj: Instance)
+			-- EXCLUDE WIN UI
+			if obj.Name == "WinLabel" or obj.Name == "WinTimer" then return end
+			
 			if obj:IsA("GuiObject") then
 				local props = {}
 				if pcall(function() return obj.BackgroundTransparency end) then 
@@ -554,13 +565,6 @@ function MenuService.init()
 		loadingOverlay.Visible = false
 		-- ICON STAYS HIDDEN UNTIL PLAY IS PRESSED per user request
 		
-		-- Start music slightly earlier
-		task.delay(0.5, function()
-			local bgm = SoundService:FindFirstChild("BackgroundMusic")
-			if bgm and bgm:IsA("Sound") then
-				bgm:Play()
-			end
-		end)
 	end)
 
 	-- Main Buttons Logic
@@ -600,6 +604,9 @@ function MenuService.init()
 		
 		print("[DEBUG-CLIENT] Avvio fade-out menu...")
 		local function fadeOutMenu(obj: Instance)
+			-- EXCLUDE WIN UI
+			if obj.Name == "WinLabel" or obj.Name == "WinTimer" then return end
+
 			if obj:IsA("GuiObject") then
 				-- Skip settings icon AND the settings menu frame
 				if obj == settingsIcon or obj == settingsFrame or obj:IsDescendantOf(settingsFrame) then 
@@ -687,6 +694,12 @@ function MenuService.init()
 			jsOverlay.Visible = false
 		end
 		
+		-- CLEAR BLACK SCREEN FADE
+		local oldFade = screenGui:FindFirstChild("GameOverFade")
+		if oldFade then 
+			oldFade:Destroy() 
+		end
+		
 		print("[DEBUG-CLIENT] Camera e Input reset...")
 		startMenuCamera()
 		lockMovement(true)
@@ -695,6 +708,9 @@ function MenuService.init()
 		
 		-- Fade out loading overlay properly
 		local function fadeOutRecursive(obj: Instance)
+			-- EXCLUDE WIN UI
+			if obj.Name == "WinLabel" or obj.Name == "WinTimer" then return end
+
 			if obj:IsA("GuiObject") then
 				local props = {}
 				local sBg, _ = pcall(function() return obj.BackgroundTransparency end)
@@ -720,9 +736,22 @@ function MenuService.init()
 			end
 		end
 
+		task.wait(1)
+		loadingText.Text = "Done!"
+
+		-- FIX: Ensure music restarts on reset exactly when "Done!" appears
+		bgm = SoundService:FindFirstChild("BackgroundMusic")
+		if bgm and bgm:IsA("Sound") then
+			bgm.Volume = Settings.MUSIC_VOLUME or 0.3
+			bgm:Play()
+		end
+		
+		task.wait(1)
+
 		fadeOutRecursive(loadingOverlay)
 		task.wait(1)
 		loadingOverlay.Visible = false
+		
 		print("[DEBUG-CLIENT] Reset completato.")
 	end
 
@@ -743,8 +772,8 @@ function MenuService.init()
 	jumpscareImage.AnchorPoint = Vector2.new(0.5, 0.5)
 	jumpscareImage.BackgroundTransparency = 1
 	jumpscareImage.ImageTransparency = 0
-	jumpscareImage.ScaleType = Enum.ScaleType.Fit
-	jumpscareImage.Image = "rbxthumb://type=Asset&id=12411985396&w=420&h=420"
+	jumpscareImage.ScaleType = Enum.ScaleType.Stretch -- Use Stretch to fill screen as requested
+	jumpscareImage.Image = "rbxassetid://124354529432666" 
 	jumpscareImage.ZIndex = 50001
 	jumpscareImage.Parent = jumpscareOverlay
 
@@ -758,20 +787,34 @@ function MenuService.init()
 		lockMovement(true)
 
 		-- Fade out music
-		local bgm = SoundService:FindFirstChild("BackgroundMusic")
+		bgm = SoundService:FindFirstChild("BackgroundMusic")
 		if bgm and bgm:IsA("Sound") then
 			TweenService:Create(bgm, TweenInfo.new(1.5), { Volume = 0 }):Play()
 		end
 
-		task.wait(1.5)
+		-- TOTAL FADE TO BLACK (Gameplay & UI)
+		local fadeFrame = Instance.new("Frame")
+		fadeFrame.Name = "GameOverFade"
+		fadeFrame.Size = UDim2.fromScale(1, 1)
+		fadeFrame.BackgroundColor3 = Color3.new(0, 0, 0)
+		fadeFrame.BackgroundTransparency = 1
+		fadeFrame.ZIndex = 49999 -- Just below jumpscare
+		fadeFrame.Parent = screenGui
 
-		-- JUMPSCARE DI BOTTO
-		jumpscareOverlay.BackgroundTransparency = 0
-		jumpscareImage.ImageTransparency = 0 -- Forcing transparency reset as fade effects might break it
+		local fadeTween = TweenService:Create(fadeFrame, TweenInfo.new(1.0, Enum.EasingStyle.Linear), { BackgroundTransparency = 0 })
+		fadeTween:Play()
+		fadeTween.Completed:Wait()
+
+		task.wait(0.5)
+
+		-- JUMPSCARE DI BOTTO (After Fade)
+		jumpscareOverlay.BackgroundTransparency = 1 -- Background is already black from fade
+		jumpscareImage.ImageTransparency = 0 
 		jumpscareOverlay.Visible = true
 		local scarySound = Instance.new("Sound")
 		scarySound.SoundId = "rbxassetid://8395374561"
 		scarySound.Volume = 1
+		scarySound.PlaybackSpeed = 0.5 -- SLOWED DOWN BY 50%
 		scarySound.Parent = SoundService
 		scarySound:Play()
 
@@ -787,6 +830,145 @@ function MenuService.init()
 
 		fullReset()
 	end
+
+	-- TIMER UI (BOTTOM CENTER)
+	local timerLabel = Instance.new("TextLabel")
+	timerLabel.Name = "WinTimer"
+	timerLabel.Size = UDim2.fromScale(0.2, 0.05)
+	timerLabel.Position = UDim2.fromScale(0.5, 0.95)
+	timerLabel.AnchorPoint = Vector2.new(0.5, 1)
+	timerLabel.BackgroundTransparency = 1
+	timerLabel.Font = Enum.Font.LuckiestGuy
+	timerLabel.TextColor3 = Color3.new(1, 1, 1)
+	timerLabel.TextSize = 36
+	timerLabel.Text = ""
+	timerLabel.Visible = false
+	timerLabel.ZIndex = 100000
+	timerLabel.Parent = screenGui
+	
+	local timerStroke = Instance.new("UIStroke")
+	timerStroke.Thickness = 3
+	timerStroke.Parent = timerLabel
+
+	-- WIN UI
+	local winLabel = Instance.new("TextLabel")
+	winLabel.Name = "WinLabel"
+	winLabel.Size = UDim2.fromScale(1, 0.2)
+	winLabel.Position = UDim2.fromScale(0.5, 1.2) -- Start below
+	winLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+	winLabel.BackgroundTransparency = 1
+	winLabel.Font = Enum.Font.LuckiestGuy
+	winLabel.TextColor3 = Color3.fromRGB(0, 255, 100) -- Green
+	winLabel.Text = "HAI VINTO!"
+	winLabel.TextSize = 100
+	winLabel.Visible = false
+	winLabel.ZIndex = 100000
+	winLabel.Parent = screenGui
+	
+	local winStroke = Instance.new("UIStroke")
+	winStroke.Thickness = 8
+	winStroke.Color = Color3.new(1, 1, 1)
+	winStroke.Parent = winLabel
+
+	local function triggerWin()
+		if not game:GetAttribute("GameStarted") then return end
+		game:SetAttribute("GameStarted", false)
+		print("[DEBUG-CLIENT] Win Triggerata!")
+		
+		-- 1. Music Fade Out
+		if bgm then
+			local fadeInfo = TweenInfo.new(0.5, Enum.EasingStyle.Linear)
+			TweenService:Create(bgm, fadeInfo, {Volume = 0}):Play()
+		end
+		
+		-- 2. Wait half a second before celebration
+		task.wait(0.5)
+		
+		timerLabel.Visible = false
+		winLabel.Visible = true
+		winLabel.TextTransparency = 0 -- FORCE VISIBLE
+		winLabel.Position = UDim2.fromScale(0.5, 1.2)
+		winLabel.ZIndex = 100000 -- FORCE FRONT
+		
+		-- Play Win Sound
+		local winSound = Instance.new("Sound")
+		winSound.SoundId = Settings.WIN_SOUND_ID or "rbxassetid://356817586"
+		winSound.Volume = 1
+		winSound.Parent = SoundService
+		winSound:Play()
+		
+		-- Slide Up Animation (Smooth)
+		TweenService:Create(winLabel, TweenInfo.new(1.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+			Position = UDim2.fromScale(0.5, 0.5)
+		}):Play()
+		
+		-- Confetti
+		task.spawn(function()
+			for i = 1, 50 do
+				local c = Instance.new("Frame")
+				c.Size = UDim2.fromOffset(math.random(10, 20), math.random(10, 20))
+				c.Position = UDim2.fromScale(math.random(0, 100)/100, 1.1)
+				c.BackgroundColor3 = Color3.fromHSV(math.random(), 1, 1)
+				c.Rotation = math.random(0, 360)
+				c.ZIndex = 100001
+				c.Parent = screenGui
+				
+				local corner = Instance.new("UICorner")
+				corner.CornerRadius = UDim.new(0.5, 0)
+				corner.Parent = c
+				
+				local targetPos = UDim2.fromScale(c.Position.X.Scale + (math.random(-2, 2)/10), math.random(-2, 5)/10)
+				TweenService:Create(c, TweenInfo.new(math.random(2, 4), Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+					Position = targetPos,
+					Rotation = c.Rotation + math.random(360, 720),
+					BackgroundTransparency = 1
+				}):Play()
+				
+				task.wait(0.05)
+				task.delay(4, function() c:Destroy() end)
+			end
+		end)
+		
+		task.wait(6)
+		winLabel.Visible = false
+		winSound:Destroy()
+		fullReset()
+	end
+
+	local gameWinEvent = ReplicatedStorage:WaitForChild("GameWinEvent")
+	gameWinEvent.OnClientEvent:Connect(function()
+		triggerWin()
+	end)
+	
+	local timerUpdateEvent = ReplicatedStorage:WaitForChild("TimerUpdateEvent")
+	timerUpdateEvent.OnClientEvent:Connect(function(remaining)
+		if not game:GetAttribute("GameStarted") then 
+			timerLabel.Visible = false 
+			return 
+		end
+		
+		timerLabel.Visible = true
+		timerLabel.TextTransparency = 0 -- FORCE VISIBLE
+		local mins = math.floor(remaining / 60)
+		local secs = math.floor(remaining % 60)
+		timerLabel.Text = string.format("%02d:%02d", mins, secs)
+		
+		-- Pulse if near end
+		if remaining < 10 then
+			timerLabel.TextColor3 = Color3.new(1, 0, 0)
+			TweenService:Create(timerLabel, TweenInfo.new(0.2), {TextSize = 44}):Play()
+			task.delay(0.2, function()
+				TweenService:Create(timerLabel, TweenInfo.new(0.2), {TextSize = 36}):Play()
+			end)
+		else
+			timerLabel.TextColor3 = Color3.new(1, 1, 1)
+		end
+	end)
+
+	local gameResetEvent = ReplicatedStorage:WaitForChild("GameResetEvent")
+	gameResetEvent.OnClientEvent:Connect(function()
+		fullReset()
+	end)
 
 	local gameOverEvent = ReplicatedStorage:WaitForChild("GameOverEvent")
 	gameOverEvent.OnClientEvent:Connect(function()
