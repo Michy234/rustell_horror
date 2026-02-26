@@ -274,27 +274,27 @@ gAaOGIAGjhiABo4YgAaOGIAGjhiABo4YgAaOGIAGjhiABo4YgAaOGIDm]]></BinaryString>
 		<Item class="Camera" referent="RBXBC1CE911126F4207AAFDC10F3781A789">
 			<Properties>
 				<CoordinateFrame name="CFrame">
-					<X>32.6979065</X>
-					<Y>8.57261848</Y>
-					<Z>7.00743055</Z>
-					<R00>-0.344430447</R00>
-					<R01>-0.0049179974</R01>
-					<R02>0.938799024</R02>
-					<R10>-1.16415322e-10</R10>
-					<R11>0.99998641</R11>
-					<R12>0.00523853349</R12>
-					<R20>-0.938811898</R20>
-					<R21>0.00180431036</R21>
-					<R22>-0.344425708</R22>
+					<X>-2.92448592</X>
+					<Y>7.26994705</Y>
+					<Z>7.6580267</Z>
+					<R00>0.998292267</R00>
+					<R01>-0.0109188491</R01>
+					<R02>0.0573882982</R02>
+					<R10>-0</R10>
+					<R11>0.982377172</R11>
+					<R12>0.186909661</R12>
+					<R20>-0.0584177896</R20>
+					<R21>-0.186590463</R21>
+					<R22>0.98069942</R22>
 				</CoordinateFrame>
 				<Ref name="CameraSubject">null</Ref>
 				<token name="CameraType">0</token>
 				<float name="FieldOfView">70</float>
 				<token name="FieldOfViewMode">0</token>
 				<CoordinateFrame name="Focus">
-					<X>30.8203087</X>
-					<Y>8.56214142</Y>
-					<Z>7.69628191</Z>
+					<X>-3.03926253</X>
+					<Y>6.8961277</Y>
+					<Z>5.69662762</Z>
 					<R00>1</R00>
 					<R01>0</R01>
 					<R02>0</R02>
@@ -8614,7 +8614,7 @@ gAaOGIAGjhiABo4YgAaOGIAGjhiABo4YgAaOGIAGjhiABo4YgAaOGIDm]]></BinaryString>
 							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 							<bool name="DefinesCapabilities">false</bool>
 							<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-							<string name="Name">Fire</string>
+							<string name="Name">FireElement</string>
 							<int64 name="SourceAssetId">-1</int64>
 							<BinaryString name="Tags"></BinaryString>
 							<UniqueId name="UniqueId">076bca2916d5b3ca09b03b0f00000986</UniqueId>
@@ -44302,6 +44302,298 @@ return TextureConfiguration]]></ProtectedString>
 				</Item>
 			</Item>
 		</Item>
+		<Item class="Model" referent="RBXA4A32DE604B742F3B0F5149C480B2184">
+			<Properties>
+				<token name="LevelOfDetail">0</token>
+				<CoordinateFrame name="ModelMeshCFrame">
+					<X>-134.59375</X>
+					<Y>-25.6095238</Y>
+					<Z>-27.9228401</Z>
+					<R00>0.999959826</R00>
+					<R01>-8.10586789e-05</R01>
+					<R02>8.10586789e-05</R02>
+					<R10>8.10293423e-05</R10>
+					<R11>0.999602437</R11>
+					<R12>8.09996563e-05</R12>
+					<R20>-8.1032842e-05</R20>
+					<R21>-8.10627316e-05</R21>
+					<R22>0.999640107</R22>
+				</CoordinateFrame>
+				<SharedString name="ModelMeshData">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<Vector3 name="ModelMeshSize">
+					<X>0</X>
+					<Y>0</Y>
+					<Z>0</Z>
+				</Vector3>
+				<token name="ModelStreamingMode">0</token>
+				<bool name="NeedsPivotMigration">false</bool>
+				<Ref name="PrimaryPart">null</Ref>
+				<float name="ScaleFactor">1.14999998</float>
+				<SharedString name="SlimHash">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+				<OptionalCoordinateFrame name="WorldPivotData">
+					<CFrame>
+						<X>-1.90258777</X>
+						<Y>6.50117588</Y>
+						<Z>-0.0935658514</Z>
+						<R00>0</R00>
+						<R01>0</R01>
+						<R02>0.999999881</R02>
+						<R10>-0.999998808</R10>
+						<R11>0</R11>
+						<R12>0</R12>
+						<R20>0</R20>
+						<R21>-0.999998927</R21>
+						<R22>0</R22>
+					</CFrame>
+				</OptionalCoordinateFrame>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+				<string name="Name">Salt</string>
+				<int64 name="SourceAssetId">18840486570</int64>
+				<BinaryString name="Tags"></BinaryString>
+				<UniqueId name="UniqueId">589d622752f6f22c09b22ff100001c7f</UniqueId>
+			</Properties>
+			<Item class="Part" referent="RBX0FAC105D257B4E59B2255D969647E1EC">
+				<Properties>
+					<token name="shape">2</token>
+					<token name="formFactorRaw">1</token>
+					<bool name="Anchored">true</bool>
+					<bool name="AudioCanCollide">true</bool>
+					<float name="BackParamA">-0.5</float>
+					<float name="BackParamB">0.5</float>
+					<token name="BackSurface">0</token>
+					<token name="BackSurfaceInput">0</token>
+					<float name="BottomParamA">-0.5</float>
+					<float name="BottomParamB">0.5</float>
+					<token name="BottomSurface">0</token>
+					<token name="BottomSurfaceInput">0</token>
+					<CoordinateFrame name="CFrame">
+						<X>-1.90255272</X>
+						<Y>6.41872835</Y>
+						<Z>-0.0935373381</Z>
+						<R00>-6.57109833e-09</R00>
+						<R01>-6.57018884e-09</R01>
+						<R02>0.999999881</R02>
+						<R10>-0.999998808</R10>
+						<R11>6.57018173e-09</R11>
+						<R12>6.57109123e-09</R12>
+						<R20>6.57018262e-09</R20>
+						<R21>-0.999998927</R21>
+						<R22>6.57018262e-09</R22>
+					</CoordinateFrame>
+					<bool name="CanCollide">true</bool>
+					<bool name="CanQuery">true</bool>
+					<bool name="CanTouch">true</bool>
+					<bool name="CastShadow">true</bool>
+					<string name="CollisionGroup">Default</string>
+					<int name="CollisionGroupId">0</int>
+					<Color3uint8 name="Color3uint8">4294506744</Color3uint8>
+					<PhysicalProperties name="CustomPhysicalProperties">
+						<CustomPhysics>false</CustomPhysics>
+					</PhysicalProperties>
+					<bool name="EnableFluidForces">false</bool>
+					<float name="FrontParamA">-0.5</float>
+					<float name="FrontParamB">0.5</float>
+					<token name="FrontSurface">0</token>
+					<token name="FrontSurfaceInput">0</token>
+					<float name="LeftParamA">-0.5</float>
+					<float name="LeftParamB">0.5</float>
+					<token name="LeftSurface">0</token>
+					<token name="LeftSurfaceInput">0</token>
+					<bool name="Locked">false</bool>
+					<bool name="Massless">false</bool>
+					<token name="Material">272</token>
+					<string name="MaterialVariantSerialized"></string>
+					<CoordinateFrame name="PivotOffset">
+						<X>0</X>
+						<Y>0</Y>
+						<Z>0</Z>
+						<R00>1</R00>
+						<R01>0</R01>
+						<R02>0</R02>
+						<R10>0</R10>
+						<R11>1</R11>
+						<R12>0</R12>
+						<R20>0</R20>
+						<R21>0</R21>
+						<R22>1</R22>
+					</CoordinateFrame>
+					<float name="Reflectance">0</float>
+					<float name="RightParamA">-0.5</float>
+					<float name="RightParamB">0.5</float>
+					<token name="RightSurface">0</token>
+					<token name="RightSurfaceInput">0</token>
+					<int name="RootPriority">0</int>
+					<Vector3 name="RotVelocity">
+						<X>0</X>
+						<Y>0</Y>
+						<Z>0</Z>
+					</Vector3>
+					<float name="TopParamA">-0.5</float>
+					<float name="TopParamB">0.5</float>
+					<token name="TopSurface">0</token>
+					<token name="TopSurfaceInput">0</token>
+					<float name="Transparency">0</float>
+					<Vector3 name="Velocity">
+						<X>0</X>
+						<Y>0</Y>
+						<Z>0</Z>
+					</Vector3>
+					<Vector3 name="size">
+						<X>0.689999878</X>
+						<Y>0.460000008</Y>
+						<Z>0.459999889</Z>
+					</Vector3>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+					<string name="Name">Part</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+					<UniqueId name="UniqueId">589d622752f6f22c09b22ff100001c80</UniqueId>
+				</Properties>
+			</Item>
+			<Item class="UnionOperation" referent="RBXA2FA60C089534735BB24AAB4AFA3F450">
+				<Properties>
+					<Content name="AssetId"><url>https://www.roblox.com//asset/?id=11093175608</url></Content>
+					<BinaryString name="ChildData"></BinaryString>
+					<SharedString name="ChildData2">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+					<int name="ComponentIndex">-1</int>
+					<token name="FormFactor">3</token>
+					<Vector3 name="InitialSize">
+						<X>0.100000858</X>
+						<Y>0.399997711</Y>
+						<Z>0.399997711</Z>
+					</Vector3>
+					<BinaryString name="MeshData"></BinaryString>
+					<SharedString name="MeshData2">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+					<bool name="OffCentered">false</bool>
+					<BinaryString name="PhysicsData"></BinaryString>
+					<token name="RenderFidelity">1</token>
+					<float name="SmoothingAngle">0</float>
+					<NetAssetRef name="SolidMeshHolder">yuZpQdnvvUBOTYh1jqZ2cA==</NetAssetRef>
+					<bool name="UsePartColor">false</bool>
+					<SharedString name="AeroMeshData">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+					<token name="FluidFidelityInternal">0</token>
+					<bool name="InertiaMigrated">true</bool>
+					<SharedString name="PhysicalConfigData">cptMgMxhNJYlDhhaIVXHlQ==</SharedString>
+					<Vector3 name="UnscaledCofm">
+						<X>-0.000981783844</X>
+						<Y>-0.00251559727</Y>
+						<Z>0.00263205217</Z>
+					</Vector3>
+					<Vector3 name="UnscaledVolInertiaDiags">
+						<X>0.000230509628</X>
+						<Y>0.000124367783</Y>
+						<Z>0.000127384192</Z>
+					</Vector3>
+					<Vector3 name="UnscaledVolInertiaOffDiags">
+						<X>6.41739348e-07</X>
+						<Y>-1.44075727e-06</Y>
+						<Z>-8.10559868e-08</Z>
+					</Vector3>
+					<float name="UnscaledVolume">0.0113729425</float>
+					<bool name="Anchored">true</bool>
+					<bool name="AudioCanCollide">true</bool>
+					<float name="BackParamA">-0.5</float>
+					<float name="BackParamB">0.5</float>
+					<token name="BackSurface">0</token>
+					<token name="BackSurfaceInput">0</token>
+					<float name="BottomParamA">-0.5</float>
+					<float name="BottomParamB">0.5</float>
+					<token name="BottomSurface">0</token>
+					<token name="BottomSurfaceInput">0</token>
+					<CoordinateFrame name="CFrame">
+						<X>-1.90258777</X>
+						<Y>6.82122183</Y>
+						<Z>-0.0935702398</Z>
+						<R00>8.10623096e-05</R00>
+						<R01>0.999999881</R01>
+						<R02>8.10623096e-05</R02>
+						<R10>-0.999998808</R10>
+						<R11>8.10622223e-05</R11>
+						<R12>8.10622223e-05</R12>
+						<R20>8.10622296e-05</R20>
+						<R21>-8.10622296e-05</R21>
+						<R22>0.999998927</R22>
+					</CoordinateFrame>
+					<bool name="CanCollide">true</bool>
+					<bool name="CanQuery">true</bool>
+					<bool name="CanTouch">true</bool>
+					<bool name="CastShadow">true</bool>
+					<string name="CollisionGroup">Default</string>
+					<int name="CollisionGroupId">0</int>
+					<Color3uint8 name="Color3uint8">4288914085</Color3uint8>
+					<PhysicalProperties name="CustomPhysicalProperties">
+						<CustomPhysics>false</CustomPhysics>
+					</PhysicalProperties>
+					<bool name="EnableFluidForces">false</bool>
+					<float name="FrontParamA">-0.5</float>
+					<float name="FrontParamB">0.5</float>
+					<token name="FrontSurface">0</token>
+					<token name="FrontSurfaceInput">0</token>
+					<float name="LeftParamA">-0.5</float>
+					<float name="LeftParamB">0.5</float>
+					<token name="LeftSurface">0</token>
+					<token name="LeftSurfaceInput">0</token>
+					<bool name="Locked">false</bool>
+					<bool name="Massless">false</bool>
+					<token name="Material">272</token>
+					<string name="MaterialVariantSerialized"></string>
+					<CoordinateFrame name="PivotOffset">
+						<X>0</X>
+						<Y>0</Y>
+						<Z>0</Z>
+						<R00>1</R00>
+						<R01>0</R01>
+						<R02>0</R02>
+						<R10>0</R10>
+						<R11>1</R11>
+						<R12>0</R12>
+						<R20>0</R20>
+						<R21>0</R21>
+						<R22>1</R22>
+					</CoordinateFrame>
+					<float name="Reflectance">0</float>
+					<float name="RightParamA">-0.5</float>
+					<float name="RightParamB">0.5</float>
+					<token name="RightSurface">0</token>
+					<token name="RightSurfaceInput">0</token>
+					<int name="RootPriority">0</int>
+					<Vector3 name="RotVelocity">
+						<X>0</X>
+						<Y>0</Y>
+						<Z>0</Z>
+					</Vector3>
+					<float name="TopParamA">-0.5</float>
+					<float name="TopParamB">0.5</float>
+					<token name="TopSurface">0</token>
+					<token name="TopSurfaceInput">0</token>
+					<float name="Transparency">0</float>
+					<Vector3 name="Velocity">
+						<X>0</X>
+						<Y>0</Y>
+						<Z>0</Z>
+					</Vector3>
+					<Vector3 name="size">
+						<X>0.115000986</X>
+						<Y>0.459997356</Y>
+						<Z>0.459997356</Z>
+					</Vector3>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+					<string name="Name">Union</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+					<UniqueId name="UniqueId">589d622752f6f22c09b22ff100001c81</UniqueId>
+				</Properties>
+			</Item>
+		</Item>
 	</Item>
 	<Item class="TimerService" referent="RBX5061FA66ADB44D24AB21E851F2B39002">
 		<Properties>
@@ -44806,10 +45098,19 @@ NotificationService.init()
 InteractionService.init()
 MenuService.init()
 
--- Force Camera Mode to Classic
+-- FIRST PERSON by default (toggle in settings)
 local player = Players.LocalPlayer
 if player then
-	player.CameraMode = Enum.CameraMode.Classic
+	player.CameraMode = Enum.CameraMode.LockFirstPerson
+end
+
+-- Expose camera mode toggle globally for settings checkbox
+_G.SetFirstPerson = function(enabled: boolean)
+	if enabled then
+		player.CameraMode = Enum.CameraMode.LockFirstPerson
+	else
+		player.CameraMode = Enum.CameraMode.Classic
+	end
 end
 
 -- Prepare Background Music (Music will be played by MenuService after loading)
@@ -44819,15 +45120,17 @@ bgm.SoundId = Settings.BG_MUSIC.ID
 bgm.Volume = Settings.MUSIC_VOLUME or Settings.BG_MUSIC.VOLUME
 bgm.Looped = true
 bgm.Parent = SoundService
--- bgm:Play() -- REMOVED: MenuService will play this after loading
 
 -- NPC Interaction Visibility Logic
 task.spawn(function()
 	while true do
 		local character = player.Character
-		local holdingRustella = character and (character:FindFirstChild("Rustella") or character:FindFirstChild("Rustella Bruciata")) ~= nil
+		local holdingRustella = character and (
+			character:FindFirstChild("Rustella")
+			or character:FindFirstChild("Rustella Salata")
+			or character:FindFirstChild("Rustella Bruciata")
+		) ~= nil
 		
-		-- Manage all NPC prompts in Workspace
 		for _, descendant in Workspace:GetDescendants() do
 			if descendant:IsA("ProximityPrompt") and descendant.ActionText == "Dai Rustella" then
 				descendant.Enabled = holdingRustella
@@ -44841,7 +45144,6 @@ end)
 print("Client started, NotificationService, InteractionService, and MenuService initialized.")
 
 -- DOG CLICK DETECTION
--- When the player clicks on any part of the dog during its trip, fire the server.
 local mouse = player:GetMouse()
 local DogClickEvent = ReplicatedStorage:WaitForChild("DogClickEvent", 10)
 
@@ -44849,12 +45151,146 @@ if DogClickEvent then
 	mouse.Button1Down:Connect(function()
 		local target = mouse.Target
 		if not target then return end
-		-- Walk up the part's ancestry to see if it belongs to dogMalus
 		local model = target:FindFirstAncestorOfClass("Model")
 		if model and model.Name == "dogMalus" then
 			DogClickEvent:FireServer()
 		end
 	end)
+end
+
+-- ============================================================
+-- RAIN VISUALS
+-- ============================================================
+local Lighting = game:GetService("Lighting")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+
+local RainStartEvent = ReplicatedStorage:WaitForChild("RainStartEvent", 10)
+local RainStopEvent  = ReplicatedStorage:WaitForChild("RainStopEvent",  10)
+
+local rainGui: ScreenGui? = nil
+local rainSound: Sound? = nil
+local rainConn: RBXScriptConnection? = nil
+
+-- Save original Lighting properties the first time
+local originalBrightness = Lighting.Brightness
+local originalFogEnd = Lighting.FogEnd
+local originalFogColor = Lighting.FogColor
+local atmosphere = Lighting:FindFirstChildOfClass("Atmosphere")
+local originalDensity = atmosphere and atmosphere.Density or 0
+local originalHaze = atmosphere and atmosphere.Haze or 0
+
+local function startRainVisuals()
+	-- 1) SKY TWEEN - 3s slow darkening
+	TweenService:Create(Lighting, TweenInfo.new(3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+		Brightness = 0.15,
+		FogEnd = 50,
+		FogStart = 5,
+		FogColor = Color3.fromRGB(110, 125, 145),
+	}):Play()
+	if atmosphere then
+		TweenService:Create(atmosphere, TweenInfo.new(3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+			Density = 0.65,
+			Haze = 0.8,
+		}):Play()
+	end
+
+	-- 2) RAIN SOUND
+	local snd = Instance.new("Sound")
+	snd.Name = "RainLoop"
+	snd.SoundId = Settings.RAIN_SOUND_ID or "rbxassetid://237985445"
+	snd.Volume = 0   -- start silent, fade in
+	snd.Looped = true
+	snd.Parent = SoundService
+	snd:Play()
+	TweenService:Create(snd, TweenInfo.new(0.5), {Volume = 0.7}):Play()  -- 0.5s fade in
+	rainSound = snd
+
+	-- 3) RAIN OVERLAY (animated scanlines)
+	local gui = Instance.new("ScreenGui")
+	gui.Name = "RainOverlay"
+	gui.IgnoreGuiInset = true
+	gui.ResetOnSpawn = false
+	gui.DisplayOrder = 200   -- ScreenGui uses DisplayOrder, not ZIndex
+	gui.Parent = player.PlayerGui
+	rainGui = gui
+
+	-- Pre-create rain drops, starting fully transparent for fade-in
+	local drops: {{frame: Frame, speed: number, x: number, targetAlpha: number}} = {}
+	for _ = 1, 150 do
+		local targetAlpha = math.random(20, 50) / 100
+		local f = Instance.new("Frame")
+		f.BackgroundColor3 = Color3.fromRGB(200, 220, 255)
+		f.BackgroundTransparency = 1   -- start invisible
+		f.BorderSizePixel = 0
+		f.Size = UDim2.fromOffset(math.random(1, 2), math.random(20, 50))
+		f.Position = UDim2.fromScale(math.random(), math.random())
+		f.Parent = gui
+		-- Fade-in: tween each drop to its target transparency over 3s
+		TweenService:Create(f, TweenInfo.new(3.0, Enum.EasingStyle.Quad), {BackgroundTransparency = targetAlpha}):Play()
+		table.insert(drops, {
+			frame = f,
+			speed = math.random(8, 18) / 10,
+			x = math.random(),
+			targetAlpha = targetAlpha,
+		})
+	end
+
+	rainConn = RunService.RenderStepped:Connect(function(dt)
+		for _, d in drops do
+			local newY = d.frame.Position.Y.Scale + dt * d.speed
+			if newY > 1.05 then
+				newY = -0.05
+				d.x = math.random()
+			end
+			d.frame.Position = UDim2.new(d.x, 0, newY, 0)
+		end
+	end)
+end
+
+local function stopRainVisuals()
+	-- Reverse lighting over 3s
+	TweenService:Create(Lighting, TweenInfo.new(3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+		Brightness = originalBrightness,
+		FogEnd = originalFogEnd,
+		FogStart = 0,
+		FogColor = originalFogColor,
+	}):Play()
+	if atmosphere then
+		TweenService:Create(atmosphere, TweenInfo.new(3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+			Density = originalDensity,
+			Haze = originalHaze,
+		}):Play()
+	end
+
+	-- Stop sound with 3s fade
+	if rainSound then
+		TweenService:Create(rainSound, TweenInfo.new(3), {Volume = 0}):Play()
+		task.delay(3.1, function()
+			if rainSound then rainSound:Destroy() rainSound = nil end
+		end)
+	end
+
+	-- Fade out drops over 3s, but KEEP animation running so drops move during fade
+	if rainGui then
+		for _, child in rainGui:GetChildren() do
+			if child:IsA("Frame") then
+				TweenService:Create(child, TweenInfo.new(3.0, Enum.EasingStyle.Quad), {BackgroundTransparency = 1}):Play()
+			end
+		end
+		-- Disconnect + destroy AFTER the 3s fade completes
+		task.delay(3.1, function()
+			if rainConn then rainConn:Disconnect() rainConn = nil end
+			if rainGui then rainGui:Destroy() rainGui = nil end
+		end)
+	end
+end
+
+if RainStartEvent then
+	RainStartEvent.OnClientEvent:Connect(startRainVisuals)
+end
+if RainStopEvent then
+	RainStopEvent.OnClientEvent:Connect(stopRainVisuals)
 end
 ]]></ProtectedString>
 					<bool name="Disabled">false</bool>
@@ -45720,6 +46156,60 @@ function MenuService.init()
 		local difficulty = 0.5 + (v * 2.0)
 		game:SetAttribute("Difficulty", difficulty)
 	end)
+	
+	-- FIRST PERSON TOGGLE CHECKBOX
+	do
+		local isFirstPerson = true  -- default ON
+		
+		local row = Instance.new("Frame")
+		row.Size = UDim2.new(0.95, 0, 0, 44)
+		row.BackgroundTransparency = 1
+		row.ZIndex = 202
+		row.Parent = settingsList
+		
+		local rowLabel = Instance.new("TextLabel")
+		rowLabel.Size = UDim2.new(0.75, 0, 1, 0)
+		rowLabel.BackgroundTransparency = 1
+		rowLabel.Font = Enum.Font.FredokaOne
+		rowLabel.TextColor3 = Color3.fromRGB(100, 100, 100)
+		rowLabel.TextSize = 18
+		rowLabel.TextXAlignment = Enum.TextXAlignment.Left
+		rowLabel.Text = "Prima Persona"
+		rowLabel.ZIndex = 203
+		rowLabel.Parent = row
+		
+		local checkBtn = Instance.new("TextButton")
+		checkBtn.Size = UDim2.fromOffset(36, 36)
+		checkBtn.Position = UDim2.new(1, -36, 0.5, -18)
+		checkBtn.BackgroundColor3 = Color3.fromRGB(0, 160, 80) -- green = ON
+		checkBtn.Text = "✓"
+		checkBtn.Font = Enum.Font.GothamBold
+		checkBtn.TextSize = 20
+		checkBtn.TextColor3 = Color3.new(1, 1, 1)
+		checkBtn.ZIndex = 204
+		checkBtn.Parent = row
+		Instance.new("UICorner", checkBtn).CornerRadius = UDim.new(0, 6)
+		
+		local function updateCheckbox()
+			if isFirstPerson then
+				checkBtn.BackgroundColor3 = Color3.fromRGB(0, 160, 80)
+				checkBtn.Text = "✓"
+			else
+				checkBtn.BackgroundColor3 = Color3.fromRGB(160, 50, 50)
+				checkBtn.Text = "✗"
+			end
+			if _G.SetFirstPerson then
+				_G.SetFirstPerson(isFirstPerson)
+			end
+		end
+		
+		checkBtn.MouseButton1Click:Connect(function()
+			isFirstPerson = not isFirstPerson
+			updateCheckbox()
+		end)
+		
+		updateCheckbox()  -- Apply default state
+	end
 
 	-- TOP-DOWN CAMERA LOGIC
 	local cameraConn: RBXScriptConnection?
@@ -46209,7 +46699,7 @@ function MenuService.init()
 		-- 2. Wait half a second before celebration
 		task.wait(0.5)
 		
-		timerLabel.Visible = false
+		timerContainer.Visible = false  -- hide entire timer (title + number)
 		winLabel.Visible = true
 		winLabel.TextTransparency = 0 -- FORCE VISIBLE
 		winLabel.Position = UDim2.fromScale(0.5, 1.2)
@@ -46962,6 +47452,18 @@ Settings.ADMINS = {
 	"marco"
 }
 
+-- Rain Malus Settings
+Settings.RAIN_INTERVAL = 150    -- Seconds between rain checks
+Settings.RAIN_CHANCE = 0.4      -- 40% chance per interval
+Settings.RAIN_DURATION = 10     -- Seconds rain lasts
+Settings.RAIN_SOUND_ID = "rbxassetid://237985445"
+
+-- Brace Coal Settings
+Settings.COAL_DURATION = 40     -- Seconds coal burns before brace goes out
+
+-- Salt Settings
+Settings.SALT_SOUND_ID = "rbxassetid://6042053626"  -- shaker SFX (swap if needed)
+
 return Settings
 ]]></ProtectedString>
 					<string name="ScriptGuid">{E101DCC6-0928-4390-B11A-CF3DE515F1AB}</string>
@@ -46999,12 +47501,16 @@ local NPCService = require(script:WaitForChild("NPCService"))
 local WorldService = require(script:WaitForChild("WorldService"))
 local DogService = require(script:WaitForChild("DogService"))
 local AdminService = require(script:WaitForChild("AdminService"))
+local RainService = require(script:WaitForChild("RainService"))
+local SaltService = require(script:WaitForChild("SaltService"))
 
 BraceService.init()
 NPCService.init()
 WorldService.init()
 DogService.init()
 AdminService.init()
+RainService.init()
+SaltService.init()
 
 local startEvent = Instance.new("RemoteEvent")
 startEvent.Name = "GameStartEvent"
@@ -47199,10 +47705,12 @@ function BraceService.setupBrace(brace: Model)
 	
 	-- Initial State
 	brace:SetAttribute("HasCoal", false)
+	brace:SetAttribute("SaltActive", false)   -- salt state for the whole brace
 	for i = 1, 4 do
 		brace:SetAttribute("Slot" .. i .. "_Status", Settings.STATUS.EMPTY)
 		brace:SetAttribute("Slot" .. i .. "_StartTime", 0)
 		brace:SetAttribute("Slot" .. i .. "_CookedTime", 0)
+		brace:SetAttribute("Slot" .. i .. "_Salted", false)
 	end
 	
 	-- Store original colors
@@ -47275,30 +47783,115 @@ function BraceService.setupBrace(brace: Model)
 	takePrompt.MaxActivationDistance = Settings.INTERACTION_DISTANCE
 	takePrompt.Parent = parentPart
 	
+	takePrompt.MaxActivationDistance = Settings.INTERACTION_DISTANCE
+	takePrompt.Parent = parentPart
+	
+	-- No more RekindlePrompt (Q), everything is on insertPrompt (E) as requested
+
+	
+	-- Helper: start the fire opacity watcher for the coal timer
+	local function startCoalTimer()
+		brace:SetAttribute("CoalStartTime", os.clock())
+
+		
+		-- Find fire by CLASS (works regardless of instance name)
+		local fireObj = brace:FindFirstChildWhichIsA("Fire", true)
+			if not fireObj then fireObj = brace:FindFirstChildWhichIsA("ParticleEmitter", true) end
+		
+		task.spawn(function()
+			local duration = Settings.COAL_DURATION or 40
+			while true do
+				local elapsed = os.clock() - (brace:GetAttribute("CoalStartTime") or os.clock())
+				local remaining = duration - elapsed
+				local ratio = math.clamp(remaining / duration, 0, 1)
+				
+				-- Update Fire opacity linearly
+				if fireObj then
+					if fireObj:IsA("ParticleEmitter") then
+						local maxRate = fireObj:GetAttribute("OriginalRate") or 50
+						fireObj.Rate = ratio * maxRate
+						fireObj.Enabled = ratio > 0
+					elseif fireObj:IsA("Fire") then
+						-- Calibrated values: Size 2 (off) to 4 (on), Heat 0.8 - 1.7 based on ratio
+						-- Fire scales with remaining coal: Size 1.5-4.5, Heat 3-9
+						fireObj.Size = 1.5 + (ratio * 3.0)
+						fireObj.Heat = 3 + (ratio * 6)
+						fireObj.Enabled = ratio > 0.02
+						if elapsed % 5 < 0.5 then
+							print(string.format("[DEBUG] Fire - Ratio: %.2f, Size: %.1f, Heat: %.1f", ratio, fireObj.Size, fireObj.Heat))
+						end
+					end
+				end
+				
+				if remaining <= 0 then
+					-- Coal exhausted — extinguish and restore E-key prompt
+					brace:SetAttribute("HasCoal", false)
+					if fireObj then
+						if fireObj:IsA("ParticleEmitter") then
+							fireObj.Enabled = false
+							fireObj.Rate = 0
+						elseif fireObj:IsA("Fire") then
+						fireObj.Size = 1.5
+						fireObj.Heat = 2
+						fireObj.Enabled = false
+					end
+					print("[DEBUG] Fire Extinguished")
+					end
+					local coalSound = parentPart:FindFirstChild("CoalLoopSound")
+					if coalSound then
+						coalSound:Stop()
+						coalSound:Destroy()
+					end
+					
+					-- Restore E-key: show 'Inserisci Carbone' again so player can relight
+					insertPrompt.ActionText = "Inserisci Carbone"
+					insertPrompt.Enabled = true
+					print("[BraceService] Carbonella esaurita, brace spenta. Premi E per riaccendere.")
+					return
+				end
+				
+				task.wait(0.5)
+			end
+		end)
+	end
+	
 	BraceService.setupSpawn(parentPart)
 	
 	insertPrompt.Triggered:Connect(function(player)
 		local hasCoal = brace:GetAttribute("HasCoal")
 		if not hasCoal then
 			brace:SetAttribute("HasCoal", true)
-			insertPrompt.ActionText = "Inserisci Rustella (0/4)"
 			BraceService.notify(player, "Hai inserito il carbone!")
 			local s = BraceService.playSound(parentPart, Settings.SOUNDS.COAL, true)
 			s.Name = "CoalLoopSound"
 			
-			-- Gradual Fire Fade-In
-			local fireObj = brace:FindFirstChild("Fire", true)
-			if fireObj and fireObj:IsA("ParticleEmitter") then
-				fireObj.Enabled = true
-				local targetRate = fireObj:GetAttribute("OriginalRate") or 50
-				task.spawn(function()
-					for i = 1, 20 do
-						fireObj.Rate = (i / 20) * targetRate
-						task.wait(0.1)
-					end
-					fireObj.Rate = targetRate
-				end)
+			-- Gradual Fire Fade-In — search by class, ignore name
+			local fireObj = brace:FindFirstChildWhichIsA("Fire", true)
+				if not fireObj then fireObj = brace:FindFirstChildWhichIsA("ParticleEmitter", true) end
+			
+			print("[DEBUG] Coal inserted (E-key). Fire found:", fireObj and fireObj.Name or "NONE")
+			
+			if fireObj then
+				if fireObj:IsA("ParticleEmitter") then
+					fireObj.Enabled = true
+					local targetRate = fireObj:GetAttribute("OriginalRate") or 50
+					task.spawn(function()
+						for i = 1, 20 do
+							fireObj.Rate = (i / 20) * targetRate
+							task.wait(0.1)
+						end
+						fireObj.Rate = targetRate
+						fireObj:SetAttribute("OriginalRate", targetRate)
+					end)
+				elseif fireObj:IsA("Fire") then
+					fireObj.Size = 4.5
+					fireObj.Heat = 9
+					fireObj.Enabled = true
+					print("[DEBUG] Fire activated (Size 4.5, Heat 9)")
+				end
 			end
+			startCoalTimer()
+			BraceService.updatePrompts(brace, insertPrompt, takePrompt)
 		else
 			BraceService.handleInsert(brace, player, insertPrompt, takePrompt)
 		end
@@ -47397,9 +47990,32 @@ function BraceService.handleInsert(brace: Model, player: Player, insertPrompt: P
 	task.spawn(function()
 		local cookingTime = Settings.COOKING_TIME
 		local start = os.clock()
+		local totalPausedTime = 0       -- accumulated seconds spent without coal
+		local pauseStart: number? = nil -- when the current pause began
 		
-		while (os.clock() - start) < cookingTime do
-			local alpha = (os.clock() - start) / cookingTime
+		while true do
+			local now = os.clock()
+			
+			-- Track pause start/end
+			if not brace:GetAttribute("HasCoal") then
+				if pauseStart == nil then
+					pauseStart = now
+				end
+				task.wait(0.3)
+				continue
+			else
+				if pauseStart ~= nil then
+					-- Coal was just re-lit: accumulate the pause duration
+					totalPausedTime += now - pauseStart
+					pauseStart = nil
+				end
+			end
+			
+			-- Actual elapsed cooking time (excluding pauses)
+			local elapsed = now - start - totalPausedTime
+			if elapsed >= cookingTime then break end
+			
+			local alpha = elapsed / cookingTime
 			if slotModel then
 				for _, p in slotModel:GetDescendants() do
 					if p:IsA("BasePart") and p.Name ~= "stecca" then
@@ -47472,14 +48088,18 @@ function BraceService.handleTake(brace: Model, player: Player, insertPrompt: Pro
 	
 	local status = brace:GetAttribute("Slot" .. targetSlot .. "_Status")
 	local isBurnt = (status == "Burnt")
+	local isSalted = brace:GetAttribute("Slot" .. targetSlot .. "_Salted") == true
 	
 	-- Give Tool logic
+	local toolName = isBurnt and "Rustella Bruciata"
+		or isSalted and "Rustella Salata"
+		or "Rustella"
 	local rustelleModel = brace:FindFirstChild("Model") :: Model
 	local rOriginal = rustelleModel and rustelleModel:FindFirstChild("rustell" .. targetSlot)
 	
 	if rOriginal then
-		local tool = Instance.new("Tool")
-		tool.Name = isBurnt and "Rustella Bruciata" or "Rustella"
+	local tool = Instance.new("Tool")
+			tool.Name = toolName
 		tool.RequiresHandle = true
 		
 		local handle = Instance.new("Part")
@@ -47503,7 +48123,12 @@ function BraceService.handleTake(brace: Model, player: Player, insertPrompt: Pro
 				p.Transparency = 0
 				p.Anchored = false
 				p.CanCollide = false
-				if isBurnt then p.Color = Settings.BURNT_COLOR end
+				if isBurnt then
+					p.Color = Settings.BURNT_COLOR
+				elseif isSalted then
+					-- Slightly lighter/whitish tint for salted rustelle
+					p.Color = p.Color:Lerp(Color3.new(1,1,1), 0.25)
+				end
 				local w = Instance.new("WeldConstraint")
 				w.Part0 = handle
 				w.Part1 = p
@@ -47517,11 +48142,15 @@ function BraceService.handleTake(brace: Model, player: Player, insertPrompt: Pro
 		local currentCount = player:GetAttribute("RustelleCount") or 0
 		player:SetAttribute("RustelleCount", currentCount + 1)
 		
-		BraceService.notify(player, isBurnt and "Hai preso una rustella... ma è bruciata!" or "Hai preso una rustella cotta!")
+		BraceService.notify(player,
+			isBurnt and "Hai preso una rustella... ma è bruciata!"
+			or isSalted and "Hai preso una rustella salata!"
+			or "Hai preso una rustella cotta!")
 	end
 	
-	-- Reset slot
+	-- Reset slot (including salt)
 	brace:SetAttribute("Slot" .. targetSlot .. "_Status", Settings.STATUS.EMPTY)
+	brace:SetAttribute("Slot" .. targetSlot .. "_Salted", false)
 	local slotModel = rustelleModel and rustelleModel:FindFirstChild("rustell" .. targetSlot)
 	if slotModel then
 		for _, p in slotModel:GetDescendants() do
@@ -47611,6 +48240,31 @@ function BraceService.resetBrace(brace: Model)
 		end
 	end
 	print("BraceService: [RESET] Brace reset -> " .. brace.Name)
+end
+
+-- PUBLIC API: Called by SaltService when the player interacts with the Salt model.
+-- Marks every non-empty slot in the brace as salted and adds a subtle white tint.
+function BraceService.applySalt(brace: Model)
+	brace:SetAttribute("SaltActive", true)
+	local rustelleModel = brace:FindFirstChild("Model") :: Model
+	for i = 1, 4 do
+		local status = brace:GetAttribute("Slot" .. i .. "_Status")
+		if status ~= nil and status ~= Settings.STATUS.EMPTY then
+			brace:SetAttribute("Slot" .. i .. "_Salted", true)
+			-- Visual: lighten the meat colour slightly
+			if rustelleModel then
+				local slot = rustelleModel:FindFirstChild("rustell" .. i)
+				if slot then
+					for _, p in slot:GetDescendants() do
+						if p:IsA("BasePart") and p.Name ~= "stecca" then
+							p.Color = p.Color:Lerp(Color3.new(1, 1, 1), 0.2)
+						end
+					end
+				end
+			end
+		end
+	end
+	print("[BraceService] Sale applicato a " .. brace.Name)
 end
 
 return BraceService
@@ -47800,8 +48454,24 @@ function NPCService.setupNPC(npc: Model)
 		end
 	end
 
-	npc:SetAttribute("Hunger", 100)
+	-- Each NPC gets a unique random hunger profile so they don't all die together
+	local startingHunger = math.random(70, 100)
+	local hungerSpeed = 0.5 + math.random() * 1.3
+	npc:SetAttribute("Hunger", startingHunger)
+	npc:SetAttribute("HungerSpeed", hungerSpeed)
+	-- Salt preference: random, flips periodically
+	npc:SetAttribute("WantsSalted", math.random() > 0.5)
 	NPCService.createHungerUI(npc)
+
+	-- Flip salt preference every 30-90 seconds
+	task.spawn(function()
+		while npc.Parent do
+			task.wait(math.random(30, 90))
+			if not npc.Parent then break end
+			npc:SetAttribute("WantsSalted", math.random() > 0.5)
+			NPCService.updateSaltIcon(npc)
+		end
+	end)
 
 	-- FINAL ROBUST ANIMATOR (Server-Side)
 	task.spawn(function()
@@ -47871,12 +48541,16 @@ function NPCService.setupNPC(npc: Model)
 					break
 				end
 				local difficulty = game:GetAttribute("Difficulty") or Settings.DIFFICULTY or 1.0
-				local decay = (Settings.HUNGER_DECAY_RATE or 0.5) * difficulty * (0.8 + math.random() * 0.4)
+				local npcHungerSpeed = npc:GetAttribute("HungerSpeed") or 1.0
+				local decay = (Settings.HUNGER_DECAY_RATE or 0.5) * difficulty * npcHungerSpeed
+				-- tiny tick jitter so even same-speed NPCs drift apart
+				decay = decay * (0.9 + math.random() * 0.2)
 				hunger = math.max(0, hunger - decay)
 				npc:SetAttribute("Hunger", hunger)
 				NPCService.updateHungerUI(npc, hunger)
 			end
-			task.wait(1)
+			-- randomise wait too: 0.8-1.2s, adds natural drift over time
+			task.wait(0.8 + math.random() * 0.4)
 		end
 	end)
 
@@ -47989,9 +48663,27 @@ function NPCService.handleInteraction(npc: Model, player: Player, prompt: Proxim
 	local char = player.Character
 	if not char then return end
 
-	local tool = char:FindFirstChild("Rustella") or char:FindFirstChild("Rustella Bruciata")
+	-- Check both Character (equipped) and Backpack (in inventory)
+	local function findRustellaTool()
+		local playerChar = player.Character
+		for _, toolName in {"Rustella Salata", "Rustella Bruciata", "Rustella"} do
+			if playerChar then
+				local t = playerChar:FindFirstChild(toolName)
+				if t then return t end
+			end
+			local bp = player:FindFirstChild("Backpack")
+			if bp then
+				local t = bp:FindFirstChild(toolName)
+				if t then return t end
+			end
+		end
+		return nil
+	end
+	local tool = findRustellaTool()
 	if tool then
-		local isBurnt = (tool.Name == "Rustella Bruciata")
+		local isBurnt   = (tool.Name == "Rustella Bruciata")
+		local isSalted  = (tool.Name == "Rustella Salata")
+		local wantsSalt = npc:GetAttribute("WantsSalted") == true
 		tool:Destroy()
 		npc:SetAttribute("IsEating", true)
 		prompt.Enabled = false
@@ -48001,11 +48693,26 @@ function NPCService.handleInteraction(npc: Model, player: Player, prompt: Proxim
 			NPCService.notify(player, npc.Name .. ": 'Bleah! Che schifo!'")
 			local hunger = npc:GetAttribute("Hunger") or 0
 			npc:SetAttribute("Hunger", math.max(0, hunger - 20))
-		else
+		elseif isSalted and wantsSalt then
+			-- Perfect match!
+			NPCService.playSound(npc:GetPivot().Position, Settings.SOUNDS.WOAH)
+			NPCService.notify(player, npc.Name .. ": 'Mmmh, salata! PERFETTA!'")
+			local hunger = npc:GetAttribute("Hunger") or 0
+			npc:SetAttribute("Hunger", math.min(100, hunger + 50))  -- bonus
+		elseif (not isSalted) and (not wantsSalt) then
+			-- Also fine — natural when they want natural
 			NPCService.playSound(npc:GetPivot().Position, Settings.SOUNDS.WOAH)
 			NPCService.notify(player, npc.Name .. ": 'Woah! Grazie!'")
 			local hunger = npc:GetAttribute("Hunger") or 0
 			npc:SetAttribute("Hunger", math.min(100, hunger + 35))
+		else
+			-- Wrong type (salted when they didn't want, or plain when they wanted salt)
+			local msg = wantsSalt
+				and npc.Name .. ": 'Dove e' il sale?!'"
+				or npc.Name .. ": 'Bleah, troppo sale!'"
+			NPCService.notify(player, msg)
+			local hunger = npc:GetAttribute("Hunger") or 0
+			npc:SetAttribute("Hunger", math.min(100, hunger + 15))  -- small gain
 		end
 
 		task.wait(Settings.NPC_HOLD_TIME)
@@ -48066,14 +48773,14 @@ function NPCService.createHungerUI(npc: Model)
 	
 	local frame = Instance.new("Frame", bgui)
 	frame.Size = UDim2.fromScale(1, 0.4)
-	frame.Position = UDim2.fromScale(0, 0.6)
+	frame.Position = UDim2.fromScale(0, 0.5)
 	frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-	
+
 	local bar = Instance.new("Frame", frame)
 	bar.Name = "Bar"
 	bar.Size = UDim2.fromScale(1, 1)
 	bar.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
-	
+
 	local nl = Instance.new("TextLabel", frame)
 	nl.Size = UDim2.fromScale(1, 1)
 	nl.Position = UDim2.fromScale(0, -1.2)
@@ -48092,6 +48799,20 @@ function NPCService.createHungerUI(npc: Model)
 	pl.Font = Enum.Font.GothamBold
 	pl.TextColor3 = Color3.new(1, 1, 1)
 	pl.TextScaled = true
+
+	-- Salt preference icon — shown BELOW the hunger bar so it doesn't overlap the name
+	local saltIcon = Instance.new("TextLabel")
+	saltIcon.Name = "SaltIcon"
+	saltIcon.Size = UDim2.fromScale(1, 0.35)
+	saltIcon.Position = UDim2.fromScale(0, 1.05)    -- below the frame (hunger bar)
+	saltIcon.BackgroundTransparency = 1
+	saltIcon.Font = Enum.Font.GothamBold
+	saltIcon.TextColor3 = Color3.fromRGB(255, 245, 180)
+	saltIcon.TextScaled = true
+	saltIcon.Parent = frame
+	Instance.new("UIStroke", saltIcon)
+	local wantsSalt = npc:GetAttribute("WantsSalted") == true
+	saltIcon.Text = wantsSalt and "🧂 SALATA" or "🍖 NATURALE"
 end
 
 function NPCService.updateHungerUI(npc: Model, hunger: number)
@@ -48110,9 +48831,24 @@ function NPCService.updateHungerUI(npc: Model, hunger: number)
 	end
 end
 
+function NPCService.updateSaltIcon(npc: Model)
+	local head = npc:FindFirstChild("Head") or npc:FindFirstChildWhichIsA("BasePart", true)
+	if not head then return end
+	local bgui = head:FindFirstChild("HungerUI")
+	if not bgui then return end
+	local frame = bgui:FindFirstChild("Frame")
+	if not frame then return end
+	local icon = frame:FindFirstChild("SaltIcon")
+	if not icon then return end
+	local wantsSalt = npc:GetAttribute("WantsSalted") == true
+	icon.Text = wantsSalt and "🧂 SALATA" or "🍖 NATURALE"
+end
+
 function NPCService.notify(player: Player, message: string)
 	local ev = ReplicatedStorage:FindFirstChild("NotificationEvent")
-	if ev then ev:FireClient(player, message) end
+	if ev then
+		ev:FireClient(player, message)
+	end
 end
 
 return NPCService
@@ -48212,7 +48948,9 @@ function DogService.init()
 
 	task.spawn(function()
 		while true do
-			task.wait(Settings.DOG_SPAWN_INTERVAL or 45)
+			-- Random interval: 45s to 75s (45s to 1m15s as requested)
+			local interval = math.random(45, 75)
+			task.wait(interval)
 			if game:GetAttribute("GameStarted") then
 				DogService.spawnDog(true)
 			end
@@ -48223,7 +48961,7 @@ end
 local isMoving = false
 local dogChased = false
 local clickCount = 0
-local CLICKS_TO_CHASE = 20
+local CLICKS_TO_CHASE = 20  -- computed dynamically per trip, default 20
 
 -- Create/Get RemoteEvent for dog clicks
 local DogClickEvent = ReplicatedStorage:FindFirstChild("DogClickEvent")
@@ -48239,19 +48977,15 @@ local function createDogUI(rootPart: BasePart): BillboardGui
 	
 	local billboard = Instance.new("BillboardGui")
 	billboard.Name = "DogChaseUI"
-	billboard.Size = UDim2.fromOffset(200, 60)
+	-- Use world-space studs so text shrinks with distance
+	billboard.Size = UDim2.fromOffset(180, 55)
+	billboard.MaxDistance = 50  -- invisible beyond 30 studs
 	billboard.StudsOffset = Vector3.new(0, 3, 0)
-	billboard.AlwaysOnTop = true
+	billboard.AlwaysOnTop = false  -- occludes behind walls
 	billboard.ResetOnSpawn = false
 	billboard.Parent = rootPart
 	
-	local bg = Instance.new("Frame")
-	bg.Size = UDim2.fromScale(1, 1)
-	bg.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-	bg.BackgroundTransparency = 0.3
-	bg.Parent = billboard
-	Instance.new("UICorner", bg).CornerRadius = UDim.new(0, 8)
-	
+	-- NO background frame: transparent
 	local label = Instance.new("TextLabel")
 	label.Name = "CountLabel"
 	label.Size = UDim2.fromScale(1, 0.5)
@@ -48259,9 +48993,9 @@ local function createDogUI(rootPart: BasePart): BillboardGui
 	label.BackgroundTransparency = 1
 	label.Font = Enum.Font.GothamBold
 	label.TextColor3 = Color3.new(1, 1, 0)
-	label.TextSize = 14
+	label.TextSize = 13
 	label.Text = "Clicca per scacciarmi!"
-	label.Parent = bg
+	label.Parent = billboard
 	Instance.new("UIStroke", label).Thickness = 1
 	
 	local bar = Instance.new("TextLabel")
@@ -48271,9 +49005,9 @@ local function createDogUI(rootPart: BasePart): BillboardGui
 	bar.BackgroundTransparency = 1
 	bar.Font = Enum.Font.GothamBold
 	bar.TextColor3 = Color3.new(1, 0.4, 0.1)
-	bar.TextSize = 18
+	bar.TextSize = 16
 	bar.Text = "0 / " .. CLICKS_TO_CHASE
-	bar.Parent = bg
+	bar.Parent = billboard
 	Instance.new("UIStroke", bar).Thickness = 1
 	
 	return billboard
@@ -48282,9 +49016,7 @@ end
 local function updateDogUI(rootPart: BasePart, count: number)
 	local billboard = rootPart:FindFirstChild("DogChaseUI")
 	if not billboard then return end
-	local bg = billboard:FindFirstChildOfClass("Frame")
-	if not bg then return end
-	local bar = bg:FindFirstChild("BarLabel")
+	local bar = billboard:FindFirstChild("BarLabel")
 	if bar then
 		bar.Text = count .. " / " .. CLICKS_TO_CHASE
 		if count >= CLICKS_TO_CHASE * 0.7 then
@@ -48296,6 +49028,62 @@ end
 local function cleanDogUI(rootPart: BasePart)
 	local billboard = rootPart:FindFirstChild("DogChaseUI")
 	if billboard then billboard:Destroy() end
+end
+
+local function showDogSpeech(rootPart: BasePart, text: string, duration: number?)
+	local existing = rootPart:FindFirstChild("DogSpeech")
+	if existing then existing:Destroy() end
+	
+	local bubble = Instance.new("BillboardGui")
+	bubble.Name = "DogSpeech"
+	bubble.Size = UDim2.fromOffset(200, 70)
+	bubble.MaxDistance = 50
+	bubble.StudsOffset = Vector3.new(0, 6, 0)
+	bubble.AlwaysOnTop = false
+	bubble.ResetOnSpawn = false
+	bubble.Parent = rootPart
+	
+	-- Bubble background panel
+	local bg = Instance.new("Frame")
+	bg.Name = "BubbleBG"
+	bg.Size = UDim2.new(1, 0, 0.78, 0)
+	bg.Position = UDim2.fromScale(0, 0)
+	bg.BackgroundColor3 = Color3.fromRGB(255, 255, 240)
+	bg.BorderSizePixel = 0
+	bg.Parent = bubble
+	local bgCorner = Instance.new("UICorner")
+	bgCorner.CornerRadius = UDim.new(0, 10)
+	bgCorner.Parent = bg
+	local bgStroke = Instance.new("UIStroke")
+	bgStroke.Color = Color3.fromRGB(80, 50, 20)
+	bgStroke.Thickness = 2
+	bgStroke.Parent = bg
+	
+	-- Text inside bubble
+	local label = Instance.new("TextLabel")
+	label.Size = UDim2.fromScale(1, 1)
+	label.BackgroundTransparency = 1
+	label.Font = Enum.Font.GothamBold
+	label.TextColor3 = Color3.fromRGB(50, 25, 0)
+	label.TextSize = 16
+	label.Text = text
+	label.TextWrapped = true
+	label.Parent = bg
+	
+	-- Triangle pointer (downward notch) using a rotated frame
+	local tail = Instance.new("Frame")
+	tail.Name = "Tail"
+	tail.Size = UDim2.fromOffset(18, 18)
+	tail.Position = UDim2.new(0.5, -9, 0.78, -2)
+	tail.BackgroundColor3 = Color3.fromRGB(255, 255, 240)
+	tail.BorderSizePixel = 0
+	tail.Rotation = 45
+	tail.ZIndex = 0
+	tail.Parent = bubble
+	
+	task.delay(duration or 4, function()
+		if bubble and bubble.Parent then bubble:Destroy() end
+	end)
 end
 
 local function moveModel(model: Model, targetPos: Vector3, speed: number)
@@ -48389,6 +49177,15 @@ function DogService.spawnDog(isAuto: boolean?)
 	isMoving = true
 	dogChased = false
 	clickCount = 0
+	
+	-- Dynamic click threshold: more clicks needed when less time remains
+	-- Range: 20 (lots of time) → 40 (almost no time)
+	do
+		local remaining = Workspace:GetAttribute("GameRemainingTime") or 300
+		local winTime = Settings.WIN_TIME or 300
+		local t = math.clamp(remaining / winTime, 0, 1) -- 1 = full time, 0 = no time
+		CLICKS_TO_CHASE = math.floor(20 + (1 - t) * 20)
+	end
 	
 	-- Server-side click listener (valid only for this trip)
 	local clickConn = DogClickEvent.OnServerEvent:Connect(function(_player)
@@ -48498,16 +49295,22 @@ function DogService.spawnDog(isAuto: boolean?)
 				if meatModel then
 					NPCService.playSound(rootPart, Settings.DOG_SOUND_ID, 1.0)
 					
-					-- Clone the meat and attach it to the dog's mouth
+					-- Clone the meat and attach to the dog's mouth
 					local carriedMeat = meatModel:Clone()
 					carriedMeat.Name = "CarriedMeat"
 					carriedMeat.Parent = dog
 					
-					-- 1) Place it at the dog's mouth FIRST (front, slightly down)
-					local mouthOffset = CFrame.new(0, -0.5, -2)
-					carriedMeat:PivotTo(rootPart.CFrame * mouthOffset)
+					-- Find the head/snout part dynamically for correct positioning
+					local headPart = dog:FindFirstChild("Head")
+						or dog:FindFirstChild("DogHead")
+						or dog:FindFirstChild("UpperTorso")
+						or rootPart
 					
-					-- 2) THEN weld so the offset is recorded correctly
+					-- 1) Place meat at the snout: front of head, chin level
+					local snoutCFrame = headPart.CFrame * CFrame.new(0, -0.4, -1.2)
+					carriedMeat:PivotTo(snoutCFrame)
+					
+					-- 2) THEN weld each meat part to rootPart (offset is recorded from current world position)
 					for _, p in carriedMeat:GetDescendants() do
 						if p:IsA("BasePart") then
 							p.Transparency = 0
@@ -48524,6 +49327,11 @@ function DogService.spawnDog(isAuto: boolean?)
 			end
 			
 			task.wait(0.5)
+			
+			-- Dog won! Hide click counter, show victory taunt
+			cleanDogUI(rootPart)
+			showDogSpeech(rootPart, "rustell :]")
+			
 			walkSound:Play()
 			
 			local pathBack = PathfindingService:CreatePath({AgentRadius = 3})
@@ -48540,6 +49348,50 @@ function DogService.spawnDog(isAuto: boolean?)
 			for _, child in dog:GetChildren() do
 				if child.Name == "CarriedMeat" then child:Destroy() end
 			end
+		end
+		
+		if dogChased then
+			-- CHASED HOME: walk back sadly with slow bark, no steal
+			walkSound:Stop()
+			walkSound:Destroy()  -- destroy immediately so it can't replay
+			task.wait(0.3)
+			
+			-- Player won! Hide click counter, show sad message
+			cleanDogUI(rootPart)
+			showDogSpeech(rootPart, "che palle :[", 5)
+			
+			-- One-shot sad bark: create directly (not via NPCService) to ensure it's one-shot
+			local barkSound = Instance.new("Sound")
+			barkSound.SoundId = Settings.DOG_SOUND_ID
+			barkSound.Volume = 0.5
+			barkSound.Looped = false
+			barkSound.PlaybackSpeed = 0.75
+			barkSound.Parent = rootPart
+			barkSound:Play()
+			barkSound.Ended:Connect(function() barkSound:Destroy() end)
+			
+			-- Sad walk: slow trudge home
+			local sadWalk = Instance.new("Sound")
+			sadWalk.Name = "SadWalkLoop"
+			sadWalk.SoundId = Settings.DOG_WALK_SOUND_ID
+			sadWalk.Looped = true
+			sadWalk.Volume = 0.3
+			sadWalk.PlaybackSpeed = 0.6
+			sadWalk.Parent = rootPart
+			sadWalk:Play()
+			
+			local pathHome = PathfindingService:CreatePath({AgentRadius = 3})
+			local okHome = pcall(function() pathHome:ComputeAsync(rootPart.Position, homeCFrame.Position) end)
+			
+			if okHome and pathHome.Status == Enum.PathStatus.Success then
+				for _, waypoint in pathHome:GetWaypoints() do
+					moveModel(dog, waypoint.Position, 12)
+				end
+			else
+				moveModel(dog, homeCFrame.Position, 12)
+			end
+			
+			sadWalk:Destroy()
 		end
 		
 		walkSound:Destroy()
@@ -48578,6 +49430,7 @@ local RunService = game:GetService("RunService")
 local Settings = require(ReplicatedStorage.Shared.Settings)
 local DogService = require(script.Parent.DogService)
 local NPCService = require(script.Parent.NPCService)
+local RainService = require(script.Parent.RainService)
 
 local AdminService = {}
 
@@ -48646,6 +49499,12 @@ function AdminService.handleCommand(player: Player, message: string)
 				v:SetAttribute("Hunger", 100)
 			end
 		end
+		
+	elseif cmd == ":rain" then
+		print("[ADMIN] " .. player.Name .. " triggered RAIN")
+		task.spawn(function()
+			RainService.trigger()
+		end)
 	end
 end
 
@@ -48660,6 +49519,284 @@ return AdminService
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 					<UniqueId name="UniqueId">09c6a6ec96e7fe7009b1e7e100000f86</UniqueId>
+				</Properties>
+			</Item>
+			<Item class="ModuleScript" referent="RBX520F82D475364D70B371B2474350E0E0">
+				<Properties>
+					<Content name="LinkedSource"><null></null></Content>
+					<ProtectedString name="Source"><![CDATA[--!strict
+local Workspace = game:GetService("Workspace")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+
+local Settings = require(ReplicatedStorage.Shared.Settings)
+
+local RainService = {}
+
+-- RemoteEvents for rain visuals on clients
+local RainStartEvent = Instance.new("RemoteEvent")
+RainStartEvent.Name = "RainStartEvent"
+RainStartEvent.Parent = ReplicatedStorage
+
+local RainStopEvent = Instance.new("RemoteEvent")
+RainStopEvent.Name = "RainStopEvent"
+RainStopEvent.Parent = ReplicatedStorage
+
+local function getAllBraces(): {Model}
+	local braces = {}
+	for _, obj in Workspace:GetDescendants() do
+		if obj:IsA("Model") and obj.Name:lower():find("brace") then
+			table.insert(braces, obj)
+		end
+	end
+	return braces
+end
+
+local function extinguishBrace(brace: Model)
+	-- Only turn off coal — do NOT touch cooking slot status or meat colors.
+	-- The cooking loop will pause automatically via HasCoal check.
+	brace:SetAttribute("HasCoal", false)
+
+	-- Find fire by CLASS (works regardless of element name)
+	local fireObj = brace:FindFirstChildWhichIsA("Fire", true)
+	if not fireObj then fireObj = brace:FindFirstChildWhichIsA("ParticleEmitter", true) end
+	
+	if fireObj then
+		print("[DEBUG] Rain extinguishment. Fire object found:", fireObj.Name)
+		task.spawn(function()
+			if fireObj:IsA("ParticleEmitter") then
+				local startRate = fireObj.Rate
+				for i = 20, 0, -1 do
+					fireObj.Rate = (i / 20) * startRate
+					task.wait(0.06)
+				end
+				fireObj.Enabled = false
+				fireObj.Rate = 0
+			elseif fireObj:IsA("Fire") then
+				-- Fade from full (Size 15, Heat 12) to off (Size 5, Heat 5)
+				for i = 20, 0, -1 do
+					local r = i / 20
+					fireObj.Size = 5 + (r * 10)
+					fireObj.Heat = 5 + (r * 7)
+					task.wait(0.06)
+				end
+				fireObj.Size = 3
+				fireObj.Heat = 3
+				fireObj.Enabled = false
+				print("[DEBUG] Rain extinguishment complete.")
+			end
+		end)
+	end
+
+	-- Stop coal loop sound
+	local parentPart = brace.PrimaryPart or brace:FindFirstChildWhichIsA("BasePart", true)
+	if parentPart then
+		local coalSound = parentPart:FindFirstChild("CoalLoopSound")
+		if coalSound then
+			coalSound:Stop()
+			coalSound:Destroy()
+		end
+		
+		-- Restore E-key prompt so player can relight the brace
+		local insertP = parentPart:FindFirstChild("InsertPrompt")
+		if insertP then
+			insertP.ActionText = "Inserisci Carbone"
+			insertP.Enabled = true
+		end
+		local rekindleP = parentPart:FindFirstChild("RekindlePrompt")
+		if rekindleP then
+			rekindleP.Enabled = false
+		end
+	end
+
+	print("[RainService] Brace extinguished (cooking paused, E to relight).")
+end
+
+function RainService.trigger()
+	print("[RainService] ☁️ Pioggia in arrivo!")
+	
+	-- Notify all clients to start rain
+	RainStartEvent:FireAllClients()
+	
+	-- Extinguish all braces
+	for _, brace in getAllBraces() do
+		extinguishBrace(brace)
+	end
+	
+	-- Rain lasts for RAIN_DURATION seconds
+	task.wait(Settings.RAIN_DURATION)
+	
+	-- Stop rain on clients
+	RainStopEvent:FireAllClients()
+	print("[RainService] ☀️ Pioggia finita.")
+end
+
+function RainService.init()
+	task.spawn(function()
+		while true do
+			-- Wait for game to start before enabling rain
+			while not game:GetAttribute("GameStarted") do
+				task.wait(1)
+			end
+			
+			local winTime = Settings.WIN_TIME or 300
+			local numRains = math.random(2, 3)
+			-- Distribute rains across the game time (avoiding the very beginning/end)
+			local avgWait = (winTime - 60) / numRains
+			
+			for _ = 1, numRains do
+				local waitTime = avgWait + math.random(-20, 20)
+				
+				-- Custom wait loop to permit immediate breaks if game stops
+				local elapsed = 0
+				while elapsed < waitTime and game:GetAttribute("GameStarted") do
+					task.wait(1)
+					elapsed += 1
+				end
+				
+				if not game:GetAttribute("GameStarted") then break end
+				
+				RainService.trigger()
+			end
+			
+			-- Idle until the match finishes if we ran out of scheduled rains early
+			while game:GetAttribute("GameStarted") do
+				task.wait(1)
+			end
+		end
+	end)
+end
+
+return RainService
+]]></ProtectedString>
+					<string name="ScriptGuid">{EA219409-2812-4B4A-A647-1C6508EBE1FA}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+					<string name="Name">RainService</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+					<UniqueId name="UniqueId">589d622752f6f22c09b22ff10000174e</UniqueId>
+				</Properties>
+			</Item>
+			<Item class="ModuleScript" referent="RBX4FC9AC4AF48346E3AD01DBB4E9454175">
+				<Properties>
+					<Content name="LinkedSource"><null></null></Content>
+					<ProtectedString name="Source"><![CDATA[--!strict
+local Workspace = game:GetService("Workspace")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Settings = require(ReplicatedStorage.Shared.Settings)
+local BraceService = require(script.Parent:WaitForChild("BraceService"))
+
+local SaltService = {}
+
+-- Sound played when salt is applied (shaker-style)
+-- Using a generic shaker sfx; user can swap the ID in Settings.
+local SALT_SOUND_ID  = Settings.SALT_SOUND_ID or "rbxassetid://6042053626"
+
+local function playSaltSound(parent: BasePart)
+	local s = Instance.new("Sound")
+	s.SoundId  = SALT_SOUND_ID
+	s.Volume   = 0.9
+	s.Looped   = false
+	s.Parent   = parent
+	s:Play()
+	s.Ended:Connect(function() s:Destroy() end)
+end
+
+local function getAllBraces(): {Model}
+	local braces = {}
+	for _, obj in Workspace:GetDescendants() do
+		if obj:IsA("Model") and obj.Name:lower():find("brace") then
+			table.insert(braces, obj)
+		end
+	end
+	return braces
+end
+
+function SaltService.init()
+	-- Wait up to 10 seconds for the Salt model to appear in Workspace
+	local saltModel: Model? = Workspace:FindFirstChild("Salt") :: Model?
+	if not saltModel then
+		task.spawn(function()
+			for _ = 1, 10 do
+				task.wait(1)
+				saltModel = Workspace:FindFirstChild("Salt") :: Model?
+				if saltModel then break end
+			end
+			if saltModel then
+				SaltService.setupSalt(saltModel)
+			else
+				warn("[SaltService] Modello 'Salt' non trovato nel Workspace!")
+			end
+		end)
+	else
+		SaltService.setupSalt(saltModel)
+	end
+end
+
+function SaltService.setupSalt(saltModel: Model)
+	-- Find a BasePart to attach the prompt to (PrimaryPart preferred)
+	local root = saltModel.PrimaryPart or saltModel:FindFirstChildWhichIsA("BasePart", true)
+	if not root then
+		warn("[SaltService] Salt model non ha BasePart, impossibile aggiungere ProximityPrompt.")
+		return
+	end
+
+	-- Remove any existing prompt
+	for _, c in root:GetChildren() do
+		if c:IsA("ProximityPrompt") then c:Destroy() end
+	end
+
+	local prompt = Instance.new("ProximityPrompt")
+	prompt.ActionText       = "Aggiungi Sale"
+	prompt.ObjectText       = "Sale"
+	prompt.Style            = Enum.ProximityPromptStyle.Custom   -- picked up by InteractionService
+	prompt.KeyboardKeyCode  = Enum.KeyCode.E
+	prompt.HoldDuration     = 0.5
+	prompt.RequiresLineOfSight = false
+	prompt.MaxActivationDistance = 8
+	prompt.Parent = root
+
+	prompt.Triggered:Connect(function(player: Player)
+		-- One-shot: disable immediately so it can't be spammed
+		prompt.Enabled = false
+
+		-- Play the salt shaker SFX
+		playSaltSound(root)
+
+		-- Notify the player
+		local notifEv = ReplicatedStorage:FindFirstChild("NotificationEvent")
+		if notifEv then
+			notifEv:FireClient(player, "🧂 Sale aggiunto alle rustelle!")
+		end
+
+		-- Apply salt to every brace
+		local braces = getAllBraces()
+		for _, brace in braces do
+			BraceService.applySalt(brace)
+		end
+
+		print("[SaltService] " .. player.Name .. " ha salato le rustelle.")
+		-- Salt stays consumed — prompt remains disabled permanently until game reset
+	end)
+
+	print("[SaltService] Pronto — prompt sul modello Salt.")
+end
+
+return SaltService
+]]></ProtectedString>
+					<string name="ScriptGuid">{805FCCD9-0B5F-446C-AE33-07068157B3E7}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
+					<string name="Name">SaltService</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+					<UniqueId name="UniqueId">589d622752f6f22c09b22ff100001e89</UniqueId>
 				</Properties>
 			</Item>
 		</Item>
@@ -49599,6 +50736,42 @@ T9wH6ZCcWPmM9W4K9rGJc9vf6DhZKHPd0+X7kcHNwMcS3vHhJadlsN03cJ8ELLVRwQoRhPjs
 KPL/ay/YPQ/BZU0/cP80mT5DyP6+BMK7jg2nc7jddcCr/iTxVOQkS/pY5gS7gATpJJhAENrr
 p49P/7ol8Nd5/59XPuCugBXcQu3gfRj0wLOscTEV+UdGVw14Xt1QxCJYKdqWHFoydwHBucx5
 U64S</SharedString>
+		<SharedString md5="cptMgMxhNJYlDhhaIVXHlQ==">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</SharedString>
 		<SharedString md5="eaPDU7PNk4wD0AaY0Jtlaw==">Q1NHUEhTCAAAAAIAKLUv/WAUP01SAUpMio00EBBsSwfbVmUjmoVM7D+WyeckIAxg9/tXxeSX
 IVxS97HypbX2t0co5eS981tmVXn3FSWVBOIIuQjGCKpnSJM/tIQfOeUgFc764q+d0O2ODprW
 qyRsWXfy8dSVNqqe/vjoGsRVpZcm9IgUtTyaCvjYZ3JWwGfZ1mq005uOZzyZOnZFDGSGnDrS
