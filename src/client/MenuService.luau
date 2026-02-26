@@ -12,7 +12,15 @@ local MenuService = {}
 function MenuService.init()
 	local player = Players.LocalPlayer
 	local playerGui = player:WaitForChild("PlayerGui")
+	-- The camera might change (e.g., when player respawns), so we should use workspace.CurrentCamera directly where needed
+	-- or update it when it changes.
 	local camera = Workspace.CurrentCamera
+	
+	-- Listener for camera changes (Roblox replaces the camera object sometimes)
+	Workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(function()
+		camera = Workspace.CurrentCamera
+		print("[DEBUG-CLIENT] CurrentCamera changed, updating reference.")
+	end)
 	
 	-- LOCK MOVEMENT DURING MENU
 	local function lockMovement(locked: boolean)
@@ -49,7 +57,7 @@ function MenuService.init()
 	loadingOverlay.Parent = screenGui
 
 	local loadingText = Instance.new("TextLabel")
-	loadingText.Size = UDim2.new(0.6, 0, 0.2, 0)
+	loadingText.Size = UDim2.fromScale(0.6, 0.2)
 	loadingText.Position = UDim2.fromScale(0.5, 0.45)
 	loadingText.AnchorPoint = Vector2.new(0.5, 0.5)
 	loadingText.BackgroundTransparency = 1
@@ -354,14 +362,16 @@ function MenuService.init()
 		sliderBg.ZIndex = 203
 		sliderBg.Parent = container
 		local sliderCorner = Instance.new("UICorner")
-	sliderCorner.Parent = sliderBg
+		sliderCorner.Parent = sliderBg
 
 		local sliderFill = Instance.new("Frame")
 		sliderFill.Size = UDim2.fromScale(default, 1)
 		sliderFill.BackgroundColor3 = Color3.fromRGB(0, 160, 255)
 		sliderFill.ZIndex = 204
 		sliderFill.Parent = sliderBg
-		Instance.new("UICorner", sliderFill)
+		
+		local fillCorner = Instance.new("UICorner")
+		fillCorner.Parent = sliderFill
 
 		local handle = Instance.new("TextButton")
 		handle.Size = UDim2.fromOffset(24, 24)
@@ -430,16 +440,28 @@ function MenuService.init()
 		print("[DEBUG-CLIENT] Cerco brace per focus camera...")
 		for _, v in Workspace:GetDescendants() do
 			if v.Name:lower():match("brace") and v:IsA("Model") then
-				lookPoint = v:GetPivot().Position
+				local pivot = v:GetPivot()
+				lookPoint = pivot.Position
 				print("[DEBUG-CLIENT] Brace trovata a " .. tostring(lookPoint))
 				break
 			end
+		end
+
+		-- FALLBACK: If no brace found, use origin or a fixed point
+		if lookPoint == Vector3.new(0, 0, 0) then
+			warn("[DEBUG-CLIENT] Nessuna brace trovata! Uso (0, 0, 0) come fallback.")
 		end
 
 		cameraConn = RunService.RenderStepped:Connect(function()
 			local t = tick() * 0.1
 			local radius = 80
 			local camPos = lookPoint + Vector3.new(math.cos(t) * radius, 100, math.sin(t) * radius)
+			
+			-- FORCE Scriptable every frame if using menu camera to prevent Roblox from overriding it
+			if camera.CameraType ~= Enum.CameraType.Scriptable then
+				camera.CameraType = Enum.CameraType.Scriptable
+			end
+			
 			camera.CFrame = CFrame.lookAt(camPos, lookPoint)
 		end)
 	end
@@ -467,9 +489,9 @@ function MenuService.init()
 
 	-- LOADING SCREEN SEQUENCER (FIXED)
 	task.spawn(function()
-        loadingText.Font = Enum.Font.GothamMedium -- Simpler font
-        loadingText.Text = "Loading"
-        
+		loadingText.Font = Enum.Font.GothamMedium -- Simpler font
+		loadingText.Text = "Loading"
+		
 		-- Animated Dots Logic
 		local dotsThread = task.spawn(function()
 			local dots = 0
@@ -482,11 +504,17 @@ function MenuService.init()
 		end)
 
 		task.wait(3)
-		task.cancel(dotsThread) -- Stop dots
+		if dotsThread then
+			task.cancel(dotsThread) -- Stop dots
+		end
 		loadingText.Text = "Done!"
 		
-		if spinnerRotate then spinnerRotate:Disconnect() end
-		if spinner then spinner.Visible = false end
+		if spinnerRotate then 
+			spinnerRotate:Disconnect() 
+		end
+		if spinner then 
+			spinner.Visible = false 
+		end
 		
 		task.wait(1)
 		
@@ -612,10 +640,6 @@ function MenuService.init()
 		menuFrame.Visible = false
 	end)
 
-	settingsBtn.MouseButton1Click:Connect(function()
-		toggleSettings(true)
-	end)
-
 	-- RESET LOGIC
 	local function fullReset()
 		print("[DEBUG-CLIENT] Inizio fullReset...")
@@ -634,9 +658,15 @@ function MenuService.init()
 		-- FUNCTION TO RESET OVERLAY TRANSPARENCY
 		local function resetOverlay(obj: Instance)
 			if obj:IsA("GuiObject") then
-				if obj:IsA("TextLabel") or obj:IsA("TextButton") then obj.TextTransparency = 0 end
-				if obj:IsA("ImageLabel") or obj:IsA("ImageButton") then obj.ImageTransparency = 0 end
-				pcall(function() (obj :: any).BackgroundTransparency = 0 end)
+				if obj:IsA("TextLabel") or obj:IsA("TextButton") then 
+					obj.TextTransparency = 0 
+				end
+				if obj:IsA("ImageLabel") or obj:IsA("ImageButton") then 
+					obj.ImageTransparency = 0 
+				end
+				pcall(function() 
+					(obj :: any).BackgroundTransparency = 0 
+				end)
 			end
 			if obj:IsA("UIStroke") then
 				obj.Transparency = 0
@@ -659,18 +689,30 @@ function MenuService.init()
 					v.Visible = false
 					if v:IsA("CanvasGroup") or v:IsA("Frame") or v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("ImageLabel") then
 						-- Restore transparency for future use
-						pcall(function() (v :: any).BackgroundTransparency = 0 end)
-						if v:IsA("TextLabel") or v:IsA("TextButton") then (v :: any).TextTransparency = 0 end
-						if v:IsA("ImageLabel") or v:IsA("ImageButton") then (v :: any).ImageTransparency = 0 end
+						pcall(function() 
+							(v :: any).BackgroundTransparency = 0 
+						end)
+						if v:IsA("TextLabel") or v:IsA("TextButton") then 
+							(v :: any).TextTransparency = 0 
+						end
+						if v:IsA("ImageLabel") or v:IsA("ImageButton") then 
+							(v :: any).ImageTransparency = 0 
+						end
 					end
 				else
 					-- Show main menu elements (MenuFrame etc)
 					if not v:IsDescendantOf(loadingOverlay) and v ~= loadingOverlay then
 						v.Visible = true
 						if v:IsA("CanvasGroup") or v:IsA("Frame") or v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("ImageLabel") then
-							pcall(function() (v :: any).BackgroundTransparency = 0 end)
-							if v:IsA("TextLabel") or v:IsA("TextButton") then (v :: any).TextTransparency = 0 end
-							if v:IsA("ImageLabel") or v:IsA("ImageButton") then (v :: any).ImageTransparency = 0 end
+							pcall(function() 
+								(v :: any).BackgroundTransparency = 0 
+							end)
+							if v:IsA("TextLabel") or v:IsA("TextButton") then 
+								(v :: any).TextTransparency = 0 
+							end
+							if v:IsA("ImageLabel") or v:IsA("ImageButton") then 
+								(v :: any).ImageTransparency = 0 
+							end
 						end
 					end
 				end
@@ -685,6 +727,12 @@ function MenuService.init()
 		settingsFrame.Visible = false
 		settingsFrame.Position = UDim2.fromScale(0.5, 1.5)
 		
+		-- Ensure jumpscare is hidden
+		local jsOverlay = screenGui:FindFirstChild("JumpscareOverlay")
+		if jsOverlay then
+			jsOverlay.Visible = false
+		end
+		
 		print("[DEBUG-CLIENT] Camera e Input reset...")
 		startMenuCamera()
 		lockMovement(true)
@@ -696,6 +744,65 @@ function MenuService.init()
 		print("[DEBUG-CLIENT] Reset completato.")
 	end
 
+	-- JUMPSCARE GUI
+	local jumpscareOverlay = Instance.new("Frame")
+	jumpscareOverlay.Name = "JumpscareOverlay"
+	jumpscareOverlay.Size = UDim2.fromScale(1, 1)
+	jumpscareOverlay.BackgroundColor3 = Color3.new(0, 0, 0)
+	jumpscareOverlay.ZIndex = 50000
+	jumpscareOverlay.Visible = false
+	jumpscareOverlay.Parent = screenGui
+
+	local jumpscareImage = Instance.new("ImageLabel")
+	jumpscareImage.Name = "IShowSpeed"
+	jumpscareImage.Size = UDim2.fromScale(0.8, 0.8)
+	jumpscareImage.Position = UDim2.fromScale(0.5, 0.5)
+	jumpscareImage.AnchorPoint = Vector2.new(0.5, 0.5)
+	jumpscareImage.BackgroundTransparency = 1
+	jumpscareImage.Image = "rbxassetid://12411985396" -- Placeholder: Change to IShowSpeed ID
+	jumpscareImage.ZIndex = 50001
+	jumpscareImage.Parent = jumpscareOverlay
+
+	-- GAME OVER LOGIC
+	local gameOverEvent = ReplicatedStorage:WaitForChild("GameOverEvent")
+	gameOverEvent.OnClientEvent:Connect(function()
+		print("[DEBUG-CLIENT] GameOverEvent ricevuto!")
+		game:SetAttribute("GameStarted", false)
+		lockMovement(true)
+
+		-- Fade out music
+		local bgm = SoundService:FindFirstChild("BackgroundMusic")
+		if bgm and bgm:IsA("Sound") then
+			TweenService:Create(bgm, TweenInfo.new(1.5), { Volume = 0 }):Play()
+		end
+
+		task.wait(1.5)
+
+		-- JUMPSCARE DI BOTTO
+		jumpscareOverlay.Visible = true
+		local scarySound = Instance.new("Sound")
+		scarySound.SoundId = "rbxassetid://8395374561"
+		scarySound.Volume = 1
+		scarySound.Parent = SoundService
+		scarySound:Play()
+
+		task.wait(3)
+		jumpscareOverlay.Visible = false
+		scarySound:Destroy()
+		
+		-- Restore BGM volume for next game
+		if bgm and bgm:IsA("Sound") then
+			bgm.Volume = Settings.MUSIC_VOLUME or 0.3
+			bgm:Stop()
+		end
+
+		fullReset()
+	end)
+
+	settingsBtn.MouseButton1Click:Connect(function()
+		toggleSettings(true)
+	end)
+
 	local function onCharacter(char)
 		print("[DEBUG-CLIENT] onCharacter: caricato -> " .. char.Name)
 		local hum = char:WaitForChild("Humanoid")
@@ -703,7 +810,7 @@ function MenuService.init()
 		-- Maintain camera if game hasn't started
 		if not game:GetAttribute("GameStarted") then
 			print("[DEBUG-CLIENT] Caricamento personaggio in Menu: forzo camera...")
-			task.wait(0.2) -- Black buffer as requested and time for Roblox defaults
+			task.wait(1) -- Yield longer for Roblox character loading defaults to settle
 			startMenuCamera()
 			lockMovement(true)
 		end

@@ -8,6 +8,7 @@ local Settings = require(ReplicatedStorage.Shared.Settings)
 
 local NPCService = {}
 local npcsSnapshot: {Model} = {} -- Store clones here
+local aliveNPCs = 0
 
 function NPCService.init()
 	print("[DEBUG-SERVER] NPCService: [ULTRA BOOT] Avvio monitoraggio totale...")
@@ -51,7 +52,8 @@ end
 function NPCService.setupNPC(npc: Model)
 	npc:SetAttribute("Initialized", true)
 	npc:SetAttribute("IsEating", false)
-	print("NPCService: [SYSTEM] Inizializzazione forzata per -> " .. npc.Name)
+	aliveNPCs += 1
+	print("NPCService: [SYSTEM] Inizializzazione forzata per -> " .. npc.Name .. " (Vivi: " .. aliveNPCs .. ")")
 
 	local humanoid = npc:FindFirstChildOfClass("Humanoid")
 	if not humanoid then
@@ -499,11 +501,17 @@ function NPCService.playSound(parent: Instance, soundId: string, volume: number?
 end
 
 function NPCService.die(npc: Model)
-	if npc:GetAttribute("IsDead") then
-		return
-	end
 	npc:SetAttribute("IsDead", true)
-	print("NPCService: " .. npc.Name .. " è morto di fame!")
+	aliveNPCs = math.max(0, aliveNPCs - 1)
+	print("NPCService: " .. npc.Name .. " è morto di fame! (Rimanenti: " .. aliveNPCs .. ")")
+
+	if aliveNPCs <= 0 and game:GetAttribute("GameStarted") then
+		print("NPCService: [GAME OVER] Tutti gli NPC sono morti!")
+		local gameOverEvent = ReplicatedStorage:FindFirstChild("GameOverEvent")
+		if gameOverEvent and gameOverEvent:IsA("RemoteEvent") then
+			gameOverEvent:FireAllClients()
+		end
+	end
 
 	-- PLAY YUCK SOUND IMMEDIATELY ON DEATH per user request
 	local head = npc:FindFirstChild("Head")
@@ -668,6 +676,7 @@ function NPCService.reset()
 			count += 1
 		end
 	end
+	aliveNPCs = 0
 	print("[DEBUG-SERVER] NPCService: [RESET] Rimossi " .. count .. " NPC.")
 
 	print("[DEBUG-SERVER] NPCService: [RESET] Ripristino NPC dai template...")
