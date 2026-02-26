@@ -731,17 +731,20 @@ function MenuService.init()
 	jumpscareOverlay.Name = "JumpscareOverlay"
 	jumpscareOverlay.Size = UDim2.fromScale(1, 1)
 	jumpscareOverlay.BackgroundColor3 = Color3.new(0, 0, 0)
+	jumpscareOverlay.BackgroundTransparency = 0
 	jumpscareOverlay.ZIndex = 50000
 	jumpscareOverlay.Visible = false
 	jumpscareOverlay.Parent = screenGui
 
 	local jumpscareImage = Instance.new("ImageLabel")
 	jumpscareImage.Name = "IShowSpeed"
-	jumpscareImage.Size = UDim2.fromScale(0.8, 0.8)
+	jumpscareImage.Size = UDim2.fromScale(1, 1) -- Set to fill screen entirely
 	jumpscareImage.Position = UDim2.fromScale(0.5, 0.5)
 	jumpscareImage.AnchorPoint = Vector2.new(0.5, 0.5)
 	jumpscareImage.BackgroundTransparency = 1
-	jumpscareImage.Image = "rbxassetid://12411985396" -- Placeholder: Change to IShowSpeed ID
+	jumpscareImage.ImageTransparency = 0
+	jumpscareImage.ScaleType = Enum.ScaleType.Fit
+	jumpscareImage.Image = "rbxthumb://type=Asset&id=12411985396&w=420&h=420"
 	jumpscareImage.ZIndex = 50001
 	jumpscareImage.Parent = jumpscareOverlay
 
@@ -763,6 +766,8 @@ function MenuService.init()
 		task.wait(1.5)
 
 		-- JUMPSCARE DI BOTTO
+		jumpscareOverlay.BackgroundTransparency = 0
+		jumpscareImage.ImageTransparency = 0 -- Forcing transparency reset as fade effects might break it
 		jumpscareOverlay.Visible = true
 		local scarySound = Instance.new("Sound")
 		scarySound.SoundId = "rbxassetid://8395374561"

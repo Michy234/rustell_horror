@@ -505,8 +505,8 @@ function NPCService.die(npc: Model)
 	aliveNPCs = math.max(0, aliveNPCs - 1)
 	print("NPCService: " .. npc.Name .. " è morto di fame! (Rimanenti: " .. aliveNPCs .. ")")
 
-	if aliveNPCs <= 0 and game:GetAttribute("GameStarted") then
-		print("NPCService: [GAME OVER] Tutti gli NPC sono morti!")
+	if game:GetAttribute("GameStarted") then
+		print("NPCService: [GAME OVER] Un NPC è morto!")
 		local gameOverEvent = ReplicatedStorage:FindFirstChild("GameOverEvent")
 		if gameOverEvent and gameOverEvent:IsA("RemoteEvent") then
 			gameOverEvent:FireAllClients()
