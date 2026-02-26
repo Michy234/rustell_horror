@@ -10,6 +10,11 @@ Settings.STATUS = {
 	COOKED = "Cooked" :: CookingStatus,
 }
 
+-- List of authorized usernames for Admin Commands
+Settings.ADMINS = {
+	"Francesco0990o"
+}
+
 Settings.COOKING_TIME = 10 -- Seconds
 Settings.INTERACTION_DISTANCE = 8
 Settings.RAW_COLOR = Color3.fromRGB(255, 170, 170) -- Brighter Pink/Rosaceo
