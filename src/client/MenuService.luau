@@ -655,79 +655,33 @@ function MenuService.init()
 		
 		print("[DEBUG-CLIENT] Mostro caricamento e resetto UI forzatamente...")
 		
-		-- FUNCTION TO RESET OVERLAY TRANSPARENCY
-		local function resetOverlay(obj: Instance)
-			if obj:IsA("GuiObject") then
-				if obj:IsA("TextLabel") or obj:IsA("TextButton") then 
-					obj.TextTransparency = 0 
-				end
-				if obj:IsA("ImageLabel") or obj:IsA("ImageButton") then 
-					obj.ImageTransparency = 0 
-				end
-				pcall(function() 
-					(obj :: any).BackgroundTransparency = 0 
-				end)
+		loadingOverlay.Visible = true
+		loadingText.Text = "Loading"
+		
+		-- Restore original UI transparencies globally
+		for _, v in screenGui:GetDescendants() do
+			if v:IsA("GuiObject") then
+				local origBg = v:GetAttribute("OrigBgTrans")
+				if origBg ~= nil then v.BackgroundTransparency = origBg end
+				
+				local origText = v:GetAttribute("OrigTextTrans")
+				if origText ~= nil and (v:IsA("TextLabel") or v:IsA("TextButton")) then v.TextTransparency = origText end
+				
+				local origImg = v:GetAttribute("OrigImgTrans")
+				if origImg ~= nil and (v:IsA("ImageLabel") or v:IsA("ImageButton")) then v.ImageTransparency = origImg end
 			end
-			if obj:IsA("UIStroke") then
-				obj.Transparency = 0
-			end
-			for _, child in obj:GetChildren() do
-				resetOverlay(child)
+			if v:IsA("UIStroke") then
+				local origTrans = v:GetAttribute("OrigStrokeTrans")
+				if origTrans ~= nil then v.Transparency = origTrans end
 			end
 		end
 
-		-- Mostra overlay di caricamento
-		loadingOverlay.Visible = true
-		resetOverlay(loadingOverlay)
-		loadingText.Text = "Loading" -- Reset text too
-		
-		-- Restore UI
-		for _, v in screenGui:GetDescendants() do
-			if v:IsA("GuiObject") then
-				if v == settingsIcon or v == settingsFrame or v:IsDescendantOf(settingsFrame) then
-					-- Keep settings hidden
-					v.Visible = false
-					if v:IsA("CanvasGroup") or v:IsA("Frame") or v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("ImageLabel") then
-						-- Restore transparency for future use
-						pcall(function() 
-							(v :: any).BackgroundTransparency = 0 
-						end)
-						if v:IsA("TextLabel") or v:IsA("TextButton") then 
-							(v :: any).TextTransparency = 0 
-						end
-						if v:IsA("ImageLabel") or v:IsA("ImageButton") then 
-							(v :: any).ImageTransparency = 0 
-						end
-					end
-				else
-					-- Show main menu elements (MenuFrame etc)
-					if not v:IsDescendantOf(loadingOverlay) and v ~= loadingOverlay then
-						v.Visible = true
-						if v:IsA("CanvasGroup") or v:IsA("Frame") or v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("ImageLabel") then
-							pcall(function() 
-								(v :: any).BackgroundTransparency = 0 
-							end)
-							if v:IsA("TextLabel") or v:IsA("TextButton") then 
-								(v :: any).TextTransparency = 0 
-							end
-							if v:IsA("ImageLabel") or v:IsA("ImageButton") then 
-								(v :: any).ImageTransparency = 0 
-							end
-						end
-					end
-				end
-			end
-			if v:IsA("UIStroke") then
-				v.Transparency = 0
-			end
-		end
-		
 		menuFrame.Visible = true
 		settingsIcon.Visible = false
+		
 		settingsFrame.Visible = false
 		settingsFrame.Position = UDim2.fromScale(0.5, 1.5)
 		
-		-- Ensure jumpscare is hidden
 		local jsOverlay = screenGui:FindFirstChild("JumpscareOverlay")
 		if jsOverlay then
 			jsOverlay.Visible = false
@@ -738,7 +692,35 @@ function MenuService.init()
 		lockMovement(true)
 		
 		task.wait(1)
-		TweenService:Create(loadingOverlay, TweenInfo.new(1), {BackgroundTransparency = 1}):Play()
+		
+		-- Fade out loading overlay properly
+		local function fadeOutRecursive(obj: Instance)
+			if obj:IsA("GuiObject") then
+				local props = {}
+				local sBg, _ = pcall(function() return obj.BackgroundTransparency end)
+				if sBg then 
+					props.BackgroundTransparency = 1 
+				end
+				if obj:IsA("TextLabel") or obj:IsA("TextButton") then 
+					props.TextTransparency = 1 
+				end
+				if obj:IsA("ImageLabel") or obj:IsA("ImageButton") then 
+					props.ImageTransparency = 1 
+				end
+				
+				if next(props) ~= nil then
+					TweenService:Create(obj, TweenInfo.new(1), props):Play()
+				end
+			end
+			if obj:IsA("UIStroke") then
+				TweenService:Create(obj, TweenInfo.new(1), { Transparency = 1 }):Play()
+			end
+			for _, child in obj:GetChildren() do
+				fadeOutRecursive(child)
+			end
+		end
+
+		fadeOutRecursive(loadingOverlay)
 		task.wait(1)
 		loadingOverlay.Visible = false
 		print("[DEBUG-CLIENT] Reset completato.")
@@ -764,9 +746,11 @@ function MenuService.init()
 	jumpscareImage.Parent = jumpscareOverlay
 
 	-- GAME OVER LOGIC
-	local gameOverEvent = ReplicatedStorage:WaitForChild("GameOverEvent")
-	gameOverEvent.OnClientEvent:Connect(function()
-		print("[DEBUG-CLIENT] GameOverEvent ricevuto!")
+	local function triggerGameOver()
+		-- Prevent double triggering
+		if not game:GetAttribute("GameStarted") then return end
+
+		print("[DEBUG-CLIENT] Game Over Triggerato!")
 		game:SetAttribute("GameStarted", false)
 		lockMovement(true)
 
@@ -797,6 +781,12 @@ function MenuService.init()
 		end
 
 		fullReset()
+	end
+
+	local gameOverEvent = ReplicatedStorage:WaitForChild("GameOverEvent")
+	gameOverEvent.OnClientEvent:Connect(function()
+		print("[DEBUG-CLIENT] GameOverEvent ricevuto dal server!")
+		triggerGameOver()
 	end)
 
 	settingsBtn.MouseButton1Click:Connect(function()
@@ -816,9 +806,14 @@ function MenuService.init()
 		end
 
 		hum.Died:Connect(function()
-			print("[DEBUG-CLIENT] Personaggio morto. Avvio reset in 2s...")
-			task.wait(2) -- Wait for death animation
-			fullReset()
+			if game:GetAttribute("GameStarted") then
+				print("[DEBUG-CLIENT] Personaggio morto in partita! Avvio Jumpscare...")
+				triggerGameOver()
+			else
+				print("[DEBUG-CLIENT] Personaggio morto fuori partita. Reset normale...")
+				task.wait(2)
+				fullReset()
+			end
 		end)
 	end
 	
@@ -826,6 +821,22 @@ function MenuService.init()
 	if player.Character then 
 		print("[DEBUG-CLIENT] Personaggio già presente all'init.")
 		onCharacter(player.Character) 
+	end
+
+	-- Save original transparencies to restore cleanly on reset
+	for _, v in screenGui:GetDescendants() do
+		if v:IsA("GuiObject") then
+			v:SetAttribute("OrigBgTrans", v.BackgroundTransparency)
+			if v:IsA("TextLabel") or v:IsA("TextButton") then
+				v:SetAttribute("OrigTextTrans", v.TextTransparency)
+			end
+			if v:IsA("ImageLabel") or v:IsA("ImageButton") then
+				v:SetAttribute("OrigImgTrans", v.ImageTransparency)
+			end
+		end
+		if v:IsA("UIStroke") then
+			v:SetAttribute("OrigStrokeTrans", v.Transparency)
+		end
 	end
 end
 

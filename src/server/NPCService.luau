@@ -669,8 +669,16 @@ end
 function NPCService.reset()
 	print("[DEBUG-SERVER] NPCService: [RESET] Inizio pulizia Workspace...")
 	local count = 0
-	for _, npc in Workspace:GetChildren() do
+	
+	local Players = game:GetService("Players")
+
+	for _, npc in Workspace:GetDescendants() do
 		if npc:IsA("Model") and (npc:FindFirstChild("Humanoid") or npc:GetAttribute("NPC_Hunger")) then
+			-- SKIP THE ACTUAL PLAYER CHARACTER!
+			if Players:GetPlayerFromCharacter(npc) then
+				continue
+			end
+
 			print("[DEBUG-SERVER] NPCService: [RESET] Distruggo NPC rimasto -> " .. npc.Name)
 			npc:Destroy()
 			count += 1
