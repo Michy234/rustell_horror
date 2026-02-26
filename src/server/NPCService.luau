@@ -1,24 +1,44 @@
 --!strict
 local Workspace = game:GetService("Workspace")
-local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
+local ServerStorage = game:GetService("ServerStorage")
 local Settings = require(ReplicatedStorage.Shared.Settings)
 
 local NPCService = {}
+local npcsSnapshot: {Model} = {} -- Store clones here
 
 function NPCService.init()
-	print("NPCService: [ULTRA BOOT] Avvio monitoraggio totale...")
+	print("[DEBUG-SERVER] NPCService: [ULTRA BOOT] Avvio monitoraggio totale...")
+
+	-- CREATE SNAPSHOT OF ORIGINAL NPCs
+	print("[DEBUG-SERVER] NPCService: [SNAPSHOT] Inizio scansione Workspace per template NPC...")
+	for _, obj in Workspace:GetDescendants() do
+		if obj:IsA("Model") and obj.Name:lower():match("npc") then
+			-- Ensure it has a humanoid or is marked as NPC
+			if obj:FindFirstChildOfClass("Humanoid") or obj:GetAttribute("NPC_Hunger") then
+				local clone = obj:Clone()
+				clone:SetAttribute("Initialized", nil)
+				table.insert(npcsSnapshot, clone)
+				print("[DEBUG-SERVER] NPCService: [SNAPSHOT] Salvato template -> " .. obj.Name .. " (Percorso: " .. obj:GetFullName() .. ")")
+			end
+		end
+	end
+	
+	print("[DEBUG-SERVER] NPCService: [SNAPSHOT] Totale template salvati: " .. #npcsSnapshot)
+	if #npcsSnapshot == 0 then
+		warn("[DEBUG-SERVER] NPCService: [WARNING] Nessun NPC trovato nel Workspace durante l'init!")
+	end
 
 	task.spawn(function()
 		while true do
-			-- Scansione di ogni oggetto nel Workspace per trovare NPC
+			-- Scansione per inizializzare nuovi NPC
 			for _, obj in Workspace:GetDescendants() do
 				if obj:IsA("Model") and not obj:GetAttribute("Initialized") then
 					local name = obj.Name:lower()
 					if name:match("npc") then
-						print("NPCService: [FOUND] Rilevato potenziale NPC -> " .. obj.Name)
+						print("[DEBUG-SERVER] NPCService: [FOUND] Inizializzo -> " .. obj.Name)
 						NPCService.setupNPC(obj)
 					end
 				end
@@ -60,12 +80,12 @@ function NPCService.setupNPC(npc: Model)
 	end
 
 	local walkTrack: AnimationTrack?
-	local success, err = pcall(function()
+	local loadSuccess, loadErr = pcall(function()
 		walkTrack = animator:LoadAnimation(walkAnim)
 	end)
 
-	if not success or not walkTrack then
-		warn("NPCService: [FAIL] Impossibile caricare animazione per " .. npc.Name .. ": " .. tostring(err))
+	if not loadSuccess or not walkTrack then
+		warn("NPCService: [FAIL] Impossibile caricare animazione per " .. npc.Name .. ": " .. tostring(loadErr))
 	else
 		walkTrack.Looped = true
 		print("NPCService: [OK] Animazione caricata per " .. npc.Name)
@@ -90,16 +110,22 @@ function NPCService.setupNPC(npc: Model)
 
 	task.spawn(function()
 		while npc.Parent do
-			local hunger = npc:GetAttribute("Hunger") or 100
+			if game:GetAttribute("GameStarted") then
+				local hunger = npc:GetAttribute("Hunger") or 100
 
-			if hunger <= 0 then
-				NPCService.die(npc)
-				break
+				if hunger <= 0 then
+					NPCService.die(npc)
+					break
+				end
+
+				-- Calcola il decay rate basato sulla difficoltà
+				local difficulty = game:GetAttribute("Difficulty") or Settings.DIFFICULTY or 1.0
+				local decay = (Settings.HUNGER_DECAY_RATE or 0.5) * difficulty
+				
+				hunger = math.max(0, hunger - decay)
+				npc:SetAttribute("Hunger", hunger)
+				NPCService.updateHungerUI(npc, hunger)
 			end
-
-			hunger = math.max(0, hunger - (Settings.HUNGER_DECAY_RATE or 0.5))
-			npc:SetAttribute("Hunger", hunger)
-			NPCService.updateHungerUI(npc, hunger)
 			task.wait(1)
 		end
 	end)
@@ -120,9 +146,35 @@ function NPCService.setupNPC(npc: Model)
 		end
 	end)
 
-	-- SBLOCCO E SETUP FISICA (Eseguito una sola volta)
+	-- SBLOCCO E SETUP FISICA (Watchdog per prevenire jitter)
 	task.spawn(function()
-		local RunService = game:GetService("RunService")
+		local function setOwner(obj: Model)
+			local hrp = obj:FindFirstChild("HumanoidRootPart")
+			if hrp then
+				pcall(function()
+					if (hrp :: BasePart):GetNetworkOwner() ~= nil then
+						(hrp :: BasePart):SetNetworkOwner(nil)
+					end
+				end)
+			end
+			for _, p in obj:GetDescendants() do
+				if p:IsA("BasePart") then
+					pcall(function()
+						if p:GetNetworkOwner() ~= nil then
+							p:SetNetworkOwner(nil)
+						end
+					end)
+				end
+			end
+		end
+
+		while npc.Parent and not npc:GetAttribute("IsDead") do
+			setOwner(npc)
+			task.wait(5)
+		end
+	end)
+
+	task.spawn(function()
 		-- Disabilita stati fisici problematici
 		humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
 		humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
@@ -166,13 +218,13 @@ function NPCService.setupNPC(npc: Model)
 		NPCService.handleInteraction(npc, player, prompt)
 	end)
 
-	-- AI Movement Loop (CON PATHFINDING E STUCK CHECK)
+	-- AI Movement Loop (SMOOTH PATHFOLLOWING)
 	local PathfindingService = game:GetService("PathfindingService")
 
 	task.spawn(function()
 		print("NPCService: [AI START] " .. npc.Name .. " è operativo.")
 		while npc.Parent do
-			if not npc:GetAttribute("IsEating") then
+			if game:GetAttribute("GameStarted") and not npc:GetAttribute("IsEating") then
 				local targetBrace = NPCService.findNearestBrace(rootPart.Position)
 				local centerPos = rootPart.Position
 
@@ -222,9 +274,8 @@ function NPCService.setupNPC(npc: Model)
 						walkTrack:AdjustSpeed(humanoid.WalkSpeed / 16)
 					end
 
-					local stuck = false
 					for i, waypoint in ipairs(waypoints) do
-						if npc:GetAttribute("IsEating") or not npc.Parent or stuck then
+						if not game:GetAttribute("GameStarted") or npc:GetAttribute("IsEating") or not npc.Parent then
 							break
 						end
 
@@ -234,33 +285,11 @@ function NPCService.setupNPC(npc: Model)
 						end
 
 						humanoid:MoveTo(waypoint.Position)
-
-						local wpFinished = false
-						local conn
-						conn = humanoid.MoveToFinished:Connect(function(reached)
-							wpFinished = true
-							if not reached then
-								stuck = true
-							end
-							if conn then
-								conn:Disconnect()
-							end
-						end)
-
-						local startWait = tick()
-						-- max 3 secondi per waypoint
-						while not wpFinished and (tick() - startWait) < 3 do
-							if (rootPart.Position - waypoint.Position).Magnitude < 2 then
-								break -- Abbastanza vicino
-							end
-							task.wait(0.1)
-						end
-						if conn then
-							conn:Disconnect()
-						end
-
-						if not wpFinished then
-							stuck = true -- Timeout, incastrato
+						
+						-- Aspetta che finisca o timeout (senza connessioni multiple che causano jitter)
+						local reached = humanoid.MoveToFinished:Wait()
+						if not reached then
+							-- Prova a saltare se incastrato? (Opzionale, qui lo saltiamo)
 						end
 					end
 
@@ -336,10 +365,10 @@ function NPCService.handleInteraction(npc: Model, player: Player, prompt: Proxim
 			end
 		end
 
-		-- Play Sound
+		-- Play Sound (Lowered volume for Yuck per user request)
 		local rootPart = npc:FindFirstChild("HumanoidRootPart")
 		if isBurntItem then
-			NPCService.playSound(rootPart or npc, Settings.BURNT_FEED_SOUND)
+			NPCService.playSound(rootPart or npc, Settings.BURNT_FEED_SOUND, 0.35) -- 65% reduction (1.0 -> 0.35)
 			print("NPCService: " .. npc.Name .. " ha ricevuto una rustella BRUCIATA!")
 			NPCService.notify(player, npc.Name .. ": 'Bleah! Che schifo!'")
 
@@ -434,11 +463,16 @@ function NPCService.handleInteraction(npc: Model, player: Player, prompt: Proxim
 			else
 				NPCService.notify(player, npc.Name .. " ha mangiato la rustella. Fame ripristinata!")
 			end
+			
+			-- Allow immediate re-feed
+			npc:SetAttribute("IsEating", false)
+			local interactionPrompt = npc:FindFirstChild("InteractionPrompt", true) or npc:FindFirstChildOfClass("ProximityPrompt")
+			if interactionPrompt then 
+				interactionPrompt.Enabled = true 
+			end
 		end
 
-		task.wait(1) -- Small delay before resuming
-		npc:SetAttribute("IsEating", false)
-		prompt.Enabled = true
+		task.wait(0.5) -- Minimum buffer
 	else
 		NPCService.notify(player, "Devi avere una rustella in mano per nutrire " .. npc.Name .. "!")
 	end
@@ -451,10 +485,10 @@ function NPCService.notify(player: Player, message: string)
 	end
 end
 
-function NPCService.playSound(parent: Instance, soundId: string)
+function NPCService.playSound(parent: Instance, soundId: string, volume: number?)
 	local sound = Instance.new("Sound")
 	sound.SoundId = soundId
-	sound.Volume = 1 -- Max volume for visibility
+	sound.Volume = volume or 1.0
 	sound.RollOffMaxDistance = 100
 	sound.RollOffMinDistance = 10
 	sound.Parent = parent
@@ -471,100 +505,128 @@ function NPCService.die(npc: Model)
 	npc:SetAttribute("IsDead", true)
 	print("NPCService: " .. npc.Name .. " è morto di fame!")
 
+	-- PLAY YUCK SOUND IMMEDIATELY ON DEATH per user request
+	local head = npc:FindFirstChild("Head")
+	if head then
+		NPCService.playSound(head, Settings.BURNT_FEED_SOUND, 0.4)
+	end
+
 	local humanoid = npc:FindFirstChildOfClass("Humanoid")
-	if humanoid then
+	local rootPart = npc.PrimaryPart or npc:FindFirstChild("HumanoidRootPart")
+	if humanoid and rootPart then
+		-- Stop movement immediately
+		humanoid:MoveTo(rootPart.Position)
+		
 		-- Stop current animations
 		for _, track in humanoid:GetPlayingAnimationTracks() do
 			track:Stop(0.1)
 		end
 
-		-- Play T-Pose animation for 1 second before dying
+		-- DISABLE ANIMATOR TO PREVENT HANDS RISING/GLITCHES
 		local animator = humanoid:FindFirstChildOfClass("Animator")
 		if animator then
-			local tPoseAnim = Instance.new("Animation")
-			tPoseAnim.AnimationId = "rbxassetid://507768375"
-			local tPoseTrack = animator:LoadAnimation(tPoseAnim)
-			if tPoseTrack then
-				tPoseTrack:Play(0.5) -- Smooth 0.5s transition to T-Pose
+			animator:Destroy() -- Permette di "bloccare" il rig fisicamente
+		end
+
+		-- ANCHOR ALL PARTS TO FREEZE POSE
+		for _, p in npc:GetDescendants() do
+			if p:IsA("BasePart") then
+				p.Anchored = true
 			end
 		end
 	end
 
-	-- Play Death Sound
-	local sound = Instance.new("Sound")
-	sound.SoundId = Settings.DEATH_SOUND_ID
-	sound.Volume = Settings.DEATH_VOLUME or 0.8
-	sound.Parent = Workspace
-	sound:Play()
+	-- Play Death Sound SPATIALLY (at NPC position)
+	if rootPart then
+		-- Temporary Part for sound to prevent cutting
+		local soundPart = Instance.new("Part")
+		soundPart.Name = "DeathSoundSource"
+		soundPart.Transparency = 1
+		soundPart.CanCollide = false
+		soundPart.Anchored = true
+		soundPart.Position = rootPart.Position
+		soundPart.Parent = Workspace
 
-	sound.Ended:Connect(function()
-		sound:Destroy()
-	end)
+		local sound = Instance.new("Sound")
+		sound.SoundId = Settings.DEATH_SOUND_ID
+		sound.Volume = Settings.DEATH_VOLUME or 0.8
+		sound.RollOffMaxDistance = 150
+		sound.RollOffMinDistance = 10
+		sound.Parent = soundPart
+		sound:Play()
+		
+		sound.Ended:Connect(function()
+			soundPart:Destroy()
+		end)
+	end
 
-	-- Wait 1 second in T-Pose
-	task.wait(1)
+	-- Wait in T-Pose
+	task.wait(2)
 
-	-- Fade NPC Avatar
-	local fadeInfo = TweenInfo.new(0.2, Enum.EasingStyle.Linear)
+	-- Fade NPC Avatar (FASTER per user request)
+	local fadeInfo = TweenInfo.new(0.3, Enum.EasingStyle.Linear)
 	for _, part in npc:GetDescendants() do
 		if part:IsA("BasePart") or part:IsA("Decal") or part:IsA("Texture") then
 			TweenService:Create(part, fadeInfo, { Transparency = 1 }):Play()
 		end
 	end
 
+	-- Wait for fade to complete
+	task.wait(0.4)
+
 	-- Remove UI and NPC
-	local head = npc:FindFirstChild("Head")
-	if head then
-		local ui = head:FindFirstChild("HungerUI")
+	local targetHeadForCleanup = npc:FindFirstChild("Head")
+	if targetHeadForCleanup then
+		local ui = targetHeadForCleanup:FindFirstChild("HungerUI")
 		if ui then
 			ui:Destroy()
 		end
 	end
 
-	task.wait(0.2)
 	npc:Destroy()
 end
 
 function NPCService.createHungerUI(npc: Model)
-	local head = npc:FindFirstChild("Head") or npc:FindFirstChildWhichIsA("BasePart", true)
-	if not head then
+	local targetHeadForUI = npc:FindFirstChild("Head") or npc:FindFirstChildWhichIsA("BasePart", true)
+	if not targetHeadForUI then
 		return
 	end
 
 	-- Rimuovi eventuali vecchi UI
-	local existing = head:FindFirstChild("HungerUI")
+	local existing = targetHeadForUI:FindFirstChild("HungerUI")
 	if existing then
 		existing:Destroy()
 	end
 
 	local bgui = Instance.new("BillboardGui")
 	bgui.Name = "HungerUI"
-	bgui.Size = UDim2.new(5, 0, 0.7, 0)
-	bgui.Adornee = head
+	bgui.Size = UDim2.fromScale(5, 0.7)
+	bgui.Adornee = targetHeadForUI
 	bgui.AlwaysOnTop = true
 	bgui.ExtentsOffset = Vector3.new(0, 2.5, 0)
-	bgui.Parent = head
+	bgui.Parent = targetHeadForUI
 
 	local frame = Instance.new("Frame")
-	frame.Size = UDim2.new(1, 0, 1, 0)
+	frame.Size = UDim2.fromScale(1, 1)
 	frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 	frame.BorderSizePixel = 2
 	frame.Parent = bgui
 
 	local bar = Instance.new("Frame")
 	bar.Name = "Bar"
-	bar.Size = UDim2.new(1, 0, 1, 0)
+	bar.Size = UDim2.fromScale(1, 1)
 	bar.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
 	bar.BorderSizePixel = 0
 	bar.Parent = frame
 
 	local text = Instance.new("TextLabel")
 	text.Name = "Percent"
-	text.Size = UDim2.new(1, 0, 1, 0)
+	text.Size = UDim2.fromScale(1, 1)
 	text.BackgroundTransparency = 1
 	text.TextColor3 = Color3.fromRGB(255, 255, 255)
 	text.Font = Enum.Font.GothamBold
 	text.TextScaled = true
+	text.Parent = frame
 	text.Text = "100%"
 	text.ZIndex = 3
 	text.Parent = frame
@@ -572,7 +634,7 @@ function NPCService.createHungerUI(npc: Model)
 	-- Adjust Tag size of NPC Name (if any)
 	for _, d in npc:GetDescendants() do
 		if d:IsA("BillboardGui") and d.Name ~= "HungerUI" then
-			d.Size = UDim2.new(4, 0, 1, 0) -- Resize tags or other displays
+			d.Size = UDim2.fromScale(4, 1) -- Resize tags or other displays
 		end
 	end
 end
@@ -593,6 +655,26 @@ function NPCService.updateHungerUI(npc: Model, hunger: number)
 			bar.BackgroundColor3 = Color3.fromRGB(255, 0, 0):Lerp(Color3.fromRGB(0, 255, 0), progress)
 			text.Text = math.floor(hunger) .. "%"
 		end
+	end
+end
+
+function NPCService.reset()
+	print("[DEBUG-SERVER] NPCService: [RESET] Inizio pulizia Workspace...")
+	local count = 0
+	for _, npc in Workspace:GetChildren() do
+		if npc:IsA("Model") and (npc:FindFirstChild("Humanoid") or npc:GetAttribute("NPC_Hunger")) then
+			print("[DEBUG-SERVER] NPCService: [RESET] Distruggo NPC rimasto -> " .. npc.Name)
+			npc:Destroy()
+			count += 1
+		end
+	end
+	print("[DEBUG-SERVER] NPCService: [RESET] Rimossi " .. count .. " NPC.")
+
+	print("[DEBUG-SERVER] NPCService: [RESET] Ripristino NPC dai template...")
+	for _, template in npcsSnapshot do
+		local newNPC = template:Clone()
+		newNPC.Parent = Workspace
+		print("[DEBUG-SERVER] NPCService: [RESET] Ripristinato " .. newNPC.Name .. " in posizione originale.")
 	end
 end
 

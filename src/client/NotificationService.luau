@@ -42,8 +42,44 @@ function NotificationService.init()
 	-- Listen for events
 	local event = ReplicatedStorage:WaitForChild("NotificationEvent") :: RemoteEvent
 	
+	-- Stacking logic
+	local lastItem: CanvasGroup? = nil
+	local lastMsgText = ""
+	local stackCount = 0
+	local activeTimers = {} -- Store timer objects to cancel them
+
 	event.OnClientEvent:Connect(function(message: string)
+		if lastItem and lastItem.Parent and lastMsgText == message then
+			-- STACK!
+			stackCount += 1
+			local label = lastItem:FindFirstChildWhichIsA("TextLabel")
+			if label then
+				label.Text = string.format("%s (x%d)", message, stackCount)
+			end
+			
+			-- Reset Timer
+			if activeTimers[lastItem] then
+				task.cancel(activeTimers[lastItem])
+			end
+			
+			notifySound:Play()
+			
+			local item = lastItem -- Local ref for closure
+			activeTimers[item] = task.delay(3, function()
+				local fadeOut = TweenService:Create(item, TweenInfo.new(0.3), {GroupTransparency = 1})
+				fadeOut:Play()
+				fadeOut.Completed:Connect(function()
+					item:Destroy()
+					if lastItem == item then lastItem = nil end
+				end)
+			end)
+			return
+		end
+
 		-- Create individual notification item
+		stackCount = 1
+		lastMsgText = message
+		
 		local item = Instance.new("CanvasGroup")
 		item.Name = "NotifyItem"
 		item.Size = UDim2.fromScale(1, 0.06) -- Thinner items
@@ -51,6 +87,7 @@ function NotificationService.init()
 		item.GroupTransparency = 1
 		item.BorderSizePixel = 0
 		item.Parent = mainList
+		lastItem = item
 		
 		local corner = Instance.new("UICorner")
 		corner.CornerRadius = UDim.new(0, 8)
@@ -78,18 +115,17 @@ function NotificationService.init()
 		
 		-- Animations
 		local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
-		
-		-- Fade In
 		TweenService:Create(item, tweenInfo, {GroupTransparency = 0}):Play()
 		
 		-- Lifecycle
 		local duration = (Settings.NOTIFY_DURATION_BASE or 1.5) + (#message * (Settings.NOTIFY_CHAR_MULTIPLIER or 0.05))
 		
-		task.delay(duration, function()
+		activeTimers[item] = task.delay(duration, function()
 			local fadeOut = TweenService:Create(item, tweenInfo, {GroupTransparency = 1})
 			fadeOut:Play()
 			fadeOut.Completed:Connect(function()
 				item:Destroy()
+				if lastItem == item then lastItem = nil end
 			end)
 		end)
 	end)

@@ -136,6 +136,24 @@ function BraceService.setupBrace(brace: Model)
 	
 	BraceService.setRustelleVisibility(brace, false)
 	
+	-- HIDE EXISTING FIRE OBJECT INITIALLY (Robustly)
+	task.spawn(function()
+		local fireObject = brace:WaitForChild("Fire", 5)
+		if fireObject and fireObject:IsA("ParticleEmitter") then
+			fireObject.Enabled = false
+			fireObject:SetAttribute("OriginalRate", fireObject.Rate)
+			fireObject.Rate = 0
+		elseif not fireObject then
+			-- Try recursive search if WaitForChild fails on top level
+			local foundFire = brace:FindFirstChild("Fire", true)
+			if foundFire and foundFire:IsA("ParticleEmitter") then
+				foundFire.Enabled = false
+				foundFire:SetAttribute("OriginalRate", foundFire.Rate)
+				foundFire.Rate = 0
+			end
+		end
+	end)
+	
 	local parentPart = brace.PrimaryPart or brace:FindFirstChildWhichIsA("BasePart", true)
 	if not parentPart then return end
 	
@@ -180,6 +198,20 @@ function BraceService.setupBrace(brace: Model)
 			insertPrompt.ActionText = "Inserisci Rustella (0/4)"
 			BraceService.notify(player, "Hai inserito il carbone!")
 			BraceService.playSound(parentPart, Settings.SOUNDS.COAL, true)
+			
+			-- Gradual Fire Fade-In
+			local fireObj = brace:FindFirstChild("Fire", true)
+			if fireObj and fireObj:IsA("ParticleEmitter") then
+				fireObj.Enabled = true
+				local targetRate = fireObj:GetAttribute("OriginalRate") or 50
+				task.spawn(function()
+					for i = 1, 20 do
+						fireObj.Rate = (i / 20) * targetRate
+						task.wait(0.1)
+					end
+					fireObj.Rate = targetRate
+				end)
+			end
 		else
 			BraceService.handleInsert(brace, player, insertPrompt, takePrompt)
 		end
@@ -299,8 +331,26 @@ function BraceService.handleInsert(brace: Model, player: Player, insertPrompt: P
 		BraceService.playSound(insertPrompt.Parent, Settings.SOUNDS.COOKED)
 		BraceService.updatePrompts(brace, insertPrompt, takePrompt)
 		
-		-- Burning Timer
-		task.wait(Settings.BURNING_TIME)
+		-- Gradual Burning Transition (Lerp to Black)
+		local burnStart = os.clock()
+		local burningTime = Settings.BURNING_TIME
+		
+		while (os.clock() - burnStart) < burningTime do
+			local alpha = (os.clock() - burnStart) / burningTime
+			if brace:GetAttribute("Slot" .. slotIndex .. "_Status") ~= Settings.STATUS.COOKED then return end -- Taken during burning
+			
+			if slotModel then
+				for _, p in slotModel:GetDescendants() do
+					if p:IsA("BasePart") and p.Name ~= "stecca" then
+						local cookedColor = p:GetAttribute("CookedColor") or p.Color
+						p.Color = cookedColor:Lerp(Settings.BURNT_COLOR, alpha)
+					end
+				end
+			end
+			task.wait(0.1)
+		end
+		
+		-- Final Burnt State
 		if brace:GetAttribute("Slot" .. slotIndex .. "_Status") == Settings.STATUS.COOKED then
 			brace:SetAttribute("Slot" .. slotIndex .. "_Status", "Burnt")
 			if slotModel then
@@ -388,7 +438,9 @@ function BraceService.handleTake(brace: Model, player: Player, insertPrompt: Pro
 	local slotModel = rustelleModel and rustelleModel:FindFirstChild("rustell" .. targetSlot)
 	if slotModel then
 		for _, p in slotModel:GetDescendants() do
-			if p:IsA("BasePart") then p.Transparency = 1 end
+			if p:IsA("BasePart") then 
+				p.Transparency = 1 
+			end
 		end
 	end
 	
