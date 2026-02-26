@@ -11,6 +11,10 @@ local resetEvent = Instance.new("RemoteEvent")
 resetEvent.Name = "GameResetEvent"
 resetEvent.Parent = ReplicatedStorage
 
+local gameOverEvent = Instance.new("RemoteEvent")
+gameOverEvent.Name = "GameOverEvent"
+gameOverEvent.Parent = ReplicatedStorage
+
 BraceService.init()
 NPCService.init()
 WorldService.init()

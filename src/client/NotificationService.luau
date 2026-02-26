@@ -62,7 +62,7 @@ function NotificationService.init()
 				task.cancel(activeTimers[lastItem])
 			end
 			
-			notifySound:Play()
+			-- notifySound:Play() -- REMOVED: Clicks only on menu buttons
 			
 			local item = lastItem -- Local ref for closure
 			activeTimers[item] = task.delay(3, function()
@@ -111,7 +111,7 @@ function NotificationService.init()
 		label.Text = message
 		label.Parent = item
 		
-		notifySound:Play()
+		-- notifySound:Play() -- REMOVED: Clicks only on menu buttons
 		
 		-- Animations
 		local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
