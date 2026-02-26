@@ -5,9 +5,11 @@ local Workspace = game:GetService("Workspace")
 local Settings = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Settings"))
 local NotificationService = require(script.NotificationService)
 local InteractionService = require(script.InteractionService)
+local MenuService = require(script.MenuService)
 
 NotificationService.init()
 InteractionService.init()
+MenuService.init()
 
 -- Force Camera Mode to Classic
 local player = Players.LocalPlayer
@@ -15,14 +17,14 @@ if player then
 	player.CameraMode = Enum.CameraMode.Classic
 end
 
--- Play Background Music
-local bgm = Instance.new("Sound")
+-- Prepare Background Music (Music will be played by MenuService after loading)
+local bgm = SoundService:FindFirstChild("BackgroundMusic") or Instance.new("Sound")
 bgm.Name = "BackgroundMusic"
 bgm.SoundId = Settings.BG_MUSIC.ID
-bgm.Volume = Settings.BG_MUSIC.VOLUME
+bgm.Volume = Settings.MUSIC_VOLUME or Settings.BG_MUSIC.VOLUME
 bgm.Looped = true
 bgm.Parent = SoundService
-bgm:Play()
+-- bgm:Play() -- REMOVED: MenuService will play this after loading
 
 -- NPC Interaction Visibility Logic
 task.spawn(function()
@@ -41,4 +43,4 @@ task.spawn(function()
 	end
 end)
 
-print("Client started, NotificationService and Background Music initialized.")
+print("Client started, NotificationService, InteractionService, and MenuService initialized.")
