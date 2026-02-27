@@ -173,15 +173,16 @@ local function showDogSpeech(rootPart: BasePart, text: string, duration: number?
 	end)
 end
 
-local function moveModel(model: Model, targetPos: Vector3, speed: number)
+local function moveModel(model: Model, targetPos: Vector3, speed: number, yOffset: number?)
 	local root = model.PrimaryPart or model:FindFirstChildWhichIsA("BasePart", true)
 	if not root then return end
 	
-	-- PRESERVE the model's current Y height — pathfinding waypoints are at ground level
-	-- but the dog's PrimaryPart pivot is at its center, not feet. Moving to waypoint Y buries it.
+	-- Use waypoint Y + pivot offset so the dog follows stairs/ramps correctly.
+	-- yOffset = how high the pivot sits above ground (computed once per trip with raycast).
+	local offset = yOffset or 0
 	local startPos = root.Position
-	local originalY = startPos.Y
-	local flatTarget = Vector3.new(targetPos.X, originalY, targetPos.Z)
+	local targetY = targetPos.Y + offset
+	local flatTarget = Vector3.new(targetPos.X, targetY, targetPos.Z)
 	
 	local distance = (flatTarget - startPos).Magnitude
 	if distance < 0.1 then return end
@@ -189,7 +190,7 @@ local function moveModel(model: Model, targetPos: Vector3, speed: number)
 	local duration = distance / speed
 	local startCFrame = model:GetPivot()
 	
-	-- Rotation: face the direction of movement (flat)
+	-- Rotation: face the direction of movement (flat XZ)
 	local dir = (flatTarget - startPos)
 	local targetRotation
 	if dir.Magnitude > 0.1 then
@@ -207,9 +208,9 @@ local function moveModel(model: Model, targetPos: Vector3, speed: number)
 		task.wait()
 	end
 	
-	-- Phase 2: Glide forward (keep Y constant)
+	-- Phase 2: Glide forward, following the target Y (stairs/ramps)
 	local moveStart = os.clock()
-	local currentStartPos = Vector3.new(startPos.X, originalY, startPos.Z)
+	local currentStartPos = startPos
 	while (os.clock() - moveStart) < duration do
 		local alpha = math.min(1, (os.clock() - moveStart) / duration)
 		local p = currentStartPos:Lerp(flatTarget, alpha)
@@ -355,18 +356,32 @@ function DogService.spawnDog(isAuto: boolean?)
 		
 		local bracePos = targetBrace:GetPivot().Position
 		
+		-- Compute yOffset once via raycast: how far the pivot sits above the ground.
+		-- This lets the dog correctly descend/ascend stairs instead of floating.
+		local yOffset = 0
+		do
+			local rayParams = RaycastParams.new()
+			rayParams.FilterDescendantsInstances = {dog}
+			rayParams.FilterType = Enum.RaycastFilterType.Exclude
+			local hit = Workspace:Raycast(rootPart.Position, Vector3.new(0, -10, 0), rayParams)
+			if hit then
+				yOffset = rootPart.Position.Y - hit.Position.Y
+				print(string.format("[DogService] yOffset computed: %.2f", yOffset))
+			end
+		end
+		
 		local path = PathfindingService:CreatePath({AgentRadius = 3})
 		local ok = pcall(function() path:ComputeAsync(rootPart.Position, bracePos) end)
 		
 		if ok and path.Status == Enum.PathStatus.Success then
 			for _, waypoint in path:GetWaypoints() do
 				if dogChased then break end
-				moveModel(dog, waypoint.Position, 20)
+				moveModel(dog, waypoint.Position, 20, yOffset)
 				if (rootPart.Position - bracePos).Magnitude < 8 then break end
 			end
 		else
 			if not dogChased then
-				moveModel(dog, bracePos, 20)
+				moveModel(dog, bracePos, 20, yOffset)
 			end
 		end
 		
@@ -432,13 +447,23 @@ function DogService.spawnDog(isAuto: boolean?)
 			
 			local pathBack = PathfindingService:CreatePath({AgentRadius = 3})
 			local okBack = pcall(function() pathBack:ComputeAsync(rootPart.Position, homeCFrame.Position) end)
-			
+
+			-- Recompute yOffset at current position before walking back
+			local yOffsetBack = 0
+			do
+				local rp = RaycastParams.new()
+				rp.FilterDescendantsInstances = {dog}
+				rp.FilterType = Enum.RaycastFilterType.Exclude
+				local hit = Workspace:Raycast(rootPart.Position, Vector3.new(0, -10, 0), rp)
+				if hit then yOffsetBack = rootPart.Position.Y - hit.Position.Y end
+			end
+
 			if okBack and pathBack.Status == Enum.PathStatus.Success then
 				for _, waypoint in pathBack:GetWaypoints() do
-					moveModel(dog, waypoint.Position, 18)
+					moveModel(dog, waypoint.Position, 18, yOffsetBack)
 				end
 			else
-				moveModel(dog, homeCFrame.Position, 18)
+				moveModel(dog, homeCFrame.Position, 18, yOffsetBack)
 			end
 			
 			for _, child in dog:GetChildren() do
@@ -478,13 +503,23 @@ function DogService.spawnDog(isAuto: boolean?)
 			
 			local pathHome = PathfindingService:CreatePath({AgentRadius = 3})
 			local okHome = pcall(function() pathHome:ComputeAsync(rootPart.Position, homeCFrame.Position) end)
-			
+
+			-- Recompute yOffset at current position before sad walk home
+			local yOffsetHome = 0
+			do
+				local rp = RaycastParams.new()
+				rp.FilterDescendantsInstances = {dog}
+				rp.FilterType = Enum.RaycastFilterType.Exclude
+				local hit = Workspace:Raycast(rootPart.Position, Vector3.new(0, -10, 0), rp)
+				if hit then yOffsetHome = rootPart.Position.Y - hit.Position.Y end
+			end
+
 			if okHome and pathHome.Status == Enum.PathStatus.Success then
 				for _, waypoint in pathHome:GetWaypoints() do
-					moveModel(dog, waypoint.Position, 12)
+					moveModel(dog, waypoint.Position, 12, yOffsetHome)
 				end
-			else
-				moveModel(dog, homeCFrame.Position, 12)
+				else
+				moveModel(dog, homeCFrame.Position, 12, yOffsetHome)
 			end
 			
 			sadWalk:Destroy()
