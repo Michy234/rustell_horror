@@ -90,5 +90,6 @@ Settings.NPC_OBSTACLE_RAYCAST_DISTANCE = 8    -- Studs di previsione ostacoli (r
 Settings.NPC_BRACE_AVOID_RADIUS = 15          -- Raggio minimo dalla brace durante il cammino
 Settings.NPC_SEPARATION_RADIUS = 6            -- Raggio separazione tra NPC (steering)
 Settings.NPC_STUCK_TIMEOUT = 3                -- Secondi prima di considerare l'NPC bloccato
+Settings.NPC_TRACKER_DISTANCE = 0            -- Distanza (studs) per mostrare la UI di tracking NPC (0 = debug/testing)
 
 return Settings

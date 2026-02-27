@@ -6,10 +6,28 @@ local Settings = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("
 local NotificationService = require(script.NotificationService)
 local InteractionService = require(script.InteractionService)
 local MenuService = require(script.MenuService)
+local NPCTrackerService = nil
+local trackerOk, trackerErr = pcall(function()
+	NPCTrackerService = require(script.NPCTrackerService)
+end)
+if not trackerOk then
+	warn("[Client] ❌ NPCTrackerService require FAILED:", trackerErr)
+end
 
 NotificationService.init()
 InteractionService.init()
 MenuService.init()
+
+if NPCTrackerService then
+	local initOk, initErr = pcall(function()
+		NPCTrackerService.init()
+	end)
+	if not initOk then
+		warn("[Client] ❌ NPCTrackerService.init() FAILED:", initErr)
+	end
+else
+	warn("[Client] ⚠️ NPCTrackerService not loaded, skipping init")
+end
 
 -- FIRST PERSON by default (toggle in settings)
 local player = Players.LocalPlayer

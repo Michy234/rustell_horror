@@ -4,6 +4,7 @@ local TweenService = game:GetService("TweenService")
 local SoundService = game:GetService("SoundService")
 local Workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
 
 local Settings = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Settings"))
 
@@ -229,18 +230,66 @@ function MenuService.init()
 	-- Initial Position (for bounce)
 	settingsFrame.Position = UDim2.fromScale(0.5, 1.5)
 
+	local settingsOpen = false
+	local wasFirstPerson = false
+	local savedCameraCF: CFrame? = nil
+
+	-- Helper: zoom camera out when switching to third person
+	local function zoomOutCamera()
+		-- Force Roblox camera controller to zoom out by temporarily raising min zoom
+		player.CameraMinZoomDistance = 10
+		task.delay(0.3, function()
+			player.CameraMinZoomDistance = 0.5
+		end)
+	end
+
 	local function toggleSettings(open: boolean)
+		settingsOpen = open
 		local targetPos = open and UDim2.fromScale(0.5, 0.5) or UDim2.fromScale(0.5, 1.5)
 		local easing = open and Enum.EasingStyle.Bounce or Enum.EasingStyle.Back
 		
 		if open then 
-			settingsFrame.Visible = true 
+			settingsFrame.Visible = true
+			-- If in first person, freeze camera and free mouse
+			if game:GetAttribute("GameStarted") and player.CameraMode == Enum.CameraMode.LockFirstPerson then
+				wasFirstPerson = true
+				savedCameraCF = camera.CFrame
+				player.CameraMode = Enum.CameraMode.Classic
+				camera.CameraType = Enum.CameraType.Scriptable
+				-- Keep the current view frozen
+				if savedCameraCF then
+					camera.CFrame = savedCameraCF
+				end
+				UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+				UserInputService.MouseIconEnabled = true
+			end
 		end
 		
 		local tween = TweenService:Create(settingsFrame, TweenInfo.new(0.6, easing), {Position = targetPos})
 		tween:Play()
 		
 		if not open then
+			-- Restore camera based on what user chose while settings were open
+			if camera.CameraType == Enum.CameraType.Scriptable then
+				camera.CameraType = Enum.CameraType.Custom
+				-- Restore camera subject
+				local char = player.Character
+				if char then
+					local hum = char:FindFirstChildOfClass("Humanoid")
+					if hum then
+						camera.CameraSubject = hum
+					end
+				end
+				-- Apply the correct camera mode based on wasFirstPerson
+				if wasFirstPerson then
+					player.CameraMode = Enum.CameraMode.LockFirstPerson
+				else
+					player.CameraMode = Enum.CameraMode.Classic
+					zoomOutCamera()
+				end
+				wasFirstPerson = false
+				savedCameraCF = nil
+			end
 			tween.Completed:Connect(function()
 				if settingsFrame.Position.Y.Scale > 1 then 
 					settingsFrame.Visible = false 
@@ -298,7 +347,7 @@ function MenuService.init()
 		s.Volume = 0.5
 		s.Parent = SoundService
 		s:Play()
-		settingsFrame.Visible = false
+		toggleSettings(false)
 	end)
 
 	---------------------------------------------------------------------------
@@ -306,25 +355,26 @@ function MenuService.init()
 	---------------------------------------------------------------------------
 	local settingsIcon = Instance.new("TextButton")
 	settingsIcon.Name = "SettingsIcon"
-	settingsIcon.Size = UDim2.fromOffset(140, 45)
+	settingsIcon.Size = UDim2.fromOffset(50, 50)
 	settingsIcon.Position = UDim2.new(1, -20, 1, -20)
 	settingsIcon.AnchorPoint = Vector2.new(1, 1)
 	settingsIcon.BackgroundColor3 = Color3.fromRGB(0, 160, 255)
-	settingsIcon.Text = "IMPOSTAZIONI"
-	settingsIcon.Font = Enum.Font.LuckiestGuy
+	settingsIcon.Text = "⚙"
+	settingsIcon.Font = Enum.Font.GothamBold
 	settingsIcon.TextColor3 = Color3.new(1, 1, 1)
-	settingsIcon.TextSize = 14
-	settingsIcon.Visible = false -- HIDE BY DEFAULT
-	settingsIcon.ZIndex = 20000 -- DEFINITELY ON TOP
+	settingsIcon.TextSize = 28
+	settingsIcon.Visible = false
+	settingsIcon.ZIndex = 20000
 	settingsIcon.Parent = screenGui
 
 	local iconCorner = Instance.new("UICorner")
-	iconCorner.CornerRadius = UDim.new(0, 10)
+	iconCorner.CornerRadius = UDim.new(0, 12)
 	iconCorner.Parent = settingsIcon
 
 	local iconStroke = Instance.new("UIStroke")
-	iconStroke.Color = Color3.new(0, 0, 0) -- Dark background for readability
-	iconStroke.Thickness = 2
+	iconStroke.Color = Color3.fromRGB(255, 255, 255)
+	iconStroke.Thickness = 2.5
+	iconStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 	iconStroke.Parent = settingsIcon
 
 	settingsIcon.MouseButton1Click:Connect(function()
@@ -335,7 +385,18 @@ function MenuService.init()
 		s.Parent = SoundService
 		s:Play()
 		
-		toggleSettings(not settingsFrame.Visible or settingsFrame.Position.Y.Scale > 1)
+		toggleSettings(not settingsOpen)
+	end)
+
+	-- "I" key to toggle settings (with mouse unlock in first person)
+	UserInputService.InputBegan:Connect(function(input, gameProcessed)
+		if input.KeyCode ~= Enum.KeyCode.I then return end
+		-- Only block if actively typing in a TextBox (chat)
+		local focused = UserInputService:GetFocusedTextBox()
+		if focused then return end
+		if settingsIcon.Visible then
+			toggleSettings(not settingsOpen)
+		end
 	end)
 
 	-- Slider Logic (Bvibrant)
@@ -468,8 +529,33 @@ function MenuService.init()
 				checkBtn.BackgroundColor3 = Color3.fromRGB(160, 50, 50)
 				checkBtn.Text = "✗"
 			end
-			if _G.SetFirstPerson then
-				_G.SetFirstPerson(isFirstPerson)
+
+			-- If settings are open with camera frozen (Scriptable),
+			-- only update wasFirstPerson — actual CameraMode changes when settings close
+			if settingsOpen and camera.CameraType == Enum.CameraType.Scriptable then
+				wasFirstPerson = isFirstPerson
+				-- Keep mouse free since settings are open
+				UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+				UserInputService.MouseIconEnabled = true
+			elseif settingsOpen then
+				-- Settings open but not in Scriptable (e.g. was third person)
+				if isFirstPerson then
+					-- Don't apply LockFirstPerson while menu is open — defer
+					wasFirstPerson = true
+				else
+					player.CameraMode = Enum.CameraMode.Classic
+					zoomOutCamera()
+				end
+				UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+				UserInputService.MouseIconEnabled = true
+			else
+				-- Settings closed: apply immediately
+				if isFirstPerson then
+					player.CameraMode = Enum.CameraMode.LockFirstPerson
+				else
+					player.CameraMode = Enum.CameraMode.Classic
+					zoomOutCamera()
+				end
 			end
 		end
 		
@@ -477,6 +563,12 @@ function MenuService.init()
 			isFirstPerson = not isFirstPerson
 			updateCheckbox()
 		end)
+		
+		-- Also expose globally for init.client.luau compatibility
+		_G.SetFirstPerson = function(enabled: boolean)
+			isFirstPerson = enabled
+			updateCheckbox()
+		end
 		
 		updateCheckbox()  -- Apply default state
 	end
