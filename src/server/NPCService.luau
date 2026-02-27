@@ -64,6 +64,8 @@ function NPCService.reset()
 		if obj:IsA("Model") and (obj:FindFirstChildOfClass("Humanoid") or obj.Name:lower():match("npc")) then
 			-- skip the dog — it has a Humanoid but is managed by DogService
 			if obj.Name:lower():match("dog") then continue end
+			-- skip il Nonno — è gestito da GrandpaService
+			if obj.Name:lower():match("nonno") then continue end
 			if not game:GetService("Players"):GetPlayerFromCharacter(obj) then
 				obj:Destroy()
 			end
@@ -156,6 +158,7 @@ function NPCService.setupNPC(npc: Model)
 	npc:SetAttribute("Initialized", true)
 	npc:SetAttribute("IsEating", false)
 	aliveNPCs += 1
+	game:SetAttribute("AliveNPCs", aliveNPCs)  -- expose for GrandpaService watcher
 
 	local humanoid = npc:FindFirstChildOfClass("Humanoid")
 	if not humanoid then return end
@@ -626,6 +629,7 @@ function NPCService.die(npc: Model)
 	if npc:GetAttribute("IsDead") then return end
 	npc:SetAttribute("IsDead", true)
 	aliveNPCs = math.max(0, aliveNPCs - 1)
+	game:SetAttribute("AliveNPCs", aliveNPCs)  -- expose for GrandpaService watcher
 	
 	NPCService.playSound(npc:GetPivot().Position, Settings.DEATH_SOUND_ID, 0.8)
 	
@@ -637,8 +641,15 @@ function NPCService.die(npc: Model)
 	end
 	
 	if remaining <= 0 then
-		local ev = ReplicatedStorage:FindFirstChild("GameOverEvent")
-		if ev then ev:FireAllClients() end
+		-- Fire NonnoStandsUpEvent first — client will do camera sequence then trigger jumpscare
+		local nonnoEv = ReplicatedStorage:FindFirstChild("NonnoStandsUpEvent")
+		if nonnoEv then
+			nonnoEv:FireAllClients()
+		else
+			-- Fallback: direct game over if event not yet created
+			local ev = ReplicatedStorage:FindFirstChild("GameOverEvent")
+			if ev then ev:FireAllClients() end
+		end
 	end
 	
 	task.wait(0.3)

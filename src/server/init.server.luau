@@ -8,6 +8,7 @@ local DogService = require(script:WaitForChild("DogService"))
 local AdminService = require(script:WaitForChild("AdminService"))
 local RainService = require(script:WaitForChild("RainService"))
 local SaltService = require(script:WaitForChild("SaltService"))
+local GrandpaService = require(script:WaitForChild("GrandpaService"))
 
 BraceService.init()
 NPCService.init()
@@ -16,6 +17,7 @@ DogService.init()
 AdminService.init()
 RainService.init()
 SaltService.init()
+GrandpaService.init()
 
 local startEvent = Instance.new("RemoteEvent")
 startEvent.Name = "GameStartEvent"
@@ -32,6 +34,15 @@ gameOverEvent.Parent = ReplicatedStorage
 local gameWinEvent = Instance.new("RemoteEvent")
 gameWinEvent.Name = "GameWinEvent"
 gameWinEvent.Parent = ReplicatedStorage
+
+-- Nonno events
+local nonnoWakeEvent = Instance.new("RemoteEvent")
+nonnoWakeEvent.Name = "NonnoWakeEvent"
+nonnoWakeEvent.Parent = ReplicatedStorage
+
+local nonnoStandsUpEvent = Instance.new("RemoteEvent")
+nonnoStandsUpEvent.Name = "NonnoStandsUpEvent"
+nonnoStandsUpEvent.Parent = ReplicatedStorage
 
 -- Update Timer Event
 local timerUpdateEvent = Instance.new("RemoteEvent")

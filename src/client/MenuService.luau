@@ -895,36 +895,84 @@ function MenuService.init()
 			TweenService:Create(bgm, TweenInfo.new(1.5), { Volume = 0 }):Play()
 		end
 
-		-- TOTAL FADE TO BLACK (Gameplay & UI)
-		local fadeFrame = Instance.new("Frame")
-		fadeFrame.Name = "GameOverFade"
-		fadeFrame.Size = UDim2.fromScale(1, 1)
-		fadeFrame.BackgroundColor3 = Color3.new(0, 0, 0)
-		fadeFrame.BackgroundTransparency = 1
-		fadeFrame.ZIndex = 49999 -- Just below jumpscare
-		fadeFrame.Parent = screenGui
+		-- ── Sequenza Nonno ─────────────────────────────────────────────────────
+		local grandpa = Workspace:FindFirstChild("ilNonno") :: Model?
+		if grandpa then
+			-- 1. Imposta camera scriptable e tween verso il Nonno
+			camera.CameraType = Enum.CameraType.Scriptable
+			local rootPart = grandpa:FindFirstChild("HumanoidRootPart") :: BasePart?
+			if rootPart then
+				-- Posizione camera: di fronte al nonno, leggermente in alto
+				local faceCF = rootPart.CFrame
+				local camTarget = faceCF * CFrame.new(0, 1.5, -5) -- -5 = davanti al nonno (in Roblox +Z è DIETRO)
+				local camLookAt = faceCF.Position + Vector3.new(0, 1.5, 0) -- guarda la testa
+				local targetCamCF = CFrame.lookAt(camTarget.Position, camLookAt)
 
-		local fadeTween = TweenService:Create(fadeFrame, TweenInfo.new(1.0, Enum.EasingStyle.Linear), { BackgroundTransparency = 0 })
-		fadeTween:Play()
-		fadeTween.Completed:Wait()
+				local camTween = TweenService:Create(
+					camera,
+					TweenInfo.new(2.0, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
+					{ CFrame = targetCamCF }
+				)
+				camTween:Play()
+				camTween.Completed:Wait()
 
-		task.wait(0.5)
+				task.wait(0.3)
 
-		-- JUMPSCARE DI BOTTO (After Fade)
-		jumpscareOverlay.BackgroundTransparency = 1 -- Background is already black from fade
-		jumpscareImage.ImageTransparency = 0 
+				-- 2. Nonno si alza dalla sedia (tween in alto di ~2 studs, poi in piedi)
+				local standCF = rootPart.CFrame * CFrame.new(0, 2.5, 0)
+				local riseTween = TweenService:Create(
+					rootPart,
+					TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+					{ CFrame = standCF }
+				)
+				rootPart.Anchored = true  -- serve per tweenare CFrame
+				riseTween:Play()
+
+				-- 3. Cambia faccia ad arrabbiata
+				local head = grandpa:FindFirstChild("Head") :: BasePart?
+				if head then
+					local face = head:FindFirstChild("face")
+					if face and face:IsA("Decal") then
+						face.Texture = Settings.GRANDPA_FACE_ANGRY or "rbxassetid://10749405"
+					end
+				end
+
+				-- 4. Suona SFX del Nonno che si alza (Volume Estremo)
+				if Settings.GRANDPA_STANDUP_ID and Settings.GRANDPA_STANDUP_ID ~= "rbxassetid://0" then
+					local s = Instance.new("Sound")
+					s.SoundId = Settings.GRANDPA_STANDUP_ID
+					s.Volume = 100.0 -- VOLUMEN EXTREMO (Earrape) come richiesto
+					s.Parent = workspace.CurrentCamera
+					s:Play()
+				end
+
+				riseTween.Completed:Wait()
+				task.wait(0.2)
+
+				-- Aspetta che il suono finisca prima di procedere (opzionale, volume è 100 quindi finirà subito)
+				task.wait(0.5)
+			end
+		end
+
+		-- ── Jumpscare (direttamente dopo la sequenza, senza fade al nero) ───
+		jumpscareOverlay.BackgroundTransparency = 1
+		jumpscareImage.ImageTransparency = 0
 		jumpscareOverlay.Visible = true
+
 		local scarySound = Instance.new("Sound")
 		scarySound.SoundId = "rbxassetid://8395374561"
 		scarySound.Volume = 5
-		scarySound.PlaybackSpeed = 0.5 -- SLOWED DOWN BY 50%
+		scarySound.PlaybackSpeed = 0.5
 		scarySound.Parent = SoundService
 		scarySound:Play()
+
+		-- Ripristina camera
+		camera.CameraType = Enum.CameraType.Custom
 
 		task.wait(3)
 		jumpscareOverlay.Visible = false
 		scarySound:Destroy()
-		
+
 		-- Restore BGM volume for next game
 		if bgm and bgm:IsA("Sound") then
 			bgm.Volume = Settings.MUSIC_VOLUME or 0.3
@@ -933,7 +981,6 @@ function MenuService.init()
 
 		fullReset()
 	end
-
 
 	-- WIN UI
 	local winLabel = Instance.new("TextLabel")
@@ -1060,8 +1107,23 @@ function MenuService.init()
 
 	local gameOverEvent = ReplicatedStorage:WaitForChild("GameOverEvent")
 	gameOverEvent.OnClientEvent:Connect(function()
-		print("[DEBUG-CLIENT] GameOverEvent ricevuto dal server!")
-		triggerGameOver()
+		print("[DEBUG-CLIENT] GameOverEvent ricevuto (fallback/admin)")
+		task.spawn(triggerGameOver)
+	end)
+
+	-- NonnoStandsUpEvent: sequenza principale (trigger da NPCService quando tutti gli NPC muoiono)
+	local nonnoStandsUpEvent = ReplicatedStorage:WaitForChild("NonnoStandsUpEvent")
+	nonnoStandsUpEvent.OnClientEvent:Connect(function()
+		print("[DEBUG-CLIENT] NonnoStandsUpEvent ricevuto — avvio sequenza Nonno")
+		task.spawn(triggerGameOver)
+	end)
+
+	-- NonnoWakeEvent: nonno si sveglia (2 NPC rimasti) — lato client solo animazione faccia
+	local nonnoWakeEvent = ReplicatedStorage:WaitForChild("NonnoWakeEvent")
+	nonnoWakeEvent.OnClientEvent:Connect(function()
+		print("[DEBUG-CLIENT] NonnoWakeEvent — Nonno si sveglia!")
+		-- Visivo lato client: potrebbe aggiungere un overlay o effetto
+		-- La faccia è già cambiata server-side da GrandpaService
 	end)
 
 	settingsBtn.MouseButton1Click:Connect(function()

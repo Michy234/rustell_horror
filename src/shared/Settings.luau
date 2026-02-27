@@ -91,4 +91,14 @@ Settings.NPC_BRACE_AVOID_RADIUS = 15          -- Raggio minimo dalla brace duran
 Settings.NPC_SEPARATION_RADIUS = 6            -- Raggio separazione tra NPC (steering)
 Settings.NPC_STUCK_TIMEOUT = 3                -- Secondi prima di considerare l'NPC bloccato
 
+-- Grandpa Settings
+Settings.GRANDPA_SNORE_ID      = "rbxassetid://9089200372"   -- Man Snoring
+Settings.GRANDPA_MUMBLE_ID     = "rbxassetid://18465332573"  -- Grumbling
+Settings.GRANDPA_STANDUP_ID    = "rbxassetid://135527140272616"  -- AR'VATTEN A LA CAS AVAST A FATIJA          -- TODO: SFX nonno si alza (grido)
+Settings.GRANDPA_WAKEUP_NPCS   = 2                           -- NPC rimanenti per svegliare il nonno
+-- Facce del Nonno — usa le texture ID REALI (non gli ID wrapper del catalogo)
+Settings.GRANDPA_FACE_SLEEPING = "rbxassetid://15637705"   -- occhi chiusi (wrapper era 15637848)
+Settings.GRANDPA_FACE_AWAKE    = "rbxassetid://66329524"   -- occhi aperti (wrapper era 66330106)
+Settings.GRANDPA_FACE_ANGRY    = "rbxassetid://10749405"   -- arrabbiato  (wrapper era 10860384)
+
 return Settings

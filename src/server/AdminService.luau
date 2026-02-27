@@ -8,6 +8,7 @@ local Settings = require(ReplicatedStorage.Shared.Settings)
 local DogService = require(script.Parent.DogService)
 local NPCService = require(script.Parent.NPCService)
 local RainService = require(script.Parent.RainService)
+local GrandpaService = require(script.Parent.GrandpaService)
 
 local AdminService = {}
 
@@ -84,6 +85,24 @@ function AdminService.handleCommand(player: Player, message: string)
 		task.spawn(function()
 			RainService.trigger()
 		end)
+
+	-- ── Comandi Il Nonno ──────────────────────────────────────────────────
+	elseif cmd == ":nonno1" then
+		print("[ADMIN] " .. player.Name .. " → Nonno FASE 1 (dorme)")
+		GrandpaService.forceState1()
+
+	elseif cmd == ":nonno2" then
+		print("[ADMIN] " .. player.Name .. " → Nonno FASE 2 (si sveglia)")
+		GrandpaService.forceState2()
+
+	elseif cmd == ":nonno3" then
+		print("[ADMIN] " .. player.Name .. " → Nonno FASE 3 (si alza/jumpscare)")
+		local ev = ReplicatedStorage:FindFirstChild("NonnoStandsUpEvent")
+		if ev then ev:FireAllClients() end
+
+	elseif cmd == ":nonnodbg" then
+		print("[ADMIN] " .. player.Name .. " → Nonno DEBUG DUMP")
+		GrandpaService.debugDump()
 	end
 end
 
