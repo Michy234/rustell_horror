@@ -43,12 +43,12 @@ end
 local snoreSound:  Sound? = nil
 local mumbleSound: Sound? = nil
 
--- Motor6D handles for sitting/standing pose
-local defaultRightHipC0: CFrame? = nil
-local defaultLeftHipC0:  CFrame? = nil
-local SIT_ANGLE = -math.pi / 2  -- -90 gradi: gambe piegate in AVANTI (posa seduta corretta)
+-- Motor6D handles — valori C0 di default R6 (in piedi)
+-- Vengono applicati da setStandPose quando il nonno si alza
+local DEFAULT_RIGHT_HIP_C0 = CFrame.new( 1, -1, 0,  0, 0, 1,  0, 1, 0, -1, 0, 0)
+local DEFAULT_LEFT_HIP_C0  = CFrame.new(-1, -1, 0,  0, 0, -1, 0, 1, 0,  1, 0, 0)
 
--- Ritorna i Motor6D delle anche — cerca in TUTTI i discendenti, non solo Torso
+-- Ritorna i Motor6D delle anche — cerca in TUTTI i discendenti
 local function getHipJoints(model: Model): (Motor6D?, Motor6D?)
 	local rh: Motor6D? = nil
 	local lh: Motor6D? = nil
@@ -67,31 +67,14 @@ local function getHipJoints(model: Model): (Motor6D?, Motor6D?)
 	return rh, lh
 end
 
--- Piega le gambe (posa seduta) modificando i Motor6D
-local function setSitPose(model: Model)
-	local rh, lh = getHipJoints(model)
-	if not rh or not lh then
-		print("[GrandpaService] Motor6D gambe non trovati (modello non R6 o custom).")
-		return
-	end
-	-- Salva i valori di default la prima volta
-	if not defaultRightHipC0 then defaultRightHipC0 = rh.C0 end
-	if not defaultLeftHipC0  then defaultLeftHipC0  = lh.C0 end
-	-- Piega le gambe in avanti di 90 gradi
-	rh.C0 = defaultRightHipC0 * CFrame.Angles(SIT_ANGLE, 0, 0)
-	lh.C0 = defaultLeftHipC0  * CFrame.Angles(SIT_ANGLE, 0, 0)
-	print("[GrandpaService] Posa seduta applicata (Motor6D).")
-end
-
--- Raddrizza le gambe con tween (si alza dalla sedia)
+-- Raddrizza le gambe con tween (si alza dalla sedia) usando i valori R6 standard
 local function setStandPose(model: Model, duration: number)
 	local rh, lh = getHipJoints(model)
 	if not rh or not lh then return end
-	if not defaultRightHipC0 or not defaultLeftHipC0 then return end
 	local info = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-	TweenService:Create(rh, info, {C0 = defaultRightHipC0}):Play()
-	TweenService:Create(lh, info, {C0 = defaultLeftHipC0}):Play()
-	print("[GrandpaService] Posa in piedi: tween " .. duration .. "s.")
+	TweenService:Create(rh, info, {C0 = DEFAULT_RIGHT_HIP_C0}):Play()
+	TweenService:Create(lh, info, {C0 = DEFAULT_LEFT_HIP_C0}):Play()
+	print("[GrandpaService] Posa in piedi (default R6): tween " .. duration .. "s.")
 end
 
 -- ══════════════════════════════════════════════════════════════
@@ -244,18 +227,16 @@ local function sitOnChair(grandpa: Model)
 		return
 	end
 
-	-- Ancora il Nonno dove l'ha messo l'utente in Studio
-	-- NON usiamo PivotTo: il Nonno è già posizionato correttamente nella sedia
-	-- Basta ancorarlo e mettere Sit=true
+	-- Ancora il Nonno in posizione Studio (NON usiamo PivotTo)
 	root.Anchored = true
 
 	if humanoid then
 		humanoid.WalkSpeed = 0
 		humanoid.JumpPower = 0
-		humanoid.Sit = true
+		humanoid.Sit = true  -- Roblox applica la posa seduta standard
 	end
 
-	print("[GrandpaService] sitOnChair: completato. HRP.Anchored=" .. tostring(root.Anchored))
+	print("[GrandpaService] sitOnChair: HRP.Anchored=" .. tostring(root.Anchored))
 end
 
 -- Espone la CFrame del nonno ai client per la camera (via bindable value)
@@ -308,30 +289,46 @@ function GrandpaService.init()
 		debugNonno(grandpaModel)
 
 		-- ── STATO 1: Nonno dorme ──────────────────────────────────────────
+		-- sitOnChair ancora HRP + imposta Sit=true (che applica la posa seduta standard).
+		-- NON applichiamo setSitPose: Sit=true da solo mette le gambe nella posizione corretta.
+		-- NON de-ancoriamo le parti non-HRP: se lo facessimo, i capelli cadrebbero per gravità;
+		-- il de-ancora avviene solo in MenuService appena prima del salto.
 		sitOnChair(grandpaModel)
-		setSitPose(grandpaModel)   -- piega le gambe (Motor6D)
 		setFace(grandpaModel, FACE_SLEEPING())
 
-		-- Salva le CFrame iniziali di tutte le parti per poterle ripristinare al reset
-		local initialCFrames: {[string]: CFrame} = {}
+		-- Ancora TUTTE le BasePart subito (non solo HRP) così la fisica
+		-- non le sposta durante il gioco, e i capelli non cadono.
 		for _, p in grandpaModel:GetDescendants() do
 			if p:IsA("BasePart") then
-				initialCFrames[p.Name] = p.CFrame
+				p.Anchored = true
 			end
 		end
-		-- Salva anche il HumanoidRootPart direttamente
-		local rootInit = grandpaModel:FindFirstChild("HumanoidRootPart") :: BasePart?
-		if rootInit then
-			initialCFrames["HumanoidRootPart"] = rootInit.CFrame
+
+		-- Salva le CFrame iniziali come lista di {parte, cframe} usando riferimenti
+		-- diretti alle istanze (non il nome) così funziona anche con nomi duplicati.
+		local initialCFrames: {{part: BasePart, cf: CFrame}} = {}
+		for _, p in grandpaModel:GetDescendants() do
+			if p:IsA("BasePart") then
+				table.insert(initialCFrames, { part = p :: BasePart, cf = p.CFrame })
+			end
 		end
-		print("[GrandpaService] Salvate " .. #(function() local c=0; for _ in initialCFrames do c+=1 end; return {} end)() .. " CFrame iniziali.")
+		print("[GrandpaService] Salvate " .. #initialCFrames .. " CFrame iniziali.")
 
 		local root = grandpaModel:FindFirstChild("HumanoidRootPart") :: BasePart?
-		if root then
-			if Settings.GRANDPA_SNORE_ID and Settings.GRANDPA_SNORE_ID ~= "rbxassetid://0" then
+
+		-- Il russare parte SOLO quando il gioco inizia (GameStartEvent).
+		-- Così il suono non si sente durante il menu/caricamento.
+		local function startSnore()
+			if root and Settings.GRANDPA_SNORE_ID and Settings.GRANDPA_SNORE_ID ~= "rbxassetid://0" then
+				if snoreSound then snoreSound:Stop() end
 				snoreSound = playLoopingSound(root, Settings.GRANDPA_SNORE_ID, 0.5)
 			end
 		end
+
+		local gameStartEvent = ReplicatedStorage:WaitForChild("GameStartEvent") :: RemoteEvent
+		gameStartEvent.OnServerEvent:Connect(function()
+			startSnore()  -- parte semplicemente a ogni avvio partita
+		end)
 
 		-- Aggiorna CFrame del Nonno per il client
 		exposeCFrameForClient(grandpaModel)
@@ -357,7 +354,8 @@ function GrandpaService.init()
 				local rootPart = grandpaModel:FindFirstChild("HumanoidRootPart") :: BasePart?
 				if rootPart then
 					if Settings.GRANDPA_MUMBLE_ID and Settings.GRANDPA_MUMBLE_ID ~= "rbxassetid://0" then
-						mumbleSound = playLoopingSound(rootPart, Settings.GRANDPA_MUMBLE_ID, 0.4)
+						local vol = (Settings.GRANDPA_MUMBLE_VOLUME :: number?) or 1.5
+						mumbleSound = playLoopingSound(rootPart, Settings.GRANDPA_MUMBLE_ID, vol)
 					end
 				end
 
@@ -381,32 +379,24 @@ function GrandpaService.init()
 		local resetEvent = ReplicatedStorage:WaitForChild("GameResetEvent") :: RemoteEvent
 		resetEvent.OnServerEvent:Connect(function()
 			woken = false
-			-- Ripristina CFrame originali di tutte le parti (fix "Nonno galleggiante" dopo game over)
-			for _, p in grandpaModel:GetDescendants() do
-				if p:IsA("BasePart") then
-					local savedCF = initialCFrames[p.Name]
-					if savedCF then
-						p.Anchored = true
-						p.CFrame = savedCF
-					end
-				end
+			-- Ripristina CFrame originali di tutte le parti (ancorando tutto)
+			for _, entry in initialCFrames do
+				entry.part.Anchored = true
+				entry.part.CFrame   = entry.cf
 			end
-			-- Re-applica Sit=true per la posa seduta
+			-- Re-applica Sit=false poi Sit=true per forzare Roblox a rieseguire l'animazione
 			local h = grandpaModel:FindFirstChildOfClass("Humanoid")
 			if h then
 				h.WalkSpeed = 0
 				h.JumpPower = 0
+				h.Sit = false
+				task.wait()
 				h.Sit = true
 			end
-			setSitPose(grandpaModel)   -- ripiega le gambe
 			setFace(grandpaModel, FACE_SLEEPING())
 			if mumbleSound then mumbleSound:Stop(); mumbleSound:Destroy() end
-			local rootPart = grandpaModel:FindFirstChild("HumanoidRootPart") :: BasePart?
-			if rootPart then
-				if Settings.GRANDPA_SNORE_ID and Settings.GRANDPA_SNORE_ID ~= "rbxassetid://0" then
-					snoreSound = playLoopingSound(rootPart, Settings.GRANDPA_SNORE_ID, 0.5)
-				end
-			end
+			-- Ferma il russare: ripartirà quando il giocatore premerà Gioca (GameStartEvent)
+			if snoreSound then snoreSound:Stop(); snoreSound:Destroy(); snoreSound = nil end
 			print("[GrandpaService] Reset: Nonno torna a dormire e posizione ripristinata.")
 		end)
 

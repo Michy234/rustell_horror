@@ -176,30 +176,25 @@ end
 local function moveModel(model: Model, targetPos: Vector3, speed: number, yOffset: number?)
 	local root = model.PrimaryPart or model:FindFirstChildWhichIsA("BasePart", true)
 	if not root then return end
-	
-	-- Use waypoint Y + pivot offset so the dog follows stairs/ramps correctly.
-	-- yOffset = how high the pivot sits above ground (computed once per trip with raycast).
-	local offset = yOffset or 0
+
 	local startPos = root.Position
-	local targetY = targetPos.Y + offset
-	local flatTarget = Vector3.new(targetPos.X, targetY, targetPos.Z)
-	
-	local distance = (flatTarget - startPos).Magnitude
+	local flatTarget = Vector3.new(targetPos.X, targetPos.Y + (yOffset or 0), targetPos.Z)
+
+	local distance = (Vector3.new(flatTarget.X, startPos.Y, flatTarget.Z) - startPos).Magnitude
 	if distance < 0.1 then return end
-	
+
 	local duration = distance / speed
 	local startCFrame = model:GetPivot()
-	
-	-- Rotation: face the direction of movement (flat XZ)
-	local dir = (flatTarget - startPos)
+
+	local dir = flatTarget - startPos
 	local targetRotation
 	if dir.Magnitude > 0.1 then
-		targetRotation = CFrame.lookAt(startPos, flatTarget).Rotation
+		targetRotation = CFrame.lookAt(startPos, Vector3.new(flatTarget.X, startPos.Y, flatTarget.Z)).Rotation
 	else
 		targetRotation = startCFrame.Rotation
 	end
 
-	-- Phase 1: Rotate in place to face target (max 0.25s)
+	-- Phase 1: ruota sul posto verso il target (max 0.25s)
 	local rotDuration = math.min(0.25, duration * 0.4)
 	local rotStart = os.clock()
 	while (os.clock() - rotStart) < rotDuration do
@@ -207,18 +202,33 @@ local function moveModel(model: Model, targetPos: Vector3, speed: number, yOffse
 		model:PivotTo(CFrame.new(root.Position) * startCFrame.Rotation:Lerp(targetRotation, alpha))
 		task.wait()
 	end
-	
-	-- Phase 2: Glide forward, following the target Y (stairs/ramps)
+
+	-- Phase 2: avanza verso il target, aggiornando l'Y con raycast ogni frame
+	-- (così il cane non fluttua su scale e rampe)
+	local rayParams = RaycastParams.new()
+	rayParams.FilterDescendantsInstances = {model}
+	rayParams.FilterType = Enum.RaycastFilterType.Exclude
+
 	local moveStart = os.clock()
-	local currentStartPos = startPos
+	local currentStartPos = root.Position
 	while (os.clock() - moveStart) < duration do
 		local alpha = math.min(1, (os.clock() - moveStart) / duration)
-		local p = currentStartPos:Lerp(flatTarget, alpha)
-		model:PivotTo(CFrame.new(p) * targetRotation)
+		local interpXZ = currentStartPos:Lerp(flatTarget, alpha)
+
+		-- Raycast verso il basso per trovare il suolo sotto la posizione corrente
+		local groundHit = Workspace:Raycast(
+			Vector3.new(interpXZ.X, root.Position.Y + 2, interpXZ.Z),
+			Vector3.new(0, -8, 0),
+			rayParams
+		)
+		local groundY = groundHit and (groundHit.Position.Y + (yOffset or 0)) or interpXZ.Y
+		local finalPos = Vector3.new(interpXZ.X, groundY, interpXZ.Z)
+
+		model:PivotTo(CFrame.new(finalPos) * targetRotation)
 		task.wait()
-		if (root.Position - flatTarget).Magnitude < 0.2 then break end
+		if (Vector3.new(root.Position.X, 0, root.Position.Z)
+			- Vector3.new(flatTarget.X, 0, flatTarget.Z)).Magnitude < 0.3 then break end
 	end
-	model:PivotTo(CFrame.new(flatTarget) * targetRotation)
 end
 
 local function rigDog(model: Model)
@@ -370,22 +380,52 @@ function DogService.spawnDog(isAuto: boolean?)
 			end
 		end
 		
-		local path = PathfindingService:CreatePath({AgentRadius = 3})
-		local ok = pcall(function() path:ComputeAsync(rootPart.Position, bracePos) end)
-		
+		-- Parametri pathfinding con AgentHeight più alto per scale
+		local path = PathfindingService:CreatePath({
+			AgentRadius = 3,
+			AgentHeight = 5,
+			AgentCanJump = false,
+		})
+
+		-- Target della brace: usa il suolo ACCANTO alla brace (non sopra) per evitare
+		-- che il cane si arrampichi sul modello.
+		local braceGroundPos = bracePos
+		do
+			local rp = RaycastParams.new()
+			rp.FilterDescendantsInstances = {dog}
+			rp.FilterType = Enum.RaycastFilterType.Exclude
+			-- Raggiungi il suolo direttamente sotto il pivot della brace
+			local hit = Workspace:Raycast(Vector3.new(bracePos.X, bracePos.Y + 5, bracePos.Z), Vector3.new(0, -20, 0), rp)
+			if hit then
+				braceGroundPos = hit.Position
+			else
+				braceGroundPos = Vector3.new(bracePos.X, bracePos.Y, bracePos.Z)
+			end
+		end
+
+		-- Seleziona il punto sul suolo più vicino al cane, a 4 studs dalla brace
+		local dogToBarce = (Vector3.new(braceGroundPos.X, rootPart.Position.Y, braceGroundPos.Z)
+			- rootPart.Position)
+		local approachDir = dogToBarce.Magnitude > 0.1 and dogToBarce.Unit or Vector3.new(1, 0, 0)
+		local dogTarget = braceGroundPos + Vector3.new(-approachDir.X * 4, yOffset, -approachDir.Z * 4)
+
+		local ok = pcall(function() path:ComputeAsync(rootPart.Position, dogTarget) end)
+
 		if ok and path.Status == Enum.PathStatus.Success then
 			for _, waypoint in path:GetWaypoints() do
 				if dogChased then break end
 				moveModel(dog, waypoint.Position, 20, yOffset)
-				if (rootPart.Position - bracePos).Magnitude < 8 then break end
+				if (Vector3.new(rootPart.Position.X, 0, rootPart.Position.Z)
+					- Vector3.new(braceGroundPos.X, 0, braceGroundPos.Z)).Magnitude < 5 then break end
 			end
 		else
 			if not dogChased then
-				moveModel(dog, bracePos, 20, yOffset)
+				moveModel(dog, dogTarget, 20, yOffset)
 			end
 		end
 		
-		if (rootPart.Position - bracePos).Magnitude < 15 and not dogChased then
+		if (Vector3.new(rootPart.Position.X, 0, rootPart.Position.Z)
+			- Vector3.new(braceGroundPos.X, 0, braceGroundPos.Z)).Magnitude < 8 and not dogChased then
 			walkSound:Stop()
 			task.wait(1.5)
 			

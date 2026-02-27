@@ -853,6 +853,22 @@ function MenuService.init()
 		else
 			warn("[DEBUG-CLIENT] GameResetEvent non trovato!")
 		end
+
+		-- Teletrasporta il personaggio allo SpawnLocation originale
+		-- così il prossimo respawn non avviene nel punto della morte
+		local spawnLoc = Workspace:FindFirstChildOfClass("SpawnLocation")
+		local char = player.Character
+		if char then
+			local hrp = char:FindFirstChild("HumanoidRootPart") :: BasePart?
+			if hrp then
+				if spawnLoc then
+					hrp.CFrame = spawnLoc.CFrame + Vector3.new(0, 5, 0)
+				else
+					-- Fallback: usa gli attributi del Nonno invertiti per trovare il centro mappa
+					hrp.CFrame = CFrame.new(0, 10, 0)
+				end
+			end
+		end
 		
 		print("[DEBUG-CLIENT] Mostro caricamento e resetto UI forzatamente...")
 		
@@ -1010,15 +1026,53 @@ function MenuService.init()
 
 				task.wait(0.3)
 
-				-- 2. Nonno si alza dalla sedia (tween in alto di ~2 studs, poi in piedi)
-				local standCF = rootPart.CFrame * CFrame.new(0, 2.5, 0)
-				local riseTween = TweenService:Create(
+				-- 2. Prima dell'animazione di salto: salva le CFrame ORIGINALI di tutte le parti
+				--    (usate per ripristinare client-side subito dopo il salto)
+				local savedPartCFrames: {[BasePart]: CFrame} = {}
+				for _, p in grandpa:GetDescendants() do
+					if p:IsA("BasePart") then
+						savedPartCFrames[p] = p.CFrame
+					end
+				end
+				savedPartCFrames[rootPart] = rootPart.CFrame  -- assicura che HRP sia incluso
+
+				-- 3. Salva offset di ogni parte rispetto all'HRP per il Heartbeat
+				--    (muove TUTTE le parti insieme, inclusi capelli/hat senza weld)
+				local partOffsets: {[BasePart]: CFrame} = {}
+				for _, p in grandpa:GetDescendants() do
+					if p:IsA("BasePart") and p ~= rootPart then
+						-- Offset della parte rispetto all'HRP in spazio locale
+						partOffsets[p] = rootPart.CFrame:Inverse() * p.CFrame
+					end
+				end
+
+				-- Heartbeat: aggiorna tutte le parti secondarie mentre HRP si muove
+				local heartConn = RunService.Heartbeat:Connect(function()
+					for part, offset in partOffsets do
+						part.CFrame = rootPart.CFrame * offset
+					end
+				end)
+
+				-- Fase A: abbassa leggermente (raccoglie slancio, 0.25s)
+				local sinkCF = rootPart.CFrame * CFrame.new(0, -0.6, 0)
+				TweenService:Create(
 					rootPart,
-					TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-					{ CFrame = standCF }
+					TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+					{ CFrame = sinkCF }
+				):Play()
+				task.wait(0.25)
+
+				-- Fase B: scatta verso la CAMERA (world-space)
+				local nonnoPos  = rootPart.Position
+				local camPos    = camera.CFrame.Position
+				local towardCam = (Vector3.new(camPos.X, nonnoPos.Y, camPos.Z) - nonnoPos).Unit
+				local jumpPos   = nonnoPos + towardCam * 3 + Vector3.new(0, 1.8, 0)
+				local jumpCF    = CFrame.lookAt(jumpPos, camPos + Vector3.new(0, 1.8, 0))
+				local jumpTween = TweenService:Create(
+					rootPart,
+					TweenInfo.new(0.55, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+					{ CFrame = jumpCF }
 				)
-				rootPart.Anchored = true  -- serve per tweenare CFrame
-				riseTween:Play()
 
 				-- 3. Cambia faccia ad arrabbiata
 				local head = grandpa:FindFirstChild("Head") :: BasePart?
@@ -1029,20 +1083,26 @@ function MenuService.init()
 					end
 				end
 
-				-- 4. Suona SFX del Nonno che si alza (Volume Estremo)
+				-- 4. Suona SFX del Nonno che si alza
 				if Settings.GRANDPA_STANDUP_ID and Settings.GRANDPA_STANDUP_ID ~= "rbxassetid://0" then
 					local s = Instance.new("Sound")
 					s.SoundId = Settings.GRANDPA_STANDUP_ID
-					s.Volume = 100.0 -- VOLUMEN EXTREMO (Earrape) come richiesto
+					s.Volume = (Settings.GRANDPA_STANDUP_VOLUME :: number?) or 3.0
 					s.Parent = workspace.CurrentCamera
 					s:Play()
 				end
 
-				riseTween.Completed:Wait()
-				task.wait(0.2)
+				jumpTween:Play()
+				jumpTween.Completed:Wait()
+				task.wait(0.15)
 
-				-- Aspetta che il suono finisca prima di procedere (opzionale, volume è 100 quindi finirà subito)
-				task.wait(0.5)
+				-- Stop Heartbeat: ripristina SUBITO tutte le parti alle posizioni originali
+				-- (evita che il nonno resti in aria visivamente alla prossima partita)
+				heartConn:Disconnect()
+				for part, savedCF in savedPartCFrames do
+					part.CFrame = savedCF
+				end
+
 			end
 		end
 
