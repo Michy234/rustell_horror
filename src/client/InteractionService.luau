@@ -67,7 +67,7 @@ function InteractionService.init()
 		keyText.Size = UDim2.fromScale(1, 1)
 		keyText.BackgroundTransparency = 1
 		keyText.TextColor3 = Color3.new(1, 1, 1)
-		keyText.Text = prompt.KeyboardKeyCode.Name
+		keyText.Text = (prompt.KeyboardKeyCode == Enum.KeyCode.Unknown) and "🖱" or prompt.KeyboardKeyCode.Name
 		keyText.Font = Enum.Font.GothamBold
 		keyText.TextSize = 16
 		keyText.ZIndex = 3

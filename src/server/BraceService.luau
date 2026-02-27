@@ -12,6 +12,11 @@ local notificationEvent = ReplicatedStorage:FindFirstChild("NotificationEvent") 
 notificationEvent.Name = "NotificationEvent"
 notificationEvent.Parent = ReplicatedStorage
 
+-- Setup RemoteEvent for Brace Click Pickup
+local braceTakeEvent = ReplicatedStorage:FindFirstChild("BraceTakeEvent") or Instance.new("RemoteEvent")
+braceTakeEvent.Name = "BraceTakeEvent"
+braceTakeEvent.Parent = ReplicatedStorage
+
 function BraceService.init()
 	print("BraceService: Inizializzazione...")
 	
@@ -190,8 +195,8 @@ function BraceService.setupBrace(brace: Model)
 	takePrompt.ActionText = "Prendi Rustella"
 	takePrompt.ObjectText = "Pronta!"
 	takePrompt.Style = Enum.ProximityPromptStyle.Custom
-	takePrompt.KeyboardKeyCode = Enum.KeyCode.R
-	takePrompt.HoldDuration = 1.2
+	takePrompt.KeyboardKeyCode = Enum.KeyCode.Unknown
+	takePrompt.HoldDuration = 0
 	takePrompt.Enabled = false
 	takePrompt.RequiresLineOfSight = false
 	takePrompt.MaxActivationDistance = Settings.INTERACTION_DISTANCE
@@ -312,6 +317,12 @@ function BraceService.setupBrace(brace: Model)
 	
 	takePrompt.Triggered:Connect(function(player)
 		BraceService.handleTake(brace, player, insertPrompt, takePrompt)
+	end)
+
+	braceTakeEvent.OnServerEvent:Connect(function(player, targetBrace)
+		if targetBrace == brace and takePrompt.Enabled then
+			BraceService.handleTake(brace, player, insertPrompt, takePrompt)
+		end
 	end)
 
 	BraceService.updatePrompts(brace, insertPrompt, takePrompt)
@@ -446,6 +457,22 @@ function BraceService.handleInsert(brace: Model, player: Player, insertPrompt: P
 		brace:SetAttribute("Slot" .. slotIndex .. "_CookedTime", os.clock())
 		BraceService.playSound(insertPrompt.Parent, Settings.SOUNDS.COOKED)
 		BraceService.updatePrompts(brace, insertPrompt, takePrompt)
+
+		-- SelectionBox verde per indicare che la rustella è pronta
+		if slotModel then
+			local existingBox = slotModel:FindFirstChild("ReadyHighlight")
+			if existingBox then
+				existingBox:Destroy()
+			end
+			local box = Instance.new("SelectionBox")
+			box.Name = "ReadyHighlight"
+			box.Color3 = Color3.fromRGB(0, 255, 80)
+			box.LineThickness = 0.05
+			box.SurfaceTransparency = 0.7
+			box.SurfaceColor3 = Color3.fromRGB(0, 255, 80)
+			box.Adornee = slotModel
+			box.Parent = slotModel
+		end
 		
 		-- Gradual Burning Transition (Lerp to Black)
 		local burnStart = os.clock()
@@ -474,6 +501,12 @@ function BraceService.handleInsert(brace: Model, player: Player, insertPrompt: P
 					if p:IsA("BasePart") and p.Name ~= "stecca" then
 						p.Color = Settings.BURNT_COLOR
 					end
+				end
+				-- SelectionBox rossa per segnalare che è bruciata
+				local box = slotModel:FindFirstChild("ReadyHighlight")
+				if box and box:IsA("SelectionBox") then
+					box.Color3 = Color3.fromRGB(255, 60, 0)
+					box.SurfaceColor3 = Color3.fromRGB(255, 60, 0)
 				end
 			end
 			BraceService.updatePrompts(brace, insertPrompt, takePrompt)
@@ -523,6 +556,10 @@ function BraceService.handleTake(brace: Model, player: Player, insertPrompt: Pro
 		handle.Parent = tool
 		
 		local visualClone = rOriginal:Clone()
+		local clonedBox = visualClone:FindFirstChild("ReadyHighlight")
+		if clonedBox then
+			clonedBox:Destroy()
+		end
 		visualClone.Name = "Visual"
 		if visualClone:IsA("Model") then
 			visualClone:PivotTo(handle.CFrame * CFrame.Angles(0, math.rad(90), 0))
@@ -566,9 +603,13 @@ function BraceService.handleTake(brace: Model, player: Player, insertPrompt: Pro
 	brace:SetAttribute("Slot" .. targetSlot .. "_Salted", false)
 	local slotModel = rustelleModel and rustelleModel:FindFirstChild("rustell" .. targetSlot)
 	if slotModel then
+		local box = slotModel:FindFirstChild("ReadyHighlight")
+		if box then
+			box:Destroy()
+		end
 		for _, p in slotModel:GetDescendants() do
-			if p:IsA("BasePart") then 
-				p.Transparency = 1 
+			if p:IsA("BasePart") then
+				p.Transparency = 1
 			end
 		end
 	end

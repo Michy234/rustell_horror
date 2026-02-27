@@ -89,6 +89,35 @@ if DogClickEvent then
 	end)
 end
 
+-- BRACE CLICK DETECTION (click per prendere rustella)
+local BraceTakeEvent = ReplicatedStorage:WaitForChild("BraceTakeEvent", 10)
+
+if BraceTakeEvent then
+	mouse.Button1Down:Connect(function()
+		local target = mouse.Target
+		if not target then return end
+		local model = target:FindFirstAncestorOfClass("Model")
+		if not model then return end
+
+		local lowerName = string.lower(model.Name)
+		local isBrace = model.Name == "Brace" or model.Name == "brace"
+			or string.find(lowerName, "brace") ~= nil or string.find(lowerName, "braciere") ~= nil
+		if not isBrace then return end
+
+		local takePrompt = model:FindFirstChild("TakePrompt", true)
+		if not takePrompt or not (takePrompt :: ProximityPrompt).Enabled then return end
+
+		local character = player.Character
+		if not character then return end
+		local hrp = character:FindFirstChild("HumanoidRootPart")
+		local primaryPart = model.PrimaryPart
+		if not hrp or not primaryPart then return end
+		if (hrp.Position - primaryPart.Position).Magnitude > Settings.INTERACTION_DISTANCE then return end
+
+		BraceTakeEvent:FireServer(model)
+	end)
+end
+
 -- ============================================================
 -- RAIN VISUALS
 -- ============================================================
