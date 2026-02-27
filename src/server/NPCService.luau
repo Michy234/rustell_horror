@@ -272,105 +272,270 @@ function NPCService.setupNPC(npc: Model)
 	end)
 
 	-- Proximity Prompt
-	local rootPart = npc.PrimaryPart or npc:FindFirstChild("HumanoidRootPart")
-	if rootPart then
+	local npcRootPart = npc.PrimaryPart or npc:FindFirstChild("HumanoidRootPart")
+	if npcRootPart then
 		local prompt = Instance.new("ProximityPrompt")
 		prompt.ActionText = "Dai Rustella"
 		prompt.ObjectText = npc.Name
 		prompt.Style = Enum.ProximityPromptStyle.Custom
 		prompt.MaxActivationDistance = 25
 		prompt.RequiresLineOfSight = false
-		prompt.Parent = rootPart
+		prompt.Parent = npcRootPart
 		prompt.Triggered:Connect(function(player)
 			NPCService.handleInteraction(npc, player, prompt)
 		end)
 	end
 	
-	-- Movement Loop
+	-- Movement Loop (with obstacle avoidance)
 	task.spawn(function()
 		local PathfindingService = game:GetService("PathfindingService")
-		while npc.Parent and not npc:GetAttribute("IsDead") do
-			if game:GetAttribute("GameStarted") and not npc:GetAttribute("IsEating") then
-				local targetBrace = NPCService.findNearestBrace(npc:GetPivot().Position)
-				local goalPos = nil
-				
-				if targetBrace then
-					local center = targetBrace:GetPivot().Position
-					-- Try multiple times to find a spot well away from ALL braces
-					for _ = 1, 8 do
-						local angle = math.random() * math.pi * 2
-						local dist = math.random(35, Settings.NPC_WALK_RADIUS)
-						local testPos = center + Vector3.new(math.cos(angle) * dist, 0, math.sin(angle) * dist)
-						
-						-- Must be at least 35 studs from ANY brace
-						local tooClose = false
-						for _, b in Workspace:GetDescendants() do
-							if b:IsA("Model") and b.Name:lower():match("brace") then
-								if (b:GetPivot().Position - testPos).Magnitude < 35 then
-									tooClose = true
-									break
-								end
-							end
-						end
-						
-						if not tooClose then
-							goalPos = testPos
-							break
-						end
+
+		-- Cache: collect all brace positions (refreshed each cycle)
+		local function getBracePositions(): {Vector3}
+			local positions = {}
+			for _, obj in Workspace:GetDescendants() do
+				if obj:IsA("Model") and obj.Name:lower():match("brace") then
+					local pp = obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart", true)
+					if pp then
+						table.insert(positions, pp.Position)
 					end
 				end
-				
-				-- Fallback random movement if no good spot found
-				if not goalPos then
-					local angle = math.random() * math.pi * 2
-					local dist = math.random(10, 30)
-					goalPos = npc:GetPivot().Position + Vector3.new(math.cos(angle) * dist, 0, math.sin(angle) * dist)
-				end
+			end
+			return positions
+		end
 
-				if goalPos then
-					local path = PathfindingService:CreatePath({
-						AgentRadius = 4,
-						AgentHeight = 6,
-						AgentCanJump = false,
-					})
-					path:ComputeAsync(npc:GetPivot().Position, goalPos)
-					if path.Status == Enum.PathStatus.Success then
-						for _, waypoint in path:GetWaypoints() do
-							if not game:GetAttribute("GameStarted") or npc:GetAttribute("IsEating") or npc:GetAttribute("IsDead") then 
-								break 
-							end
-							
-							-- Skip waypoints too close to any brace
-							local waypointTooClose = false
-							for _, b in Workspace:GetDescendants() do
-								if b:IsA("Model") and b.Name:lower():match("brace") then
-									if (b:GetPivot().Position - waypoint.Position).Magnitude < 20 then
-										waypointTooClose = true
-										break
-									end
-								end
-							end
-							if waypointTooClose then continue end
-							
-							humanoid:MoveTo(waypoint.Position)
-							
-							local reached = false
-							local conn = humanoid.MoveToFinished:Connect(function() reached = true end)
-							
-							local t = 0
-							while t < 1.0 and not reached do
-								t += task.wait(0.1)
-								if (npc:GetPivot().Position - waypoint.Position).Magnitude < 4 then
-									reached = true
-								end
-							end
-							if conn then conn:Disconnect() end
-							task.wait(0.05)
+		-- Check if a position is too close to any brace
+		local function isTooCloseToBrace(pos: Vector3, bracePositions: {Vector3}, minDist: number): boolean
+			for _, bp in bracePositions do
+				if (Vector3.new(pos.X, bp.Y, pos.Z) - bp).Magnitude < minDist then
+					return true
+				end
+			end
+			return false
+		end
+
+		-- Get other NPC positions for separation
+		local function getOtherNPCPositions(): {Vector3}
+			local positions = {}
+			for _, obj in Workspace:GetDescendants() do
+				if obj:IsA("Model") and obj ~= npc and obj.Name:lower():match("npc") then
+					if obj:FindFirstChildOfClass("Humanoid") and not obj:GetAttribute("IsDead") then
+						local pp = obj.PrimaryPart or obj:FindFirstChild("HumanoidRootPart")
+						if pp then
+							table.insert(positions, pp.Position)
 						end
 					end
 				end
 			end
-			task.wait(math.random(4, 9))
+			return positions
+		end
+
+		-- Compute separation vector (steer away from nearby NPCs)
+		local function computeSeparation(pos: Vector3): Vector3
+			local sepRadius = Settings.NPC_SEPARATION_RADIUS or 6
+			local steer = Vector3.zero
+			local count = 0
+			for _, otherPos in getOtherNPCPositions() do
+				local diff = pos - otherPos
+				local dist = diff.Magnitude
+				if dist > 0.1 and dist < sepRadius then
+					-- Weight inversely by distance (closer = stronger push)
+					steer = steer + diff.Unit * (1 - dist / sepRadius)
+					count += 1
+				end
+			end
+			if count > 0 then
+				steer = steer / count
+				-- Cap separation offset to avoid huge jumps
+				if steer.Magnitude > 4 then
+					steer = steer.Unit * 4
+				end
+			end
+			return steer
+		end
+
+		-- Raycast forward to detect obstacles
+		local function isObstacleAhead(rp: BasePart): boolean
+			local rayDist = Settings.NPC_OBSTACLE_RAYCAST_DISTANCE or 8
+			local direction = rp.CFrame.LookVector * rayDist
+
+			local params = RaycastParams.new()
+			params.FilterType = Enum.RaycastFilterType.Exclude
+			-- Exclude the NPC itself from raycast
+			params.FilterDescendantsInstances = {npc}
+
+			local result = Workspace:Raycast(rp.Position, direction, params)
+			if result then
+				local hitPart = result.Instance
+				-- Check if it's a brace or another NPC
+				local hitModel = hitPart:FindFirstAncestorWhichIsA("Model")
+				if hitModel then
+					local hitName = hitModel.Name:lower()
+					if hitName:match("brace") or hitName:match("npc") or hitName:match("salt") then
+						return true
+					end
+				end
+				-- Also flag if we're very close to any solid obstacle (< 3 studs)
+				if result.Distance < 3 then
+					return true
+				end
+			end
+			return false
+		end
+
+		-- Pick a safe goal position far from braces and other NPCs
+		local function pickSafeGoal(): Vector3?
+			local bracePositions = getBracePositions()
+			local avoidRadius = Settings.NPC_BRACE_AVOID_RADIUS or 15
+			local walkRadius = Settings.NPC_WALK_RADIUS or 50
+			local npcPos = npc:GetPivot().Position
+
+			-- Try up to 12 random positions
+			for _ = 1, 12 do
+				local angle = math.random() * math.pi * 2
+				local dist = math.random(15, walkRadius)
+				local testPos = npcPos + Vector3.new(math.cos(angle) * dist, 0, math.sin(angle) * dist)
+
+				if not isTooCloseToBrace(testPos, bracePositions, avoidRadius) then
+					return testPos
+				end
+			end
+
+			-- Fallback: move directly AWAY from the nearest brace
+			if #bracePositions > 0 then
+				local nearestBracePos = bracePositions[1]
+				local minDist = math.huge
+				for _, bp in bracePositions do
+					local d = (npcPos - bp).Magnitude
+					if d < minDist then
+						minDist = d
+						nearestBracePos = bp
+					end
+				end
+				local awayDir = (npcPos - nearestBracePos)
+				if awayDir.Magnitude > 0.1 then
+					awayDir = Vector3.new(awayDir.X, 0, awayDir.Z).Unit
+				else
+					awayDir = Vector3.new(1, 0, 0)
+				end
+				return npcPos + awayDir * 25
+			end
+
+			-- Absolute fallback
+			return npcPos + Vector3.new(math.random(-20, 20), 0, math.random(-20, 20))
+		end
+
+		local rootPart = npcRootPart
+
+		while npc.Parent and not npc:GetAttribute("IsDead") do
+			if game:GetAttribute("GameStarted") and not npc:GetAttribute("IsEating") then
+				local goalPos = pickSafeGoal()
+
+				if goalPos and rootPart then
+					local path = PathfindingService:CreatePath({
+						AgentRadius = 4,
+						AgentHeight = 6,
+						AgentCanJump = false,
+						Costs = {
+							Obstacle = math.huge, -- avoid tagged obstacles
+						},
+					})
+					
+					local ok, _ = pcall(function()
+						path:ComputeAsync(rootPart.Position, goalPos)
+					end)
+
+					if ok and path.Status == Enum.PathStatus.Success then
+						local bracePositions = getBracePositions()
+						local avoidRadius = Settings.NPC_BRACE_AVOID_RADIUS or 15
+
+						for _, waypoint in path:GetWaypoints() do
+							-- Bail on state changes
+							if not npc.Parent or npc:GetAttribute("IsDead") then break end
+							if not game:GetAttribute("GameStarted") then break end
+							if npc:GetAttribute("IsEating") then break end
+
+							-- Skip waypoints too close to braces
+							if isTooCloseToBrace(waypoint.Position, bracePositions, avoidRadius) then
+								-- Instead of just skipping (which breaks the path),
+								-- compute a detour point away from the brace
+								local detour = waypoint.Position
+								for _, bp in bracePositions do
+									local diff = waypoint.Position - bp
+									if diff.Magnitude < avoidRadius and diff.Magnitude > 0.1 then
+										detour = bp + Vector3.new(diff.X, 0, diff.Z).Unit * (avoidRadius + 3)
+									end
+								end
+								humanoid:MoveTo(detour)
+								humanoid.MoveToFinished:Wait()
+								continue
+							end
+
+							-- Real-time obstacle check via raycast
+							if isObstacleAhead(rootPart) then
+								-- Obstacle detected — steer sideways and break to recompute
+								local rightDir = rootPart.CFrame.RightVector
+								humanoid:MoveTo(rootPart.Position + rightDir * 8)
+								task.wait(0.8)
+								break
+							end
+
+							-- Apply NPC separation steering
+							local sep = computeSeparation(rootPart.Position)
+							local adjustedTarget = waypoint.Position + Vector3.new(sep.X, 0, sep.Z)
+							-- Make sure the adjusted target isn't itself near a brace
+							if isTooCloseToBrace(adjustedTarget, bracePositions, avoidRadius) then
+								adjustedTarget = waypoint.Position
+							end
+
+							humanoid:MoveTo(adjustedTarget)
+
+							-- Wait for movement with stuck detection
+							local stuckTimeout = Settings.NPC_STUCK_TIMEOUT or 3
+							local startPos = rootPart.Position
+							local elapsed = 0
+							local reached = false
+
+							local conn = humanoid.MoveToFinished:Connect(function()
+								reached = true
+							end)
+
+							while elapsed < stuckTimeout and not reached do
+								local dt = task.wait(0.15)
+								elapsed += dt
+
+								-- Check if we arrived close enough
+								if (rootPart.Position - adjustedTarget).Magnitude < 4 then
+									reached = true
+									break
+								end
+
+								-- Bail on state changes
+								if not npc.Parent or npc:GetAttribute("IsDead") then break end
+								if npc:GetAttribute("IsEating") then break end
+
+								-- Mid-move raycast check
+								if isObstacleAhead(rootPart) then
+									break
+								end
+							end
+
+							conn:Disconnect()
+
+							-- Stuck detection: if we barely moved, break and recompute
+							if not reached and (rootPart.Position - startPos).Magnitude < 1 then
+								-- NPC is stuck — force a sidestep
+								local sideDir = rootPart.CFrame.RightVector * (math.random() > 0.5 and 1 or -1)
+								humanoid:MoveTo(rootPart.Position + sideDir * 10)
+								task.wait(1)
+								break
+							end
+						end
+					end
+				end
+			end
+			-- Idle wait between movement cycles
+			task.wait(math.random(3, 7))
 		end
 	end)
 end

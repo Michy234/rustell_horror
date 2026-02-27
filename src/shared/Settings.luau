@@ -85,4 +85,10 @@ Settings.COAL_DURATION = 40     -- Seconds coal burns before brace goes out
 -- Salt Settings
 Settings.SALT_SOUND_ID = "rbxassetid://6042053626"  -- shaker SFX (swap if needed)
 
+-- NPC Obstacle Avoidance
+Settings.NPC_OBSTACLE_RAYCAST_DISTANCE = 8    -- Studs di previsione ostacoli (raycast forward)
+Settings.NPC_BRACE_AVOID_RADIUS = 15          -- Raggio minimo dalla brace durante il cammino
+Settings.NPC_SEPARATION_RADIUS = 6            -- Raggio separazione tra NPC (steering)
+Settings.NPC_STUCK_TIMEOUT = 3                -- Secondi prima di considerare l'NPC bloccato
+
 return Settings

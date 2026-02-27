@@ -119,7 +119,7 @@ function BraceService.setupBrace(brace: Model)
 	
 	-- Initial State
 	brace:SetAttribute("HasCoal", false)
-	brace:SetAttribute("SaltActive", false)   -- salt state for the whole brace
+
 	for i = 1, 4 do
 		brace:SetAttribute("Slot" .. i .. "_Status", Settings.STATUS.EMPTY)
 		brace:SetAttribute("Slot" .. i .. "_StartTime", 0)
@@ -655,29 +655,6 @@ function BraceService.resetBrace(brace: Model)
 	print("BraceService: [RESET] Brace reset -> " .. brace.Name)
 end
 
--- PUBLIC API: Called by SaltService when the player interacts with the Salt model.
--- Marks every non-empty slot in the brace as salted and adds a subtle white tint.
-function BraceService.applySalt(brace: Model)
-	brace:SetAttribute("SaltActive", true)
-	local rustelleModel = brace:FindFirstChild("Model") :: Model
-	for i = 1, 4 do
-		local status = brace:GetAttribute("Slot" .. i .. "_Status")
-		if status ~= nil and status ~= Settings.STATUS.EMPTY then
-			brace:SetAttribute("Slot" .. i .. "_Salted", true)
-			-- Visual: lighten the meat colour slightly
-			if rustelleModel then
-				local slot = rustelleModel:FindFirstChild("rustell" .. i)
-				if slot then
-					for _, p in slot:GetDescendants() do
-						if p:IsA("BasePart") and p.Name ~= "stecca" then
-							p.Color = p.Color:Lerp(Color3.new(1, 1, 1), 0.2)
-						end
-					end
-				end
-			end
-		end
-	end
-	print("[BraceService] Sale applicato a " .. brace.Name)
-end
+
 
 return BraceService
