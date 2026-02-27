@@ -997,6 +997,8 @@ function MenuService.init()
 		game:SetAttribute("GameStarted", false)
 		lockMovement(true)
 
+		local standupSound: Sound? = nil -- Riferimento al suono STANDUP per fermarlo prima del jumpscare
+
 		-- Fade out music
 		bgm = SoundService:FindFirstChild("BackgroundMusic")
 		if bgm and bgm:IsA("Sound") then
@@ -1085,11 +1087,11 @@ function MenuService.init()
 
 				-- 4. Suona SFX del Nonno che si alza
 				if Settings.GRANDPA_STANDUP_ID and Settings.GRANDPA_STANDUP_ID ~= "rbxassetid://0" then
-					local s = Instance.new("Sound")
-					s.SoundId = Settings.GRANDPA_STANDUP_ID
-					s.Volume = (Settings.GRANDPA_STANDUP_VOLUME :: number?) or 3.0
-					s.Parent = workspace.CurrentCamera
-					s:Play()
+					standupSound = Instance.new("Sound")
+					standupSound.SoundId = Settings.GRANDPA_STANDUP_ID
+					standupSound.Volume = (Settings.GRANDPA_STANDUP_VOLUME :: number?) or 3.0
+					standupSound.Parent = workspace.CurrentCamera
+					standupSound:Play()
 				end
 
 				jumpTween:Play()
@@ -1111,12 +1113,42 @@ function MenuService.init()
 		jumpscareImage.ImageTransparency = 0
 		jumpscareOverlay.Visible = true
 
+		-- ── Flash bianco ─────────────────────────────────────────────────────
+		local flashFrame = Instance.new("Frame")
+		flashFrame.Name = "JumpscareFlash"
+		flashFrame.Size = UDim2.fromScale(1, 1)
+		flashFrame.BackgroundColor3 = Color3.new(1, 1, 1)
+		flashFrame.BackgroundTransparency = 0
+		flashFrame.BorderSizePixel = 0
+		flashFrame.ZIndex = 60000 -- Sopra il jumpscare overlay (50001)
+		flashFrame.Parent = screenGui
+		TweenService:Create(flashFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+			BackgroundTransparency = 1
+		}):Play()
+		task.delay(0.5, function() flashFrame:Destroy() end)
+
+		-- Ferma STANDUP quando il flash ha finito il fade-out (0.35s) + 0.3s extra
+		task.delay(0.65, function()
+			if standupSound then
+				standupSound:Stop()
+				standupSound:Destroy()
+				standupSound = nil
+			end
+		end)
+
 		local scarySound = Instance.new("Sound")
-		scarySound.SoundId = "rbxassetid://8395374561"
-		scarySound.Volume = 5
-		scarySound.PlaybackSpeed = 0.5
+		scarySound.SoundId = Settings.SOUNDS.JUMPSCARE
+		scarySound.Volume = 10
+		scarySound.PlaybackSpeed = 1
 		scarySound.Parent = SoundService
 		scarySound:Play()
+
+		local interventionSound = Instance.new("Sound")
+		interventionSound.SoundId = "rbxassetid://5033272182"
+		interventionSound.Volume = 10
+		interventionSound.PlaybackSpeed = 1
+		interventionSound.Parent = SoundService
+		interventionSound:Play()
 
 		-- Ripristina camera
 		camera.CameraType = Enum.CameraType.Custom
@@ -1124,6 +1156,7 @@ function MenuService.init()
 		task.wait(3)
 		jumpscareOverlay.Visible = false
 		scarySound:Destroy()
+		interventionSound:Destroy()
 
 		-- Restore BGM volume for next game
 		if bgm and bgm:IsA("Sound") then

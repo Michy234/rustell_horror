@@ -51,6 +51,7 @@ Settings.SOUNDS = {
 	NOTIFY = "rbxassetid://452267918", -- Pop/Notify
 	WOAH = "rbxassetid://292117557", -- Surprise/Woah sound
 	CHOMP = "rbxassetid://6748255118", -- Eating sound
+	JUMPSCARE = "rbxassetid://18962645622", -- Jumpscare sound
 }
 
 Settings.BG_MUSIC = {
@@ -94,11 +95,11 @@ Settings.NPC_TRACKER_DISTANCE = 0            -- Distanza (studs) per mostrare la
 
 -- Grandpa Settings
 Settings.GRANDPA_SNORE_ID      = "rbxassetid://9089200372"   -- Man Snoring
-Settings.GRANDPA_MUMBLE_ID     = "rbxassetid://98603528164103"  -- Grumbling
-Settings.GRANDPA_STANDUP_ID    = "rbxassetid://135527140272616"  -- AR'VATTEN A LA CAS AVAST A FATIJA          -- TODO: SFX nonno si alza (grido)
+Settings.GRANDPA_MUMBLE_ID     = "rbxassetid://78130144655014"  -- Grumbling
+Settings.GRANDPA_STANDUP_ID    = "rbxassetid://130997049167293" -- rbxassetid://120879596473792 per torino, lascia stare gemini..  -- AR'VATTEN A LA CAS AVAST A FATIJA          -- TODO: SFX nonno si alza (grido)
 Settings.GRANDPA_WAKEUP_NPCS   = 2                           -- NPC rimanenti per svegliare il nonno
-Settings.GRANDPA_MUMBLE_VOLUME  = 1.5                         -- Volume del mormorio (fase 2)
-Settings.GRANDPA_STANDUP_VOLUME = 500.0                         -- Volume urlo fase 3 (jumpscare)
+Settings.GRANDPA_MUMBLE_VOLUME  = 10                      -- Volume del mormorio (fase 2)
+Settings.GRANDPA_STANDUP_VOLUME = 1000.0                         -- Volume urlo fase 3 (jumpscare)
 -- Facce del Nonno — usa le texture ID REALI (non gli ID wrapper del catalogo)
 Settings.GRANDPA_FACE_SLEEPING = "rbxassetid://15637705"   -- occhi chiusi (wrapper era 15637848)
 Settings.GRANDPA_FACE_AWAKE    = "rbxassetid://66329524"   -- occhi aperti (wrapper era 66330106)
