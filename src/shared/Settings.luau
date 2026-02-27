@@ -19,10 +19,10 @@ Settings.COOKING_TIME = 10 -- Seconds
 Settings.INTERACTION_DISTANCE = 8
 Settings.RAW_COLOR = Color3.fromRGB(255, 170, 170) -- Brighter Pink/Rosaceo
 
-Settings.NPC_HOLD_TIME = 2 -- Seconds they hold the rustella before eating
+Settings.NPC_HOLD_TIME = 1 -- Seconds they hold the rustella before eating
 Settings.NPC_WALK_RADIUS = 50 -- Large spread for NPCs
 Settings.NPC_MIN_DISTANCE = 20 -- Stay far from brace
-Settings.NPC_IDLE_TIME = 5 -- Seconds between moves (less hyperactive)
+Settings.NPC_IDLE_TIME = 3 -- Seconds between moves (less hyperactive)
 
 Settings.DEATH_SOUND_ID = "rbxassetid://1973317014"
 Settings.DEATH_VOLUME = 0.8
@@ -36,13 +36,13 @@ Settings.NOTIFY_DURATION_BASE = 1.5
 Settings.NOTIFY_CHAR_MULTIPLIER = 0.05 -- Seconds per character extra
 
 Settings.BURNT_FEED_SOUND = "rbxassetid://8819900535"
-Settings.BURNT_PENALTY = 20 -- Hunger points lost
+Settings.BURNT_PENALTY = 12 -- Hunger points lost
 
-Settings.BURNING_TIME = 8 -- Seconds after cooked until it burns
+Settings.BURNING_TIME = 12 -- Seconds after cooked until it burns
 Settings.BURNT_COLOR = Color3.fromRGB(30, 30, 30) -- Black/Burnt
 
 Settings.HUNGER_DECAY_RATE = 1 -- Percentage points per second (BASE)
-Settings.FEED_RESTORE_AMOUNT = 35 -- Amount of hunger restored per feed
+Settings.FEED_RESTORE_AMOUNT = 30 -- Amount of hunger restored per feed
 
 Settings.SOUNDS = {
 	INSERT = "rbxassetid://147722227", -- Kick sound
@@ -63,7 +63,9 @@ Settings.WIN_TIME = 300 -- 5 minutes
 Settings.WIN_SOUND_ID = "rbxassetid://356817586"
 Settings.DOG_SOUND_ID = "rbxassetid://9097860409"
 Settings.DOG_WALK_SOUND_ID = "rbxassetid://7676505509"
-Settings.DOG_SPAWN_INTERVAL = 65 -- Seconds (increased to follow user request)
+Settings.DOG_CLICKS_MIN = 10
+Settings.DOG_CLICKS_MAX = 30
+Settings.DOG_SPAWN_INTERVAL = 45 -- Seconds (increased to follow user request)
 
 Settings.ADMINS = {
 	"Michy234", -- User's potential name
@@ -72,7 +74,7 @@ Settings.ADMINS = {
 }
 
 -- Rain Malus Settings
-Settings.RAIN_INTERVAL = 150    -- Seconds between rain checks
+Settings.RAIN_INTERVAL = 100   -- Seconds between rain checks
 Settings.RAIN_CHANCE = 0.4      -- 40% chance per interval
 Settings.RAIN_DURATION = 10     -- Seconds rain lasts
 Settings.RAIN_SOUND_ID = "rbxassetid://237985445"

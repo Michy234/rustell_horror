@@ -52,7 +52,9 @@ function AdminService.handleCommand(player: Player, message: string)
 		
 	elseif cmd == ":dog" then
 		print("[ADMIN] " .. player.Name .. " triggered DOG")
-		DogService.spawnDog(false)
+		task.spawn(function()
+			DogService.spawnDog(false)
+		end)
 		
 	elseif cmd == ":reset" then
 		print("[ADMIN] " .. player.Name .. " triggered RESET")

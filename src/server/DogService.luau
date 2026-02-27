@@ -37,7 +37,18 @@ end
 local isMoving = false
 local dogChased = false
 local clickCount = 0
-local CLICKS_TO_CHASE = 20  -- computed dynamically per trip, default 20
+local CLICKS_TO_CHASE = Settings.DOG_CLICKS_MIN or 20
+
+-- Watch for game stop/reset: force-unlock isMoving so :dog works again next round
+game:GetAttributeChangedSignal("GameStarted"):Connect(function()
+	if not game:GetAttribute("GameStarted") then
+		-- Game stopped — abort any running dog sequence
+		dogChased = true   -- breaks movement loops inside spawnDog
+		isMoving = false   -- allows spawnDog to be called again
+		print("[DogService] GameStarted=false → isMoving reset.")
+	end
+end)
+
 
 -- Create/Get RemoteEvent for dog clicks
 local DogClickEvent = ReplicatedStorage:FindFirstChild("DogClickEvent")
@@ -260,7 +271,9 @@ function DogService.spawnDog(isAuto: boolean?)
 		local remaining = Workspace:GetAttribute("GameRemainingTime") or 300
 		local winTime = Settings.WIN_TIME or 300
 		local t = math.clamp(remaining / winTime, 0, 1) -- 1 = full time, 0 = no time
-		CLICKS_TO_CHASE = math.floor(20 + (1 - t) * 20)
+		local minClicks = Settings.DOG_CLICKS_MIN or 20
+		local maxClicks = Settings.DOG_CLICKS_MAX or 40
+		CLICKS_TO_CHASE = math.floor(minClicks + (1 - t) * (maxClicks - minClicks))
 	end
 	
 	-- Server-side click listener (valid only for this trip)
@@ -291,9 +304,16 @@ function DogService.spawnDog(isAuto: boolean?)
 			end
 		end
 		
-		if not hasMeat then 
-			isMoving = false
-			return 
+		print("[DogService] spawnDog: hasMeat=" .. tostring(hasMeat) .. " braces=" .. #allBraces .. " isAuto=" .. tostring(isAuto))
+		if not hasMeat then
+			if isAuto then
+				-- Auto spawn aborted: nothing to steal
+				print("[DogService] Auto spawn aborted: no meat in any brace.")
+				isMoving = false
+				return
+			end
+			-- Manual :dog command: walk to brace anyway (for testing / scary effect)
+			print("[DogService] Manual call: walking to brace even with no meat.")
 		end
 
 		local rootPart = dog.PrimaryPart

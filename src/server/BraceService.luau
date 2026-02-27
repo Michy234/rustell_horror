@@ -226,10 +226,9 @@ function BraceService.setupBrace(brace: Model)
 						fireObj.Rate = ratio * maxRate
 						fireObj.Enabled = ratio > 0
 					elseif fireObj:IsA("Fire") then
-						-- Calibrated values: Size 2 (off) to 4 (on), Heat 0.8 - 1.7 based on ratio
-						-- Fire scales with remaining coal: Size 1.5-4.5, Heat 3-9
-						fireObj.Size = 1.5 + (ratio * 3.0)
-						fireObj.Heat = 3 + (ratio * 6)
+						-- Ridotto: Size 1.0-3.5 (era 1.5-4.5), Heat 2-7
+						fireObj.Size = 1.0 + (ratio * 2.5)
+						fireObj.Heat = 2 + (ratio * 5)
 						fireObj.Enabled = ratio > 0.02
 						if elapsed % 5 < 0.5 then
 							print(string.format("[DEBUG] Fire - Ratio: %.2f, Size: %.1f, Heat: %.1f", ratio, fireObj.Size, fireObj.Heat))
@@ -298,10 +297,10 @@ function BraceService.setupBrace(brace: Model)
 						fireObj:SetAttribute("OriginalRate", targetRate)
 					end)
 				elseif fireObj:IsA("Fire") then
-					fireObj.Size = 4.5
-					fireObj.Heat = 9
+					fireObj.Size = 3.0   -- ridotto da 4.5
+					fireObj.Heat = 7
 					fireObj.Enabled = true
-					print("[DEBUG] Fire activated (Size 4.5, Heat 9)")
+					print("[DEBUG] Fire activated (Size 3.0, Heat 7)")
 				end
 			end
 			startCoalTimer()

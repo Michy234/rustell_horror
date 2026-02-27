@@ -47,15 +47,15 @@ local function extinguishBrace(brace: Model)
 				fireObj.Enabled = false
 				fireObj.Rate = 0
 			elseif fireObj:IsA("Fire") then
-				-- Fade from full (Size 15, Heat 12) to off (Size 5, Heat 5)
+				-- Fade from new max (Size 3.0, Heat 7) to off (Size 1, Heat 2)
 				for i = 20, 0, -1 do
 					local r = i / 20
-					fireObj.Size = 5 + (r * 10)
-					fireObj.Heat = 5 + (r * 7)
+					fireObj.Size = 1 + (r * 2.0)
+					fireObj.Heat = 2 + (r * 5)
 					task.wait(0.06)
 				end
-				fireObj.Size = 3
-				fireObj.Heat = 3
+				fireObj.Size = 1
+				fireObj.Heat = 2
 				fireObj.Enabled = false
 				print("[DEBUG] Rain extinguishment complete.")
 			end

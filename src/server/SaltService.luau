@@ -7,9 +7,7 @@ local BraceService = require(script.Parent:WaitForChild("BraceService"))
 
 local SaltService = {}
 
--- Sound played when salt is applied (shaker-style)
--- Using a generic shaker sfx; user can swap the ID in Settings.
-local SALT_SOUND_ID  = Settings.SALT_SOUND_ID or "rbxassetid://6042053626"
+local SALT_SOUND_ID = Settings.SALT_SOUND_ID or "rbxassetid://6042053626"
 
 local function playSaltSound(parent: BasePart)
 	local s = Instance.new("Sound")
@@ -31,8 +29,21 @@ local function getAllBraces(): {Model}
 	return braces
 end
 
+-- Returns true if any brace has at least one non-empty slot
+local function anyBraceHasMeat(): boolean
+	for _, obj in Workspace:GetDescendants() do
+		if obj:IsA("Model") and obj.Name:lower():find("brace") then
+			for i = 1, 4 do
+				if obj:GetAttribute("Slot" .. i .. "_Status") ~= Settings.STATUS.EMPTY then
+					return true
+				end
+			end
+		end
+	end
+	return false
+end
+
 function SaltService.init()
-	-- Wait up to 10 seconds for the Salt model to appear in Workspace
 	local saltModel: Model? = Workspace:FindFirstChild("Salt") :: Model?
 	if not saltModel then
 		task.spawn(function()
@@ -53,10 +64,9 @@ function SaltService.init()
 end
 
 function SaltService.setupSalt(saltModel: Model)
-	-- Find a BasePart to attach the prompt to (PrimaryPart preferred)
 	local root = saltModel.PrimaryPart or saltModel:FindFirstChildWhichIsA("BasePart", true)
 	if not root then
-		warn("[SaltService] Salt model non ha BasePart, impossibile aggiungere ProximityPrompt.")
+		warn("[SaltService] Salt model non ha BasePart.")
 		return
 	end
 
@@ -66,39 +76,47 @@ function SaltService.setupSalt(saltModel: Model)
 	end
 
 	local prompt = Instance.new("ProximityPrompt")
-	prompt.ActionText       = "Aggiungi Sale"
-	prompt.ObjectText       = "Sale"
-	prompt.Style            = Enum.ProximityPromptStyle.Custom   -- picked up by InteractionService
-	prompt.KeyboardKeyCode  = Enum.KeyCode.E
-	prompt.HoldDuration     = 0.5
+	prompt.ActionText          = "Aggiungi Sale"
+	prompt.ObjectText          = "Sale  [F]"
+	prompt.Style               = Enum.ProximityPromptStyle.Custom
+	prompt.KeyboardKeyCode     = Enum.KeyCode.F   -- F, separato da E (carbone/rustella)
+	prompt.HoldDuration        = 0.8
 	prompt.RequiresLineOfSight = false
 	prompt.MaxActivationDistance = 8
+	prompt.Enabled = false   -- abilitato solo se c'è carne sulla brace
 	prompt.Parent = root
 
+	-- Watcher: abilita il prompt solo quando c'è carne e non è già stato usato
+	task.spawn(function()
+		while prompt.Parent do
+			if anyBraceHasMeat() then
+				prompt.Enabled = true
+			else
+				prompt.Enabled = false
+			end
+			task.wait(0.5)
+		end
+	end)
+
 	prompt.Triggered:Connect(function(player: Player)
-		-- One-shot: disable immediately so it can't be spammed
+		-- Removed SaltUsed setting to allow reusability
 		prompt.Enabled = false
 
-		-- Play the salt shaker SFX
 		playSaltSound(root)
 
-		-- Notify the player
 		local notifEv = ReplicatedStorage:FindFirstChild("NotificationEvent")
 		if notifEv then
 			notifEv:FireClient(player, "🧂 Sale aggiunto alle rustelle!")
 		end
 
-		-- Apply salt to every brace
-		local braces = getAllBraces()
-		for _, brace in braces do
+		for _, brace in getAllBraces() do
 			BraceService.applySalt(brace)
 		end
 
 		print("[SaltService] " .. player.Name .. " ha salato le rustelle.")
-		-- Salt stays consumed — prompt remains disabled permanently until game reset
 	end)
 
-	print("[SaltService] Pronto — prompt sul modello Salt.")
+	print("[SaltService] Pronto — tasto F, attivo solo con rustelle sulla brace.")
 end
 
 return SaltService

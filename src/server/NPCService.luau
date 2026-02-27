@@ -62,6 +62,8 @@ function NPCService.reset()
 	aliveNPCs = 0
 	for _, obj in Workspace:GetDescendants() do
 		if obj:IsA("Model") and (obj:FindFirstChildOfClass("Humanoid") or obj.Name:lower():match("npc")) then
+			-- skip the dog — it has a Humanoid but is managed by DogService
+			if obj.Name:lower():match("dog") then continue end
 			if not game:GetService("Players"):GetPlayerFromCharacter(obj) then
 				obj:Destroy()
 			end
@@ -379,19 +381,27 @@ function NPCService.handleInteraction(npc: Model, player: Player, prompt: Proxim
 	if not char then return end
 
 	-- Check both Character (equipped) and Backpack (in inventory)
+	-- Priority: prefer the currently equipped tool, then Salata > Natural > Burnt
 	local function findRustellaTool()
 		local playerChar = player.Character
-		for _, toolName in {"Rustella Salata", "Rustella Bruciata", "Rustella"} do
-			if playerChar then
+		local bp = player:FindFirstChild("Backpack")
+
+		-- 1. If something is equipped (in character), use it — any rustella type
+		if playerChar then
+			for _, toolName in {"Rustella Salata", "Rustella", "Rustella Bruciata"} do
 				local t = playerChar:FindFirstChild(toolName)
 				if t then return t end
 			end
-			local bp = player:FindFirstChild("Backpack")
-			if bp then
+		end
+
+		-- 2. Nothing equipped — prefer Salata, then Natural, then Burnt from backpack
+		if bp then
+			for _, toolName in {"Rustella Salata", "Rustella", "Rustella Bruciata"} do
 				local t = bp:FindFirstChild(toolName)
 				if t then return t end
 			end
 		end
+
 		return nil
 	end
 	local tool = findRustellaTool()
@@ -482,29 +492,50 @@ function NPCService.createHungerUI(npc: Model)
 	
 	local bgui = Instance.new("BillboardGui", head)
 	bgui.Name = "HungerUI"
-	bgui.Size = UDim2.fromScale(5, 1.5)
+	bgui.Size = UDim2.fromScale(5, 2.5)   -- tall enough for 3 rows
 	bgui.AlwaysOnTop = true
 	bgui.ExtentsOffset = Vector3.new(0, 3, 0)
 	
+	-- ROW 1: Salt preference (top) — direct child of bgui to avoid clipping
+	local saltIcon = Instance.new("TextLabel", bgui)
+	saltIcon.Name = "SaltIcon"
+	saltIcon.Size = UDim2.fromScale(1, 0.3)
+	saltIcon.Position = UDim2.fromScale(0, 0)
+	saltIcon.BackgroundTransparency = 1
+	saltIcon.Font = Enum.Font.LuckiestGuy
+	saltIcon.TextColor3 = Color3.fromRGB(255, 230, 80)
+	saltIcon.TextScaled = true
+	local wantsSalt = npc:GetAttribute("WantsSalted") == true
+	saltIcon.Text = wantsSalt and "🧂 SALATA" or "🍖 NATURALE"
+	local saltStroke = Instance.new("UIStroke")
+	saltStroke.Thickness = 2
+	saltStroke.Parent = saltIcon
+
+	-- ROW 2: NPC name — direct child of bgui
+	local nl = Instance.new("TextLabel", bgui)
+	nl.Name = "NameLabel"
+	nl.Size = UDim2.fromScale(1, 0.3)
+	nl.Position = UDim2.fromScale(0, 0.32)
+	nl.BackgroundTransparency = 1
+	nl.Text = npc.Name
+	nl.Font = Enum.Font.LuckiestGuy
+	nl.TextColor3 = Color3.new(1, 1, 1)
+	nl.TextScaled = true
+	local nameStroke = Instance.new("UIStroke")
+	nameStroke.Thickness = 2
+	nameStroke.Parent = nl
+
+	-- ROW 3: Hunger bar — direct child of bgui
 	local frame = Instance.new("Frame", bgui)
-	frame.Size = UDim2.fromScale(1, 0.4)
-	frame.Position = UDim2.fromScale(0, 0.5)
+	frame.Name = "Frame"
+	frame.Size = UDim2.fromScale(1, 0.2)
+	frame.Position = UDim2.fromScale(0, 0.68)
 	frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 
 	local bar = Instance.new("Frame", frame)
 	bar.Name = "Bar"
 	bar.Size = UDim2.fromScale(1, 1)
 	bar.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
-
-	local nl = Instance.new("TextLabel", frame)
-	nl.Size = UDim2.fromScale(1, 1)
-	nl.Position = UDim2.fromScale(0, -1.2)
-	nl.BackgroundTransparency = 1
-	nl.Text = npc.Name
-	nl.Font = Enum.Font.LuckiestGuy
-	nl.TextColor3 = Color3.new(1, 1, 1)
-	nl.TextScaled = true
-	Instance.new("UIStroke", nl)
 
 	local pl = Instance.new("TextLabel", frame)
 	pl.Name = "Percent"
@@ -514,20 +545,6 @@ function NPCService.createHungerUI(npc: Model)
 	pl.Font = Enum.Font.GothamBold
 	pl.TextColor3 = Color3.new(1, 1, 1)
 	pl.TextScaled = true
-
-	-- Salt preference icon — shown BELOW the hunger bar so it doesn't overlap the name
-	local saltIcon = Instance.new("TextLabel")
-	saltIcon.Name = "SaltIcon"
-	saltIcon.Size = UDim2.fromScale(1, 0.35)
-	saltIcon.Position = UDim2.fromScale(0, 1.05)    -- below the frame (hunger bar)
-	saltIcon.BackgroundTransparency = 1
-	saltIcon.Font = Enum.Font.GothamBold
-	saltIcon.TextColor3 = Color3.fromRGB(255, 245, 180)
-	saltIcon.TextScaled = true
-	saltIcon.Parent = frame
-	Instance.new("UIStroke", saltIcon)
-	local wantsSalt = npc:GetAttribute("WantsSalted") == true
-	saltIcon.Text = wantsSalt and "🧂 SALATA" or "🍖 NATURALE"
 end
 
 function NPCService.updateHungerUI(npc: Model, hunger: number)
@@ -535,8 +552,9 @@ function NPCService.updateHungerUI(npc: Model, hunger: number)
 	if not head then return end
 	local bgui = head:FindFirstChild("HungerUI")
 	if bgui then
-		local bar = bgui.Frame:FindFirstChild("Bar")
-		local text = bgui.Frame:FindFirstChild("Percent")
+		local hungerFrame = bgui:FindFirstChild("Frame")
+		local bar = hungerFrame and hungerFrame:FindFirstChild("Bar")
+		local text = hungerFrame and hungerFrame:FindFirstChild("Percent")
 		if bar and text then
 			local p = hunger/100
 			bar.Size = UDim2.fromScale(p, 1)
@@ -551,9 +569,8 @@ function NPCService.updateSaltIcon(npc: Model)
 	if not head then return end
 	local bgui = head:FindFirstChild("HungerUI")
 	if not bgui then return end
-	local frame = bgui:FindFirstChild("Frame")
-	if not frame then return end
-	local icon = frame:FindFirstChild("SaltIcon")
+	-- SaltIcon is now a direct child of bgui (not inside Frame)
+	local icon = bgui:FindFirstChild("SaltIcon")
 	if not icon then return end
 	local wantsSalt = npc:GetAttribute("WantsSalted") == true
 	icon.Text = wantsSalt and "🧂 SALATA" or "🍖 NATURALE"
