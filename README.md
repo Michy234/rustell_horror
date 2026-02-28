@@ -1,6 +1,6 @@
-# 🥖 Rustell Horror — Il Re delle Rustelle
+# 🥖 Rustell Simulator — Il Re delle Rustelle
 
-Un gioco horror su Roblox in cui devi sfamare gli NPC con le rustelle... prima che il Nonno si svegli.
+Un gioco su Roblox in cui devi sfamare gli NPC con le rustelle... prima che il Nonno si svegli.
 
 ---
 
@@ -49,10 +49,10 @@ Premi **IMPOSTAZIONI** dal menu o il tasto **I** durante il gioco per regolare:
 
 Disponibili solo per gli admin (`Michy234`, `Moltarobba`, `marco`):
 
-- `/gameover` — forza il game over
-- `/win` — forza la vittoria
-- `/reset` — resetta la partita
-- `/nonnowake` — sveglia il Nonno
+- `:lose` — forza il game over
+- `:win` — forza la vittoria
+- `:reset` — resetta la partita
+- `:nonno2` — sveglia il Nonno
 
 ---
 
