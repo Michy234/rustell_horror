@@ -490,7 +490,7 @@ function MenuService.init()
 	
 	-- FIRST PERSON TOGGLE CHECKBOX
 	do
-		local isFirstPerson = true  -- default ON
+		local isFirstPerson = false  -- default: terza persona
 		
 		local row = Instance.new("Frame")
 		row.Size = UDim2.new(0.95, 0, 0, 44)
@@ -976,17 +976,7 @@ function MenuService.init()
 	jumpscareOverlay.Visible = false
 	jumpscareOverlay.Parent = screenGui
 
-	local jumpscareImage = Instance.new("ImageLabel")
-	jumpscareImage.Name = "IShowSpeed"
-	jumpscareImage.Size = UDim2.fromScale(1, 1) -- Set to fill screen entirely
-	jumpscareImage.Position = UDim2.fromScale(0.5, 0.5)
-	jumpscareImage.AnchorPoint = Vector2.new(0.5, 0.5)
-	jumpscareImage.BackgroundTransparency = 1
-	jumpscareImage.ImageTransparency = 0
-	jumpscareImage.ScaleType = Enum.ScaleType.Stretch -- Use Stretch to fill screen as requested
-	jumpscareImage.Image = "rbxassetid://124354529432666" 
-	jumpscareImage.ZIndex = 50001
-	jumpscareImage.Parent = jumpscareOverlay
+	-- (jumpscareImage rimossa: nessuna foto nel jumpscare)
 
 	-- GAME OVER LOGIC
 	local function triggerGameOver()
@@ -1098,8 +1088,29 @@ function MenuService.init()
 				jumpTween.Completed:Wait()
 				task.wait(0.15)
 
-				-- Stop Heartbeat: ripristina SUBITO tutte le parti alle posizioni originali
-				-- (evita che il nonno resti in aria visivamente alla prossima partita)
+				-- NON disconnettiamo heartConn né ripristiniamo le parti ora:
+				-- il Nonno resta nella posizione scattata finché l'audio non finisce.
+
+				-- Loop che mantiene la camera Scriptable puntata sul Nonno per tutta la durata del suono
+				local camLockConn = RunService.RenderStepped:Connect(function()
+					if camera.CameraType ~= Enum.CameraType.Scriptable then
+						camera.CameraType = Enum.CameraType.Scriptable
+					end
+					-- Segui il Nonno: camera leggermente di fronte a lui
+					local facePos = rootPart.Position + Vector3.new(0, 1.5, 0)
+					local camOffset = rootPart.CFrame * CFrame.new(0, 1.5, -4)
+					camera.CFrame = CFrame.lookAt(camOffset.Position, facePos)
+				end)
+
+				-- Aspetta che l'audio AR'VATTEN A LA CAS finisca completamente
+				if standupSound then
+					standupSound.Ended:Wait()
+					standupSound:Destroy()
+					standupSound = nil
+				end
+
+				-- Ora ripristina tutto
+				camLockConn:Disconnect()
 				heartConn:Disconnect()
 				for part, savedCF in savedPartCFrames do
 					part.CFrame = savedCF
@@ -1108,41 +1119,19 @@ function MenuService.init()
 			end
 		end
 
-		-- ── Jumpscare (direttamente dopo la sequenza, senza fade al nero) ───
-		jumpscareOverlay.BackgroundTransparency = 1
-		jumpscareImage.ImageTransparency = 0
-		jumpscareOverlay.Visible = true
+		-- La camera viene resettata SOLO dentro il flash al nero (sotto)
 
-		-- ── Flash bianco ─────────────────────────────────────────────────────
+		-- ── Flash bianco → nero + interventionSound in contemporanea ──────────
 		local flashFrame = Instance.new("Frame")
 		flashFrame.Name = "JumpscareFlash"
 		flashFrame.Size = UDim2.fromScale(1, 1)
-		flashFrame.BackgroundColor3 = Color3.new(1, 1, 1)
-		flashFrame.BackgroundTransparency = 0
+		flashFrame.BackgroundColor3 = Color3.new(1, 1, 1) -- BIANCO
+		flashFrame.BackgroundTransparency = 0             -- subito pieno bianco
 		flashFrame.BorderSizePixel = 0
-		flashFrame.ZIndex = 60000 -- Sopra il jumpscare overlay (50001)
+		flashFrame.ZIndex = 60000
 		flashFrame.Parent = screenGui
-		TweenService:Create(flashFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-			BackgroundTransparency = 1
-		}):Play()
-		task.delay(0.5, function() flashFrame:Destroy() end)
 
-		-- Ferma STANDUP quando il flash ha finito il fade-out (0.35s) + 0.3s extra
-		task.delay(0.65, function()
-			if standupSound then
-				standupSound:Stop()
-				standupSound:Destroy()
-				standupSound = nil
-			end
-		end)
-
-		local scarySound = Instance.new("Sound")
-		scarySound.SoundId = Settings.SOUNDS.JUMPSCARE
-		scarySound.Volume = 10
-		scarySound.PlaybackSpeed = 1
-		scarySound.Parent = SoundService
-		scarySound:Play()
-
+		-- interventionSound parte INSIEME al flash
 		local interventionSound = Instance.new("Sound")
 		interventionSound.SoundId = "rbxassetid://5033272182"
 		interventionSound.Volume = 10
@@ -1150,13 +1139,23 @@ function MenuService.init()
 		interventionSound.Parent = SoundService
 		interventionSound:Play()
 
-		-- Ripristina camera
+		-- Fade da bianco → nero (0.4s)
+		local fadeToBlack = TweenService:Create(flashFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+			BackgroundColor3 = Color3.new(0, 0, 0)
+		})
+		fadeToBlack:Play()
+		fadeToBlack.Completed:Wait()
+
+		-- Schermo completamente nero: ora è safe resettare la camera senza che il player se ne accorga
 		camera.CameraType = Enum.CameraType.Custom
 
-		task.wait(3)
-		jumpscareOverlay.Visible = false
-		scarySound:Destroy()
+		-- 1 secondo di nero
+		task.wait(1)
+
+		-- Pulizia
+		interventionSound:Stop()
 		interventionSound:Destroy()
+		flashFrame:Destroy()
 
 		-- Restore BGM volume for next game
 		if bgm and bgm:IsA("Sound") then
