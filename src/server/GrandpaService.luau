@@ -363,8 +363,12 @@ function GrandpaService.init()
 				nonnoWakeEvent:FireAllClients()
 			end
 
-			-- ── STATO 3: ultimo NPC morto → il Nonno si alza (Motor6D tween) ─
+			-- ── STATO 3: ultimo NPC morto → ferma i suoni e il Nonno si alza ─
 			if alive <= 0 then
+				-- Ferma SUBITO russare e mormorio per evitare overlap con l'audio jumpscare
+				if snoreSound then snoreSound:Stop(); snoreSound:Destroy(); snoreSound = nil end
+				if mumbleSound then mumbleSound:Stop(); mumbleSound:Destroy(); mumbleSound = nil end
+				print("[GrandpaService] Stato 3: suoni fermati, Nonno si alza.")
 				setStandPose(grandpaModel, 1.2)  -- raddrizza le gambe in 1.2 secondi
 			end
 		end)
@@ -402,6 +406,13 @@ function GrandpaService.init()
 
 		print("[GrandpaService] Inizializzato con successo.")
 	end)
+end
+
+-- Ferma subito tutti i suoni del Nonno (chiamato da NPCService prima del jumpscare)
+function GrandpaService.stopAllSounds()
+	if snoreSound then snoreSound:Stop(); snoreSound:Destroy(); snoreSound = nil end
+	if mumbleSound then mumbleSound:Stop(); mumbleSound:Destroy(); mumbleSound = nil end
+	print("[GrandpaService] stopAllSounds: suoni fermati.")
 end
 
 -- Usate da AdminService per testare le fasi

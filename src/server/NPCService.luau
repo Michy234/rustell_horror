@@ -9,6 +9,10 @@ local NPCService = {}
 local npcsSnapshot: {Model} = {} -- Store clones here
 local aliveNPCs = 0
 
+-- Riferimenti agli eventi (inizializzati in init con WaitForChild)
+local nonnoStandsUpEvent: RemoteEvent? = nil
+local gameOverEventRef:   RemoteEvent? = nil
+
 function NPCService.findNearestBrace(pos: Vector3): Model?
 	local nearest = nil
 	local minDist = math.huge
@@ -104,14 +108,29 @@ function NPCService.init()
 	print("[DEBUG-SERVER] NPCService: [ULTRA BOOT] Avvio...")
 	table.clear(npcsSnapshot) -- Prevent accumulation
 
-	-- CREATE SNAPSHOT
+	-- Aspetta che gli eventi vengano creati da init.server.luau (vengono dopo le .init())
+	task.spawn(function()
+		nonnoStandsUpEvent = ReplicatedStorage:WaitForChild("NonnoStandsUpEvent", 30) :: RemoteEvent?
+		gameOverEventRef   = ReplicatedStorage:WaitForChild("GameOverEvent",     30) :: RemoteEvent?
+		if nonnoStandsUpEvent then
+			print("[NPCService] NonnoStandsUpEvent pronto.")
+		else
+			warn("[NPCService] NonnoStandsUpEvent NON trovato dopo 30s!")
+		end
+	end)
+
+	-- CREATE SNAPSHOT: solo gli NPC con Humanoid sono "feedable"
+	-- Vengono marcati con FeedableNPC=true sia sull'originale che sul clone.
 	for _, obj in Workspace:GetDescendants() do
 		if obj:IsA("Model") and obj.Name:lower():match("npc") then
-			if obj:FindFirstChildOfClass("Humanoid") or obj:GetAttribute("NPC_Hunger") then
+			if obj:FindFirstChildOfClass("Humanoid") then
+				-- Marca l'originale nel Workspace
+				obj:SetAttribute("FeedableNPC", true)
 				local clone = obj:Clone()
 				clone:SetAttribute("Initialized", nil)
+				clone:SetAttribute("FeedableNPC", true)
 				table.insert(npcsSnapshot, clone)
-				print("[DEBUG-SERVER] NPCService: [SNAPSHOT] Salvato -> " .. obj.Name)
+				print("[NPCService] Snapshot: " .. obj.Name .. " (FeedableNPC)")
 			end
 		end
 	end
@@ -142,11 +161,13 @@ function NPCService.init()
 			end
 			
 			for _, obj in Workspace:GetDescendants() do
-				if obj:IsA("Model") and not obj:GetAttribute("Initialized") then
-					local name = obj.Name:lower()
-					if name:match("npc") and not game:GetService("Players"):GetPlayerFromCharacter(obj) then
-						NPCService.setupNPC(obj)
-					end
+				-- Solo i veri NPCs feedable (marcati in snapshot)
+				if obj:IsA("Model")
+					and obj:GetAttribute("FeedableNPC") == true
+					and not obj:GetAttribute("Initialized")
+					and not game:GetService("Players"):GetPlayerFromCharacter(obj)
+				then
+					NPCService.setupNPC(obj)
 				end
 			end
 			task.wait(1)
@@ -630,28 +651,28 @@ function NPCService.die(npc: Model)
 	npc:SetAttribute("IsDead", true)
 	aliveNPCs = math.max(0, aliveNPCs - 1)
 	game:SetAttribute("AliveNPCs", aliveNPCs)  -- expose for GrandpaService watcher
-	
+
 	NPCService.playSound(npc:GetPivot().Position, Settings.DEATH_SOUND_ID, 0.8)
-	
-	local remaining = 0
-	for _, v in Workspace:GetDescendants() do
-		if v:IsA("Model") and v.Name:lower():match("npc") and v:FindFirstChild("Humanoid") and not v:GetAttribute("IsDead") and v ~= npc then
-			remaining += 1
-		end
-	end
-	
-	if remaining <= 0 then
-		-- Fire NonnoStandsUpEvent first — client will do camera sequence then trigger jumpscare
-		local nonnoEv = ReplicatedStorage:FindFirstChild("NonnoStandsUpEvent")
-		if nonnoEv then
-			nonnoEv:FireAllClients()
+
+	print(string.format("[NPCService] NPC morto: %s | aliveNPCs rimasti: %d | GameStarted: %s",
+		npc.Name, aliveNPCs, tostring(game:GetAttribute("GameStarted"))))
+
+	-- Usa aliveNPCs (già decrementato) — evita race condition col loop sul Workspace
+	if aliveNPCs <= 0 and game:GetAttribute("GameStarted") then
+		-- Segna subito la partita come finita così il client non ignora l'evento
+		game:SetAttribute("GameStarted", false)
+		print("[NPCService] Tutti gli NPC morti — invio NonnoStandsUpEvent")
+
+		if nonnoStandsUpEvent then
+			nonnoStandsUpEvent:FireAllClients()
+		elseif gameOverEventRef then
+			-- Fallback se per qualche motivo NonnoStandsUpEvent manca
+			gameOverEventRef:FireAllClients()
 		else
-			-- Fallback: direct game over if event not yet created
-			local ev = ReplicatedStorage:FindFirstChild("GameOverEvent")
-			if ev then ev:FireAllClients() end
+			warn("[NPCService] ERRORE: nessun evento disponibile per triggerare il game over!")
 		end
 	end
-	
+
 	task.wait(0.3)
 	for _, p in npc:GetDescendants() do
 		if p:IsA("BasePart") or p:IsA("Decal") then

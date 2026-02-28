@@ -979,9 +979,9 @@ function MenuService.init()
 	-- (jumpscareImage rimossa: nessuna foto nel jumpscare)
 
 	-- GAME OVER LOGIC
-	local function triggerGameOver()
-		-- Prevent double triggering
-		if not game:GetAttribute("GameStarted") then return end
+	local function triggerGameOver(force: boolean?)
+		-- Prevent double triggering (bypass se force=true: GameStarted già false per design)
+		if not force and not game:GetAttribute("GameStarted") then return end
 
 		print("[DEBUG-CLIENT] Game Over Triggerato!")
 		game:SetAttribute("GameStarted", false)
@@ -1298,8 +1298,8 @@ function MenuService.init()
 	-- NonnoStandsUpEvent: sequenza principale (trigger da NPCService quando tutti gli NPC muoiono)
 	local nonnoStandsUpEvent = ReplicatedStorage:WaitForChild("NonnoStandsUpEvent")
 	nonnoStandsUpEvent.OnClientEvent:Connect(function()
-		print("[DEBUG-CLIENT] NonnoStandsUpEvent ricevuto — avvio sequenza Nonno")
-		task.spawn(triggerGameOver)
+		print("[DEBUG-CLIENT] NonnoStandsUpEvent ricevuto — avvio sequenza Nonno (force=true)")
+		task.spawn(function() triggerGameOver(true) end)
 	end)
 
 	-- NonnoWakeEvent: nonno si sveglia (2 NPC rimasti) — lato client solo animazione faccia
