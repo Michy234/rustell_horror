@@ -29,11 +29,8 @@ else
 	warn("[Client] ⚠️ NPCTrackerService not loaded, skipping init")
 end
 
--- FIRST PERSON by default (toggle in settings)
+-- Third person by default (first person stays optional in settings)
 local player = Players.LocalPlayer
-if player then
-	player.CameraMode = Enum.CameraMode.LockFirstPerson
-end
 
 -- Expose camera mode toggle globally for settings checkbox
 _G.SetFirstPerson = function(enabled: boolean)

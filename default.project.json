@@ -51,15 +51,40 @@
     },
     "Lighting": {
       "$properties": {
-        "Ambient": [
-          0,
-          0,
-          0
-        ],
+        "ClockTime": 14,
+        "Ambient": [0.45, 0.45, 0.5],
+        "OutdoorAmbient": [0.55, 0.58, 0.65],
         "Brightness": 2,
+        "ExposureCompensation": 0,
+        "EnvironmentDiffuseScale": 0.5,
+        "EnvironmentSpecularScale": 0.5,
         "GlobalShadows": true,
         "Outlines": false,
         "Technology": "Voxel"
+      },
+      "Sky": {
+        "$className": "Sky",
+        "$properties": {
+          "SkyboxBk": "rbxassetid://528480826",
+          "SkyboxDn": "rbxassetid://528481890",
+          "SkyboxFt": "rbxassetid://528481964",
+          "SkyboxLf": "rbxassetid://528482047",
+          "SkyboxRt": "rbxassetid://528482365",
+          "SkyboxUp": "rbxassetid://528484371",
+          "CelestialBodiesShown": false,
+          "StarCount": 0
+        }
+      },
+      "Atmosphere": {
+        "$className": "Atmosphere",
+        "$properties": {
+          "Density": 0.2,
+          "Offset": 0,
+          "Color": [0.78, 0.9, 1],
+          "Decay": [0.6, 0.78, 0.92],
+          "Glare": 0,
+          "Haze": 0
+        }
       }
     },
     "SoundService": {
