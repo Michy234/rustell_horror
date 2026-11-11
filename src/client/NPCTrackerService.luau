@@ -70,7 +70,7 @@ local function createNPCCard(npc: Model): Frame
 	-- Card body (CanvasGroup for fade support)
 	local card = Instance.new("CanvasGroup")
 	card.Name = "CardBody"
-	card.Size = UDim2.new(1, -30, 1, 0)
+	card.Size = UDim2.new(1, -40, 1, 0)
 	card.BackgroundColor3 = Color3.fromRGB(15, 15, 25)
 	card.BackgroundTransparency = 0.15
 	card.BorderSizePixel = 0
@@ -81,50 +81,45 @@ local function createNPCCard(npc: Model): Frame
 	cardCorner.CornerRadius = UDim.new(0, 8)
 	cardCorner.Parent = card
 
-	-- Direction arrow (right of card, built from Frames)
-	local arrowColor = Color3.fromRGB(255, 255, 255)
-	local outlineColor = Color3.fromRGB(200, 200, 220)
+	-- Direction arrow: round badge right of the card, white "↑" inside that rotates toward the NPC
+	local badge = Instance.new("Frame")
+	badge.Name = "ArrowBadge"
+	badge.Size = UDim2.fromOffset(34, 34)
+	badge.AnchorPoint = Vector2.new(0.5, 0.5)
+	badge.Position = UDim2.new(1, -18, 0.5, 0)
+	badge.BackgroundColor3 = Color3.fromRGB(15, 15, 25)
+	badge.BackgroundTransparency = 0.15
+	badge.BorderSizePixel = 0
+	badge.Parent = wrapper
+	Instance.new("UICorner", badge).CornerRadius = UDim.new(1, 0)
+	local badgeStroke = Instance.new("UIStroke")
+	badgeStroke.Color = Color3.fromRGB(255, 255, 255)
+	badgeStroke.Thickness = 1.5
+	badgeStroke.Transparency = 0.4
+	badgeStroke.Parent = badge
 
 	local arrowFrame = Instance.new("Frame")
 	arrowFrame.Name = "DirectionArrow"
-	arrowFrame.Size = UDim2.fromOffset(36, 26)
-	arrowFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-	arrowFrame.Position = UDim2.new(1, -18, 0.5, 0)
+	arrowFrame.Size = UDim2.fromScale(1, 1)
 	arrowFrame.BackgroundTransparency = 1
-	arrowFrame.Rotation = 0
-	arrowFrame.Parent = wrapper
+	arrowFrame.Parent = badge
 
-	-- Shaft (slim horizontal bar)
-	local shaft = Instance.new("Frame")
-	shaft.Name = "Shaft"
-	shaft.Size = UDim2.fromOffset(20, 8)
-	shaft.Position = UDim2.fromOffset(0, 9)
-	shaft.BackgroundColor3 = arrowColor
-	shaft.BorderSizePixel = 0
-	shaft.Parent = arrowFrame
-
-	local shaftStroke = Instance.new("UIStroke")
-	shaftStroke.Color = outlineColor
-	shaftStroke.Thickness = 1
-	shaftStroke.Transparency = 0.3
-	shaftStroke.Parent = shaft
-
-	-- Arrowhead (rotated square → diamond, shaft covers left corners)
-	local arrowHead = Instance.new("Frame")
-	arrowHead.Name = "Head"
-	arrowHead.Size = UDim2.fromOffset(19, 19)
-	arrowHead.AnchorPoint = Vector2.new(0.5, 0.5)
-	arrowHead.Position = UDim2.fromOffset(25, 13)
-	arrowHead.Rotation = 45
-	arrowHead.BackgroundColor3 = arrowColor
-	arrowHead.BorderSizePixel = 0
-	arrowHead.Parent = arrowFrame
-
-	local headStroke = Instance.new("UIStroke")
-	headStroke.Color = outlineColor
-	headStroke.Thickness = 1
-	headStroke.Transparency = 0.3
-	headStroke.Parent = arrowHead
+	-- {size, center, rotation} in a 34x34 box: tip at (17,8), tail at (17,26)
+	for _, bar in {
+		{Vector2.new(4, 16), Vector2.new(17, 18), 0},      -- shaft
+		{Vector2.new(13, 4), Vector2.new(12.4, 12.6), -45}, -- left side of the head
+		{Vector2.new(13, 4), Vector2.new(21.6, 12.6), 45},  -- right side of the head
+	} do
+		local f = Instance.new("Frame")
+		f.Size = UDim2.fromOffset(bar[1].X, bar[1].Y)
+		f.AnchorPoint = Vector2.new(0.5, 0.5)
+		f.Position = UDim2.fromOffset(bar[2].X, bar[2].Y)
+		f.Rotation = bar[3]
+		f.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		f.BorderSizePixel = 0
+		f.Parent = arrowFrame
+		Instance.new("UICorner", f).CornerRadius = UDim.new(1, 0)
+	end
 
 	-- ── Left: 3D Head viewport ──
 	local viewport = Instance.new("ViewportFrame")
@@ -464,7 +459,7 @@ function NPCTrackerService.init()
 		local camCF = camera.CFrame
 
 		for npc, wrapper in activeCards do
-			local arrow = wrapper:FindFirstChild("DirectionArrow") :: Frame?
+			local arrow = wrapper:FindFirstChild("DirectionArrow", true) :: Frame?
 			if not arrow then continue end
 
 			local npcRoot = npc.PrimaryPart or npc:FindFirstChild("HumanoidRootPart")
@@ -472,16 +467,12 @@ function NPCTrackerService.init()
 
 			local toNPC = npcRoot.Position - camCF.Position
 			local flatDir = Vector3.new(toNPC.X, 0, toNPC.Z)
-			if flatDir.Magnitude < 0.1 then continue end
-
 			local camFwd = Vector3.new(camCF.LookVector.X, 0, camCF.LookVector.Z)
-			if camFwd.Magnitude < 0.1 then continue end
+			local camRight = Vector3.new(camCF.RightVector.X, 0, camCF.RightVector.Z)
+			if flatDir.Magnitude < 0.1 or camFwd.Magnitude < 0.01 or camRight.Magnitude < 0.01 then continue end
 
-			camFwd = camFwd.Unit
-			flatDir = flatDir.Unit
-			local dot = camFwd:Dot(flatDir)
-			local cross = camFwd:Cross(flatDir).Y
-			arrow.Rotation = math.deg(math.atan2(cross, dot))
+			-- arrow points up at Rotation 0; GUI rotation is clockwise, so NPC on the right = positive angle
+			arrow.Rotation = math.deg(math.atan2(flatDir:Dot(camRight.Unit), flatDir:Dot(camFwd.Unit)))
 		end
 	end)
 
